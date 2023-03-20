@@ -15,20 +15,19 @@ public class Cansat : MonoBehaviour{
 
     public static MPU6050 mpu6050 = new MPU6050();
     public static BMP280  bmp280  = new BMP280();
-    
 
     private void Start(){
         _serialPort             = new SerialPort( ".\\COM4", 9600 );
         _serialPort.ReadTimeout = 500;
         try{
-            Debug.Log("Abriendo puerto serial");
+            Debug.Log( "Abriendo puerto serial" );
             _serialPort.Open();
-            Debug.Log("Listo");
+            Debug.Log( "Listo" );
             //Debug.Log(s);
         }
         catch( Exception e ){
-            Debug.Log("Error");
-            Debug.Log(e);
+            Debug.Log( "Error" );
+            Debug.Log( e );
             return;
         }
 
@@ -36,10 +35,11 @@ public class Cansat : MonoBehaviour{
     }
 
     private void Update(){
-        if (! _serialPort.IsOpen) {
-            Debug.Log("Serial is closed");
+        if( !_serialPort.IsOpen ){
+            Debug.Log( "Serial is closed" );
         } //comprobamos que el puerto esta abierto
-            transform.Rotate( mpu6050.getDeltaAngle() );
+
+        transform.Rotate( mpu6050.getDeltaAngle() );
         //transform.position += mpu6050.getDeltaPosition();
     }
 
@@ -49,12 +49,11 @@ public class Cansat : MonoBehaviour{
     }
 
     public static void Read(){
-        Debug.Log("Thread de lectura iniciado");
-        while ( true ){
+        Debug.Log( "Thread de lectura iniciado" );
+        while( true ){
             //Debug.Log("Leyendo");
-            try
-            {
-                string message = _serialPort.ReadTo("\n");
+            try{
+                string message = _serialPort.ReadTo( "\n" );
                 mpu6050.update( message );
                 //bmp280  = new BMP280( message );
             }
@@ -64,54 +63,55 @@ public class Cansat : MonoBehaviour{
     }
 
     public class MPU6050{
-        public Vector3 Acc;  //m/s^2
-        public Vector3 Gyro; //grad/s
-        private int acc_index = 7; //Indice del json donde empiezan los datos
-        public float last_time = 0.0f;
+        public  Vector3 Acc;           //m/s^2
+        public  Vector3 Gyro;          //grad/s
+        private int     acc_index = 7; //Indice del json donde empiezan los datos
+        public  float   last_time = 0.0f;
 
         public void update( string message ){
-            if (!message.StartsWith("{"))
-            {
-                Debug.Log("Dato incorrecto, incompleto");
+            if( !message.StartsWith( "{" ) ){
+                Debug.Log( "Dato incorrecto, incompleto" );
                 return;
             }
-            message = message.Substring(1,message.Length-2);
+
+            message = message.Substring( 1, message.Length - 2 );
             //Debug.Log(message);
             string[] data = message.Split( ',' );
             //Debug.Log(data);
             if( data.Length < 6 ){
                 return;
             }
-            for (int i = 0; i < 6; i++)
-            {
 
+            for( int i = 0; i < 6; i++ ){
                 //"Ax":"5.2178231"
-                string val = data[i+acc_index].Split(':')[1];
-                
+                string val = data[i + acc_index].Split( ':' )[1];
+
                 //'5.2136789'
                 //Quitar la comillas
-                val = val.Substring(2, val.Length-3);
+                val = val.Substring( 2, val.Length - 3 );
                 //Debug.Log(val);
-                data[i+acc_index] = val;
+                data[i + acc_index] = val;
             }
+
             //El indice 5 es el del tiempo
-            string val = data[5].Split(':')[1];
+            string val2 = data[5].Split( ':' )[1];
             //'5.2136789'
             //Quitar la comillas
-            val = val.Substring(2, val.Length - 3);
-            last_time = float.Parse(val);
+            val2      = val2.Substring( 2, val2.Length - 3 );
+            last_time = float.Parse( val2 );
 
-            Acc = new Vector3(float.Parse(data[acc_index]), float.Parse(data[acc_index + 1]), float.Parse(data[acc_index + 2]));
+            Acc = new Vector3( float.Parse( data[acc_index] ), float.Parse( data[acc_index + 1] ), float.Parse( data[acc_index + 2] ) );
 
-            Gyro = new Vector3(float.Parse(data[acc_index + 3]), float.Parse(data[acc_index + 4]), float.Parse(data[acc_index + 5]));
-
+            Gyro = new Vector3(
+                float.Parse( data[acc_index + 3] ), float.Parse( data[acc_index + 4] ), float.Parse( data[acc_index + 5] )
+            );
         }
 
         public Vector3 getDeltaAngle( float deltaTime = 0.1f ){
             return new Vector3(
-                Gyro.x  * deltaTime,
+                Gyro.x * deltaTime,
                 0,
-                Gyro.y  * deltaTime
+                Gyro.y * deltaTime
             );
         }
 
