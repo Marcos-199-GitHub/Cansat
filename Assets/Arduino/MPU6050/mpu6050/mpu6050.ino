@@ -12,6 +12,8 @@ MPU6050 sensor;
 int ax, ay, az;
 int gx, gy, gz;
 
+float dt = 50;
+
 void setup() {
   Serial.begin(57600);    //Iniciando puerto serial
   Wire.begin();           //Iniciando I2C  
@@ -28,12 +30,18 @@ void loop() {
 
   //Mostrar las lecturas separadas por un [tab]
   //Serial.print("a[x y z] g[x y z]:\t");
-  Serial.print(ax*(9.81/16384.0)); Serial.print(",");
-  Serial.print(ay*(9.81/16384.0)); Serial.print(",");
-  Serial.print(az*(9.81/16384.0)); Serial.print(",");
-  Serial.print(gx*(250.0/32768.0)); Serial.print(",");
-  Serial.print(gy*(250.0/32768.0)); Serial.print(",");
-  Serial.println(gz*(250.0/32768.0));
+  //Serial.print(ax*(9.81/16384.0)); Serial.print(",");
+  //Serial.print(ay*(9.81/16384.0)); Serial.print(",");
+  //Serial.print(az*(9.81/16384.0)); Serial.print(",");
+  float gyro_x = gx*(250.0/32768.0);
+  float gyro_y = gy*(250.0/32768.0);
+  Serial.print("{ 'Wx': '");
+  Serial.print(gyro_x);
+  Serial.print("', ");
+  Serial.print("'Wy': '");
+  Serial.print(gyro_y);
+  Serial.print("'");
+  Serial.println("}");
 
-  delay(100);
+  delay(dt);
 }

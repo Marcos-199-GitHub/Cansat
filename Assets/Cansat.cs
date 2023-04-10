@@ -26,7 +26,7 @@ public class Cansat : MonoBehaviour{
 
     private void Start(){
         reader                  = new StreamReader( PATH );
-        _serialPort             = new SerialPort( ".\\COM4", 9600 );
+        _serialPort             = new SerialPort( "COM5", 57600 );
         _serialPort.ReadTimeout = 500;
         readThread.Start();
     }
@@ -75,10 +75,11 @@ public class Cansat : MonoBehaviour{
         }
         else if( method == 1 ){ //Archivo
             message = reader.ReadLine();
+            id++;
+            Debug.Log( id );
         }
 
-        id++;
-        Debug.Log( id );
+        
 
         //Debug.Log( message );
         return message;
@@ -89,19 +90,14 @@ public class Cansat : MonoBehaviour{
     public static void Read(){
         Debug.Log( "Thread de lectura iniciado" );
         while( true ){
-            //delay 100ms
-            if( tiempo - tprevious < 0.333f )
-                continue;
-
-            tprevious = tiempo;
-            //Debug.Log("Leyendo");
             try{
-                dataRecived.updateData( getDataString( 1 ) );
+                dataRecived.updateData( getDataString() );
                 rotar = true;
             }
             catch( TimeoutException ){
             }
         }
+        
     }
 
     public class DataRecived{
@@ -114,7 +110,7 @@ public class Cansat : MonoBehaviour{
         public  Vector3 Acc       = new Vector3();
         public  Vector3 Gyro      = new Vector3();
         private float   PrevTime  = 0.0f;
-        public  float   DeltaTime = 0.1f;
+        public  float   DeltaTime = 0.05f;
 
         private void restart(){
             T[0]     = 0;
@@ -129,24 +125,26 @@ public class Cansat : MonoBehaviour{
         }
 
         public void updateData( string message ){
+            //Debug.Log( message );
             if( !message.StartsWith( "{" ) ){
                 Debug.Log( "Dato incorrecto, incompleto" );
+                Debug.Log( message );
                 restart();
                 return;
             }
 
-            message = message.Substring( 1, message.Length - 2 );
+            message = message.Substring( 1, message.Length - 3 ).Replace( " ", "" );//Quitar las llaves y salto de linea
             string[] data = message.Split( ',' ); //" 'T1': '123215'", " 'T2': '126843'"
 
             for( int i = 0; i < data.Length; i++ ){
                 string[] current = data[i].Split( ':' );                             //"'T1'", "'123215'"
-                string   key     = current[0].Substring( 2, current[0].Length - 3 ); //Quitar el espacio y las comillas
-                string   val     = current[1].Substring( 2, current[1].Length - 3 ); //Quitar el espacio y las comillas
-                //Debug.Log( key + ", " + val );
+                string   key     = current[0].Substring( 1, current[0].Length - 2 ); //Quitar las comillas
+                string   val     = current[1].Substring( 1, current[1].Length - 2 ); //Quitar las comillas
+                //Debug.Log( current[0] + ":" +current[1] + " -> "+key + ":" + val );
                 float valor = float.Parse( val );
 
                 switch( key ){
-                    //Keys: T1, T2, T3, P, A, T, H, Ax, Ay, Az, Wx, Wy, Wz
+                    //Keys: T1, T2, T3, P, A, T, H, Ax, Ay, Az, Wx, Wy, Wz,
                     case "1":
                         T[0] = valor;
                         break;
