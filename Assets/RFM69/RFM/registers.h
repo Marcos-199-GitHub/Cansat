@@ -44,7 +44,7 @@
 //        #define _FSTEP = _FXOSC / 524288
 
 //RadioHead specific compatibility constants.
-#define _RH_BROADCAST_ADDRESS 0xFF
+#define _RH_BROADCAST_ADDRESS 0x00
 //The acknowledgement bit in the FLAGS
 //The top 4 bits of the flags are reserved for RadioHead. The lower 4 bits are reserved
 //for application layer use.

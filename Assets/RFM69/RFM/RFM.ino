@@ -16,25 +16,31 @@ void setup() {
   pinMode(IRQ, INPUT);
   // Inicializar bus SPI
   SPI.begin();
-  Serial.begin(9600);
-  //RFMinit();
-  Serial.println("Starting");
+  //Serial.begin(9600);
+  RFMinit();
+  //Serial.println("Starting");
   RFM69_Config();
   Delay(100);
   RFM69_EntryTx();
 }
  
-void loop() {/*
-receive();
-char dat = readFIFO(); 
+void loop() {
+//char* s = receive();
+
+//Serial.println(s);
+//char dat = readFIFO(); 
 
 char res = rfmSend("hola",4);
-
+/*
 //readAllRegs();
 //Serial.println(dat,HEX);
-if (res)
-  Serial.println("Enviado");*/
-  //RFM69_RxPacket();
+//if (res)continue;
+  //Serial.println("Enviado");
+  */
+  /*
+  RFM69_RxPacket();
+  //char res = rfmSend("hola",4);
+  println(receive());
   char x = Serial.read();
     if (x=='a'){
     readFIFO();
@@ -42,7 +48,7 @@ if (res)
   if (x=='r'){
     readAllRegs();
     }
-
+*/
  //Serial.println("Nothing");
 delay(100);
 }

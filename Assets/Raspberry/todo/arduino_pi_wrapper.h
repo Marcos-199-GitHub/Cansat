@@ -56,3 +56,16 @@ class _Serial{
         }
 
 };
+class _SPI{
+    public:
+    const int chan;
+    const int speed;
+    _SPI(int channel, int speed){
+        this->chan = channel;
+        this->speed = speed;
+    }
+    int begin(){
+        return wiringPiSPISetup (this->chan, this->speed) ;
+    }
+    
+};

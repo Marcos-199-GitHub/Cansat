@@ -340,11 +340,13 @@ byte RFM69_EntryTx(void)
    
  for(SysTime=0;SysTime<3;SysTime++)                                //wait for entry Tx
   {  
-    Delay(100);  
+    Delay(1000);  
   if((spiRead8(0x27)&0xA0)==0xA0)                          //Status OK?
    break;       
   }    
- if(SysTime>=3)  {                                         //over time for error
+ if(SysTime>=3)  {//over time for error
+  char c = spiRead8(0x27);
+    Serial.println(c,HEX);
     println("Tx error");   
   return(0);   
  }
