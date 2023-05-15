@@ -1,3 +1,6 @@
 [submodule "Assets/Raspberry/todo/grove"]
 	path = Assets/Raspberry/todo/grove
 	url = https://github.com/Seeed-Studio/grove.py
+[submodule "Assets/Raspberry/todo/groveBMM150"]
+	path = Assets/Raspberry/todo/groveBMM150
+	url = https://github.com/Seeed-Studio/Grove_3_Axis_Compass_V2.0_BMM150
