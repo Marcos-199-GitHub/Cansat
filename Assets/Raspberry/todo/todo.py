@@ -7,10 +7,12 @@ import adafruit_sht31d
 import serial
 # import digitalio # For use with SPI
 import adafruit_bmp280
-import grove_bmm150
+#import grove_bmm150
 import mpu6050
 #Pantalla del RFM
 import adafruit_ssd1306
+import math
+import bmm150
 
 from digitalio import DigitalInOut, Direction, Pull
 
@@ -41,8 +43,8 @@ bmp280.sea_level_pressure = 1013.25
 ##sht30.mode = adafruit_sht31d.MODE_PERIODIC
 
 #MPU y BMM
-bmm150 = grove_bmm150.BMM150(i2c)
-print (f"BMM correct: {bmm150.checkId()}, id: {bmm150.id}")
+dev_bmm150 = bmm150.BMM150()
+#print (f"BMM correct: {bmm150.checkId()}, id: {bmm150.id}")
 mpu = mpu6050.MPU(i2c)
 print (f"MPU correct: {mpu.checkId()}, id: {mpu.id}")
 
@@ -78,12 +80,24 @@ diccionario = {
     "Wx":"0", #GyroX °/s
     "Wy":"0", #GyroY °/s
     "Wz":"0", #GyroZ °/s
+    "Mx":"0", #MagnetX uT
+    "My":"0", #MagnetY uT
+    "Mz":"0", #MagnetZ uT
+    "head":"0" #Magnet Heading °
+
 
 }
 f = open("data.log","a")
 bus.write(bytes(b"Serial Correct\n"))
+
+def bmm_update():
+    x , y, z = dev_bmm150.read_mag_data()
+    heading_rads = math.atan2(x,y)
+    heading_deg = math.degrees(heading_rads)
+    return x,y,z,heading_deg
 while True:
     mpu.update()
+    magnet = bmm_update()
 
     diccionario["T1"] = f"{bmp280.temperature}"
     ##diccionario["T2"] = f"{sht30.temperature[0]}"
@@ -102,6 +116,12 @@ while True:
     diccionario["Wx"] = f"{mpu.gyro[0]}"
     diccionario["Wy"] = f"{mpu.gyro[1]}"
     diccionario["Wz"] = f"{mpu.gyro[2]}"
+
+    diccionario["Mx"] = f"{magnet[0]}"
+    diccionario["My"] = f"{magnet[1]}"
+    diccionario["Mz"] = f"{magnet[2]}"
+
+    diccionario["head"] = f"{magnet[3]}"
     
     utf = f"{diccionario}\n"
     bus.write(utf.encode())
