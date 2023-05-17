@@ -9,6 +9,12 @@ import serial
 import adafruit_bmp280
 import grove_bmm150
 import mpu6050
+#Pantalla del RFM
+import adafruit_ssd1306
+
+from digitalio import DigitalInOut, Direction, Pull
+
+
 
 SHT30_ADDRESS = 0x44
 INIT_TIME = time.time()
@@ -40,7 +46,17 @@ print (f"BMM correct: {bmm150.checkId()}, id: {bmm150.id}")
 mpu = mpu6050.MPU(i2c)
 print (f"MPU correct: {mpu.checkId()}, id: {mpu.id}")
 
+#LCD
+reset_pin = DigitalInOut(board.D4)
+display = adafruit_ssd1306.SSD1306_I2C(128,32,i2c,reset = reset_pin)
+#Clear display
+display.fill(0)
+display.show()
+width = display.width
+height = display.height
 
+display.text('Enviando datos',35,0,1)
+display.show()
 
 #Serial
 bus = serial.Serial('/dev/serial0',baudrate=9600)
@@ -89,7 +105,11 @@ while True:
     
     utf = f"{diccionario}\n"
     bus.write(utf.encode())
+
     print(utf)
+    display.fill(0)
+    display.text(str(time.time()),0,15,1)
+    display.show()
     f.write(utf)
 
 
