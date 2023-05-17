@@ -33,12 +33,12 @@ bmp280 = adafruit_bmp280.Adafruit_BMP280_I2C(i2c)
 bmp280.sea_level_pressure = 1013.25
 
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-sht30 = adafruit_sht31d.SHT31D(i2c)
+##sht30 = adafruit_sht31d.SHT31D(i2c)
 
 #print("\033[1mSensor\033[0m = SHT31-D")
 #print("\033[1mSerial Number\033[0m = ", sht30.serial_number, "\n")
-sht30.frequency = adafruit_sht31d.FREQUENCY_1
-sht30.mode = adafruit_sht31d.MODE_PERIODIC
+##sht30.frequency = adafruit_sht31d.FREQUENCY_1
+##sht30.mode = adafruit_sht31d.MODE_PERIODIC
 
 #MPU y BMM
 bmm150 = grove_bmm150.BMM150(i2c)
@@ -86,14 +86,14 @@ while True:
     mpu.update()
 
     diccionario["T1"] = f"{bmp280.temperature}"
-    diccionario["T2"] = f"{sht30.temperature[0]}"
+    ##diccionario["T2"] = f"{sht30.temperature[0]}"
     diccionario["T3"] = f"{mpu.tempC}"
 
     diccionario["T"] = f"{time.time()-INIT_TIME}"
 
     diccionario["A"] = f"{bmp280.altitude}"
     diccionario["P"] = f"{bmp280.pressure}"
-    diccionario["H"] = f"{sht30.relative_humidity[0]}"
+    ##diccionario["H"] = f"{sht30.relative_humidity[0]}"
 
     diccionario["Ax"] = f"{mpu.accel[0]}"
     diccionario["Ay"] = f"{mpu.accel[1]}"
