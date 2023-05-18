@@ -13,6 +13,10 @@ import mpu6050
 import adafruit_ssd1306
 import math
 import bmm150
+# Import the RFM69 radio module.
+import adafruit_rfm69
+import busio
+
 
 from digitalio import DigitalInOut, Direction, Pull
 import os
@@ -77,6 +81,17 @@ btnC = DigitalInOut(board.D12)
 btnC.direction = Direction.INPUT
 btnC.pull = Pull.UP
 
+# Configure Packet Radio
+CS = DigitalInOut(board.CE1)
+RESET = DigitalInOut(board.D25)
+spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
+rfm69 = adafruit_rfm69.RFM69(spi, CS, RESET, 433.0,sync_word=bytes([0xAA,0x2D,0xD4]))
+prev_packet = None
+# Optionally set an encryption key (16 byte AES key). MUST match both
+# on the transmitter and receiver (or be set to None to disable/the default).
+# rfm69.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
+
+
 
 #Serial
 bus = serial.Serial('/dev/serial0',baudrate=9600)
@@ -124,6 +139,7 @@ def camera_update():
         return filename
     return ""
 n=0
+total_kb=0
 while True:
     n+=1
     mpu.update()
@@ -165,10 +181,16 @@ while True:
     
     utf = f"{diccionario}\n"
     bus.write(utf.encode())
+    size_kb = len(utf)/1024
+    total_kb += size_kb
+
+    rf_data = bytes(utf,"utf-8")
+    rfm69.send(rf_data)
+    print("Enviados {size_kb} kilobytes de datos por RF y Serial")
 
     print(utf)
     display.fill(0)
-    display.text(f"{n} paquetes enviados",0,15,1)
+    display.text(f"{n} paquetes enviados ({total_kb}) kb",0,15,1)
     display.show()
     f.write(utf)
 
