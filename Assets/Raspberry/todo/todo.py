@@ -15,11 +15,13 @@ import math
 import bmm150
 
 from digitalio import DigitalInOut, Direction, Pull
+import os
 
 
 
 SHT30_ADDRESS = 0x44
 INIT_TIME = time.time()
+PHOTO_CMD = "streamer -d /dev/video0 -s 320x240 -o "
 
 # Create sensor object, communicating over the board's default I2C bus
 i2c = board.I2C()  # uses board.SCL and board.SDA
@@ -60,6 +62,22 @@ height = display.height
 display.text('Enviando datos',35,0,1)
 display.show()
 
+#Boton 1
+btnA = DigitalInOut(board.D5)
+btnA.direction = Direction.INPUT
+btnA.pull = Pull.UP
+
+#Boton 2
+btnB = DigitalInOut(board.D6)
+btnB.direction = Direction.INPUT
+btnB.pull = Pull.UP
+
+#Boton 3
+btnC = DigitalInOut(board.D12)
+btnC.direction = Direction.INPUT
+btnC.pull = Pull.UP
+
+
 #Serial
 bus = serial.Serial('/dev/serial0',baudrate=9600)
 
@@ -95,9 +113,31 @@ def bmm_update():
     heading_rads = math.atan2(x,y)
     heading_deg = math.degrees(heading_rads)
     return x,y,z,heading_deg
+
+def camera_update():
+    if not btnA.value:
+        filename = f"{int(time.time())}.jpeg"
+        os.system(f"{PHOTO_CMD} {filename}")
+        display.fill(0)
+        display.text("tomando foto",0,15,1)
+        display.show()
+        return filename
+    return ""
+n=0
 while True:
+    n+=1
     mpu.update()
+    camera_update()
     magnet = bmm_update()
+    foto = camera_update()
+    if (foto != ""):
+        try:
+            #foto = camera_update()
+            raw = open(foto,"rb").readall()
+            print (raw)
+        except:
+            print("PHOTO SEND ERROR")
+            pass
 
     diccionario["T1"] = f"{bmp280.temperature}"
     ##diccionario["T2"] = f"{sht30.temperature[0]}"
@@ -128,7 +168,7 @@ while True:
 
     print(utf)
     display.fill(0)
-    display.text(str(time.time()),0,15,1)
+    display.text(f"{n} paquetes enviados",0,15,1)
     display.show()
     f.write(utf)
 
