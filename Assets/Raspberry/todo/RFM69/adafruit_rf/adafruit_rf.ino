@@ -1,7 +1,8 @@
+
+#include <SPI.h>
+
 #include<stdint.h>
 
-#include<Arduino.h>
-#include <SPI.h>
 //#include"utils.cpp"
 #include"adafruit_rfm69_registers.h"
 #define SSPin 10
@@ -632,3 +633,41 @@ class RFM69{
 
 
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const int slaveSelectPin = 10;
+int ResetPin = 9;
+uint8_t synch[3] = {0xAA,0x2D,0xD4};
+float f = 433;
+
+RFM69 radio(f,*synch,ResetPin);;
+
+
+
+void setup() {
+  Serial.begin(9600);
+  
+  
+  
+
+}
+
+void loop() {
+  radio.send("hola");
+  // put your main code here, to run repeatedly:
+
+}
