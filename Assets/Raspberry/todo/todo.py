@@ -185,7 +185,7 @@ while True:
     total_kb += size_kb
 
     rf_data = bytes(utf,"utf-8")
-    rfm69.send(rf_data)
+    rfm69.send(rf_data[:59])
     print("Enviados {size_kb} kilobytes de datos por RF y Serial")
 
     print(utf)
