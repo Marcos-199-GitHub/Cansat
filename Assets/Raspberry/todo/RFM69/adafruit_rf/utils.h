@@ -18,13 +18,13 @@ SPI.endTransaction();
 void print(char* str){
     Serial.print(str);
 }
-void print(char* str, int format){
+void print(int str, int format){
     Serial.print(str,format);
 }
 void println(char* str){
     Serial.println(str);
 }
-void println(char* str, int format){
+void println(int str, int format){
     Serial.println(str,format);
 }
 float timeSec(){
