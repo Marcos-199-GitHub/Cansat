@@ -1,115 +1,22 @@
 
-#include <SPI.h>
-
-#include<stdint.h>
-
-//#include"utils.cpp"
-#include"adafruit_rfm69_registers.h"
 #define SSPin 10
 #define SPIBAUD 100000
-
-
 #define FREQ_433
+#define HEX 16
+#define BIN 2
 //#define FREQ_433
 //#define FREQ_433
 
-// # The crystal oscillator frequency and frequency synthesizer step size.
-// # See the datasheet for details of this calculation.
-const float _FXOSC = 32000000.0;
-const float _FSTEP = _FXOSC / 524288;
-//Global buffer for SPI commands
-uint8_t _BUFFER[4];
 
-void setOutput(int pin, int value){
-    digitalWrite(pin,value);
-}
+#include <SPI.h>
+#include<stdint.h>
 
-void spiBegin(){
-SPI.beginTransaction(SPISettings(SPIBAUD, MSBFIRST, SPI_MODE0));
-setOutput(SSPin, 0);
+#include "utils.h"
+#include "afadruit_rfm69.h"
+#include "adafruit_rfm69_registers.h"
 
-}
-void spiEnd(){
-setOutput(SSPin, 1);    
-SPI.endTransaction();
-}
 
-void print(char* str){
-    Serial.print(str);
-}
-float timeSec(){
-    return millis()/1000;
-}
-void spi_read_into(uint8_t address,uint8_t* array, uint8_t length){
-    int i=0;
-    //Select
-    spiBegin();
-    _BUFFER[0] = address & 0x7F; //Strip MSB byte to read
-    //Write address
-    SPI.transfer(_BUFFER[0]);
-    for (i=0;i<length;i++)
-        array[i] = SPI.transfer(0xFF);
-    spiEnd();
 
-}
-void spi_write_from(uint8_t address,uint8_t* array, uint8_t length){
-    int i=0;
-    spiBegin();
-    SPI.transfer(address | 0b10000000);
-    //El address se aumenta en 1 automaticamente
-   //Serial.println("Writing SPI");
-    for (i=0;i<length;i++){
-      // Serial.println((char)array[i]);
-      SPI.transfer(array[i]);}
-    spiEnd();    
-}
-uint8_t spi_read_u8(uint8_t address){
-    spi_read_into(address,_BUFFER,1);
-    return _BUFFER[0];
-}
-uint8_t spi_write_u8(uint8_t address,uint8_t val){
-    _BUFFER[0] = val;
-    spi_write_from(address,_BUFFER,1);
-    return _BUFFER[0];
-}
-void sleep_ms(int ms){
-    delay(ms);
-}
-
-class _RegisterBits{
-    public:
-    uint8_t address;
-    uint8_t mask;
-    uint8_t offset;
-    _RegisterBits(uint8_t _address, uint8_t _offset,uint8_t bits = 1){
-        uint8_t i=0;
-        mask=0;
-        //TODO: check offset to be [0,7] and bits [1,8]
-        address = _address;
-        for (i=0;i<bits;i++){
-            mask<<=1;
-            mask|=1;
-        }
-        mask <<= _offset;
-        offset = _offset;
-        }
-    void set(uint8_t val){
-        uint8_t regVal = spi_read_u8(address);
-        regVal &= ~mask;
-        regVal |= (val & 0xFF) << offset;
-        spi_write_u8(address,regVal);
-    }
-    uint8_t get(){
-        uint8_t regVal = spi_read_u8(address);
-        return ((regVal & mask) >> offset);
-    }
-    uint8_t debug(){
-      Serial.print ("Mask: ");
-      Serial.println(mask,BIN);
-      return mask;     
-  
-    }
-};
 
 
 class RFM69{
@@ -178,21 +85,20 @@ class RFM69{
     {
       uint8_t regVal;
       
-      Serial.println("Address - HEX - BIN");
+      println("Address - HEX - BIN");
       for (uint8_t regAddr = 1; regAddr <= 0x4F; regAddr++)
       {
+        /*
         spiBegin();
         SPI.transfer(regAddr & 0x7F); // send address + r/w bit
         regVal = SPI.transfer(0);
-        spiEnd();
-
-        Serial.print(regAddr, HEX);
+        spiEnd();*/
+        regVal = spi_read_u8(regAddr);
+        print(regAddr, HEX);
         print(" - ");
-        Serial.print(regVal,HEX);
+        print(regVal,HEX);
         print(" - ");
-        Serial.println(regVal,BIN);
-
-
+        println(regVal,BIN);
       }
       spiEnd();
     }    
@@ -215,7 +121,7 @@ class RFM69{
         
         version = spi_read_u8(_REG_VERSION);
         if (version != 0x24){
-            Serial.print("Error: ID del RFM incorrecta");
+            println("Error: ID del RFM incorrecta");
             while(1){}
             //exit(-1);
         }
@@ -342,7 +248,7 @@ class RFM69{
 
 
 
-        Serial.print("Initial configuration end\n");
+        print("Initial configuration end\n");
     }
     void reset(){
         setOutput(_reset_pin,1);
@@ -427,8 +333,8 @@ class RFM69{
           
             if ((timeSec() - start) >= 3){
                      
-                Serial.print ("Operation Mode couldnt be set\n");
-                Serial.println(spi_read_u8(0x27),BIN);
+                print ("Operation Mode couldnt be set\n");
+                println(spi_read_u8(0x27),BIN);
                 while (1){}
                 //exit(-2);
             }
@@ -445,8 +351,8 @@ class RFM69{
         start = timeSec();
         while (!mode_ready.get()){
             if ((timeSec() - start) >= 3){
-                Serial.print ("Timeout on Operation Mode Set\n");
-                 Serial.println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
+                print ("Timeout on Operation Mode Set\n");
+                println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
                 while (1){}
                 //exit(-2);
             }
@@ -579,7 +485,7 @@ class RFM69{
         if (!pa0 && pa1 && pa2 && high_power)
             //# 5 to 20 dBm range
             return -11 + current_output_power;
-        Serial.print("Tx power power amps state unknown!");
+        print("Tx power power amps state unknown!");
         while (1){}
         //exit(-3);
     }
@@ -723,8 +629,8 @@ class RFM69{
            
         // # Write payload to transmit fifo
         spi_write_from(_REG_FIFO, payload,5+len);
-        Serial.print("Payload: ");
-        Serial.println(payload+5);
+        print("Payload: ");
+        println(payload+5);
 
         // Serial.println((char)spi_read_u8(_REG_FIFO));              
     
@@ -799,7 +705,7 @@ class RFM69{
             while (!timed_out && !payload_ready()){
                 //delay(20);
                 if ((timeSec() - start) >= xmit_timeout){
-                    Serial.println("Timed out");
+                    println("Timed out");
                     timed_out = true;
                     }
             }
@@ -812,7 +718,7 @@ class RFM69{
          
         if (!timed_out){
             fifo_length = spi_read_u8(_REG_FIFO);
-            Serial.println("FIFO LEN: " + String(fifo_length));
+            println("FIFO LEN: " + String(fifo_length));
             //  # Handle if the received packet is too small to include the 4 byte
             // # RadioHead header and at least one byte of data --reject this packet and ignore it.
             if (fifo_length > 0){
