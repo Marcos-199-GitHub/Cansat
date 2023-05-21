@@ -6,7 +6,12 @@
 //#include"utils.cpp"
 #include"adafruit_rfm69_registers.h"
 #define SSPin 10
-#define SPIBAUD 50000
+#define SPIBAUD 100000
+
+
+#define FREQ_433
+//#define FREQ_433
+//#define FREQ_433
 
 // # The crystal oscillator frequency and frequency synthesizer step size.
 // # See the datasheet for details of this calculation.
@@ -52,7 +57,10 @@ void spi_write_from(uint8_t address,uint8_t* array, uint8_t length){
     spiBegin();
     SPI.transfer(address | 0b10000000);
     //El address se aumenta en 1 automaticamente
-    for (i=0;i<length;i++)SPI.transfer(array[i]);
+   //Serial.println("Writing SPI");
+    for (i=0;i<length;i++){
+      // Serial.println((char)array[i]);
+      SPI.transfer(array[i]);}
     spiEnd();    
 }
 uint8_t spi_read_u8(uint8_t address){
@@ -82,7 +90,7 @@ class _RegisterBits{
             mask<<=1;
             mask|=1;
         }
-        mask <<= offset;
+        mask <<= _offset;
         offset = _offset;
         }
     void set(uint8_t val){
@@ -93,7 +101,13 @@ class _RegisterBits{
     }
     uint8_t get(){
         uint8_t regVal = spi_read_u8(address);
-        return (regVal&mask) >> offset;
+        return ((regVal & mask) >> offset);
+    }
+    uint8_t debug(){
+      Serial.print ("Mask: ");
+      Serial.println(mask,BIN);
+      return mask;     
+  
     }
 };
 
@@ -143,7 +157,7 @@ class RFM69{
     uint8_t ack_retries;
     float ack_delay;
     uint8_t sequence_number;
-    uint8_t seen_ids[256];
+    uint8_t seen_ids[8];
     uint8_t node;
     uint8_t destination;
     uint8_t identifier;
@@ -154,12 +168,37 @@ class RFM69{
     float frequency_deviation;
     int _reset_pin;
 
+    
+    void readAllRegs()
+    {
+      uint8_t regVal;
+      
+      Serial.println("Address - HEX - BIN");
+      for (uint8_t regAddr = 1; regAddr <= 0x4F; regAddr++)
+      {
+        spiBegin();
+        SPI.transfer(regAddr & 0x7F); // send address + r/w bit
+        regVal = SPI.transfer(0);
+        spiEnd();
+
+        Serial.print(regAddr, HEX);
+        print(" - ");
+        Serial.print(regVal,HEX);
+        print(" - ");
+        Serial.println(regVal,BIN);
+
+
+      }
+      spiEnd();
+    }    
 
 
 
-    RFM69(float frequency, uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _high_power=true,int baudrate = 2000000){
-        uint8_t version;
-        print("Initial conf starts\n");
+
+    void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _high_power=true,uint32_t baudrate = 2000000){
+        uint8_t version=0;
+        //Serial.println("Initial conf starts");
+        //Serial.println("HOLA 2");
         _tx_power = 13;
         _reset_pin = resetPin;
         high_power = _high_power;
@@ -167,10 +206,12 @@ class RFM69{
         //TODO:set reset io
         //TODO:reset
         reset();
+        
         version = spi_read_u8(_REG_VERSION);
         if (version != 0x24){
-            print("Error: ID del RFM incorrecta");
-            exit(-1);
+            Serial.print("Error: ID del RFM incorrecta");
+            while(1){}
+            //exit(-1);
         }
         idle();
 
@@ -187,7 +228,7 @@ class RFM69{
         //IMPORTANTE: Recuerda alocar el espacio para que no se sobreescriba
         sync_word_set( _sync_word); 
         preamble_length_set(_preamble_length);
-        frequency_mhz_set(frequency); 
+        frequency_mhz_set(); 
         //TODO: set encryption key
         
         //PARA USUARIOS AVANZADOS ----------------------------------------------------------------------------------------------
@@ -270,7 +311,26 @@ class RFM69{
         //    Lower 4 bits may be used to pass information.
         //    Fourth byte of the RadioHead header.
         // """
-        print("Initial configuration end\n");
+
+
+
+        //Extras: paara algunos registros que no coinciden con la libreria del micropython
+        // RSSI_CONFIG: 0x2
+        spi_write_u8(0x23,0x02);
+        //_REG_DIO_MAPPING1
+        spi_write_u8(_REG_DIO_MAPPING1,0x00);
+        //101 → FXOSC / 32
+        spi_write_u8(_REG_DIO_MAPPING1+1,0x05);
+        //RSSI_THRESH
+        spi_write_u8(0x29,0xFF);
+        //INIT payload length to 0
+        spi_write_u8(0x38,0x00);
+        //AutoRxRestartOn
+        spi_write_u8(_REG_PACKET_CONFIG2,0x02);
+
+
+
+        Serial.print("Initial configuration end\n");
     }
     void reset(){
         setOutput(_reset_pin,1);
@@ -306,6 +366,7 @@ class RFM69{
         // Enable payload ready interrupt for D0 line.
         dio_0_mapping.set(0b01);
         // Enter RX mode (will clear FIFO!).
+        //Serial.println("HOLAAA");        
         operation_mode_set(RX_MODE); 
 
     }
@@ -318,7 +379,9 @@ class RFM69{
         set_boost(_TEST_PA1_BOOST);
         // # Enable packet sent interrupt for D0 line.
         dio_0_mapping.set(0b00);
+        //readAllRegs(); 
         // # Enter TX mode (will clear FIFO!).
+
         operation_mode_set(TX_MODE);  
     }
     // .. warning:: Reading this will STOP any receiving/sending that might be happening!
@@ -347,17 +410,33 @@ class RFM69{
     void operation_mode_set(uint8_t val){
         float start;
         //TODO: assert 0 <= val <= 4
+        start = timeSec();
+        while (!mode_ready.get()){
+          
+            if ((timeSec() - start) >= 3){
+                     
+                Serial.print ("Operation Mode couldnt be set\n");
+                Serial.println(spi_read_u8(0x27),BIN);
+                while (1){}
+                //exit(-2);
+            }
+        }      
         // Set the mode bits inside the operation mode register.
         operation_mode = spi_read_u8(_REG_OP_MODE);
         operation_mode &= 0b11100011;
         operation_mode |= val << 2;
+        //Serial.println(operation_mode,BIN);
         spi_write_u8(_REG_OP_MODE,operation_mode);
+
+       
         // Wait for mode to change by polling interrupt bit.
         start = timeSec();
         while (!mode_ready.get()){
-            if ((timeSec() - start) >=1){
-                print ("Timeout on Operation Mode Set\n");
-                exit(-2);
+            if ((timeSec() - start) >= 3){
+                Serial.print ("Timeout on Operation Mode Set\n");
+                 Serial.println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
+                while (1){}
+                //exit(-2);
             }
         }
     }
@@ -373,16 +452,20 @@ class RFM69{
         // # Handle when sync word is disabled..
         if (!sync_on.get())return NULL;
         //WARNING must free allocated memory after using
-        sync_word = (uint8_t*)malloc(sync_size.get()+1);
-        spi_read_into(_REG_SYNC_VALUE1,sync_word,sync_size.get()+1);
+        sync_word = (uint8_t*)malloc(sync_size.get()+2);
+        sync_word[0] = sync_size.get()+1;
+        spi_read_into(_REG_SYNC_VALUE1,sync_word+1,sync_size.get()+1);
         return sync_word;
     }
     void sync_word_set(uint8_t* wrd){
-        if (wrd == NULL)sync_on.set(0);
+      uint8_t len = wrd[0];
+        if (len == 0 || wrd == NULL)sync_on.set(0);
+        
         else{
             //TODO: assert 1 <= len(val) <= 8
-            spi_write_from(_REG_SYNC_VALUE1,wrd,sizeof(wrd));
-            sync_size.set(sizeof(wrd)-1);
+            spi_write_from(_REG_SYNC_VALUE1,wrd+1,len);
+            //Sync_size: len(SYNC_WORD) - 1
+            sync_size.set(len-1);
             sync_on.set(1);
         }
     }
@@ -398,7 +481,7 @@ class RFM69{
         spi_write_u8(_REG_PREAMBLE_MSB, (val >> 8) & 0xFF);
         spi_write_u8(_REG_PREAMBLE_LSB, val & 0xFF);
     }
-    uint32_t frequency_mhz_get(){
+    float frequency_mhz_get(){
         // """The frequency of the radio in Megahertz. Only the allowed values for your radio must be
         // specified (i.e. 433 vs. 915 mhz)!
         // """
@@ -409,18 +492,34 @@ class RFM69{
         uint8_t mid = spi_read_u8(_REG_FRF_MID);
         uint8_t lsb = spi_read_u8(_REG_FRF_LSB);
         uint32_t frf = ((msb << 16) | (mid << 8) | lsb) & 0xFFFFFF;
-        uint32_t frequency = (frf * _FSTEP) / 1000000.0;
+        float frequency = (frf * _FSTEP) / 1000000.0;
         return frequency;
 
     }
-    void frequency_mhz_set(uint32_t val){
+    //WARNING: No funciona en micros porque requiere de enteros de 32 bits    
+    void frequency_mhz_set(){
+        //FRF = int((freq/_FSTEP)*1,000,000) & 0xFFFFFF
+        uint8_t msb,lsb,mid;
+        #ifdef FREQ_433
+        msb = 0x6C;
+        mid = 0x40;
+        lsb = 0x00;
+        #endif
+        //TODO: añadir soporte para otras frecuencias
+        
+
+
         //TODO: assert 290 <= val <= 1020
         // Calculate FRF register 24-bit value using section 6.2 of the datasheet.
-        uint32_t frf = int((val * 1000000.0) / _FSTEP) & 0xFFFFFF;
-        // Extract byte values and update registers.
-        uint8_t msb = frf >> 16;
-        uint8_t mid = (frf >> 8) & 0xFF;
-        uint8_t lsb = frf & 0xFF;
+        // unsigned long frf = int((val/_FSTEP)* 1000000.0) ;
+        // Serial.print("FRF: ");
+        // Serial.println(frf);
+        
+        // frf &=  0xFFFFFF;
+        // // Extract byte values and update registers.
+        // uint8_t msb = frf >> 16;
+        // uint8_t mid = (frf >> 8) & 0xFF;
+        // uint8_t lsb = frf & 0xFF;
         spi_write_u8(_REG_FRF_MSB, msb);
         spi_write_u8(_REG_FRF_MID, mid);
         spi_write_u8(_REG_FRF_LSB, lsb);
@@ -468,8 +567,9 @@ class RFM69{
         if (!pa0 && pa1 && pa2 && high_power)
             //# 5 to 20 dBm range
             return -11 + current_output_power;
-        print("Tx power power amps state unknown!");
-        exit(-3);
+        Serial.print("Tx power power amps state unknown!");
+        while (1){}
+        //exit(-3);
     }
     void tx_power_set(int8_t val){
         // Determine power amplifier and output power values depending on
@@ -560,7 +660,7 @@ class RFM69{
         return (spi_read_u8(_REG_IRQ_FLAGS2) & 0x4) >> 2;
     }
 
-    bool send(uint8_t* data, bool keep_listening = false, uint16_t _destination=256, uint16_t _node=256,uint16_t _identifier= 256, uint16_t _flags = 256){
+    bool send(uint8_t* data,uint8_t len, bool keep_listening = false, uint16_t _destination=256, uint16_t _node=256,uint16_t _identifier= 256, uint16_t _flags = 256){
         // """Send a string of data using the transmitter.
         // You can only send 60 bytes at a time
         // (limited by chip's FIFO size and appended headers).
@@ -585,8 +685,9 @@ class RFM69{
         // # Fill the FIFO with a packet to send.
         // # Combine header and data to form payload
         uint32_t i=0;
-        uint8_t* payload = (uint8_t*)malloc(5 + sizeof(data));
-        payload[0] = 4 + sizeof(data);
+        char* payload = (char*)malloc(5 + len + 1);
+        
+        payload[0] = 4 + len;
         if (_destination >=256 )  // use attribute
             payload[1] = destination;
         else//  # use kwarg
@@ -603,12 +704,20 @@ class RFM69{
             payload[4] = flags;
         else  // use kwarg
             payload[4] = _flags;
-        for (i=0;i<= sizeof(data);i++)
+        for (i=0;i<= len;i++)
             payload[5+i] = data[i];
+           
         // # Write payload to transmit fifo
-        spi_write_from(_REG_FIFO, payload,5+sizeof(data));
-        // # Turn on transmit mode to send out the packet.
+        spi_write_from(_REG_FIFO, payload,5+len);
+        Serial.print("Payload: ");
+        Serial.println(payload+5);
+
+        // Serial.println((char)spi_read_u8(_REG_FIFO));              
+    
+        free(payload);
+        // # Turn on transmit mode to send out the packet.       
         transmit();
+       
         // # Wait for packet sent interrupt with explicit polling (not ideal but
         // # best that can be done right now without interrupts).
         
@@ -622,9 +731,97 @@ class RFM69{
         if (keep_listening)
             listen();
         else  //# Enter idle mode to stop receiving other packets.
+      
             idle();
         return !timed_out;
     }
+        bool send_with_ack(){
+        return false;
+    }
+    char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,bool with_header = false){
+        // Wait to receive a packet from the receiver. If a packet is found the payload bytes
+        // are returned, otherwise None is returned (which indicates the timeout elapsed with no
+        // reception).
+        // If keep_listening is True (the default) the chip will immediately enter listening mode
+        // after reception of a packet, otherwise it will fall back to idle mode and ignore any
+        // future reception.
+        // All packets must have a 4 byte header for compatibilty with the
+        // RadioHead library.
+        // The header consists of 4 bytes (To,From,ID,Flags). The default setting will  strip
+        // the header before returning the packet to the caller.
+        // If with_header is True then the 4 byte header will be returned with the packet.
+        // The payload then begins at packet[4].
+        // If with_ack is True, send an ACK after receipt (Reliable Datagram mode)
+        // """
+        bool timed_out = false;
+        int start = 0;
+        uint8_t fifo_length;
+        uint8_t* packet;
+        if (timeout == 0)timeout = receive_timeout;
+        if (timeout!=0){
+            listen();
+            start = timeSec();
+            while (!timed_out && !payload_ready()){
+                if ((timeSec() - start) >= xmit_timeout)
+                    timed_out = true;
+            }
+
+        }
+       
+        last_rssi = rssi_get();
+        // Enter idle mode to stop receiving other packets.
+        idle();
+         
+        if (!timed_out){
+            fifo_length = spi_read_u8(_REG_FIFO);
+            Serial.println("FIFO LEN: " + String(fifo_length));
+            //  # Handle if the received packet is too small to include the 4 byte
+            // # RadioHead header and at least one byte of data --reject this packet and ignore it.
+            if (fifo_length > 0){
+                packet = (uint8_t*)malloc(fifo_length+2);
+                packet[0] = fifo_length;
+                packet[fifo_length+1] = '\0';
+                spi_read_into(_REG_FIFO,packet+1,fifo_length);
+                //print(packet);
+            }
+            if (fifo_length < 5){
+                packet = NULL;
+            }
+            else{
+                if (node != _RH_BROADCAST_ADDRESS && packet[1] != _RH_BROADCAST_ADDRESS && packet[1] != node){
+                    free(packet);
+                    packet = NULL;
+                }
+                //# send ACK unless this was an ACK or a broadcast
+                else if (with_ack && (packet[4]&_RH_FLAGS_ACK)==0 && packet[1] != _RH_BROADCAST_ADDRESS){
+                    if (ack_delay != 0)sleep_ms((int)(ack_delay/1000));
+                    //# send ACK packet to sender (data is b'!')
+                    send("!",false,packet[2],packet[1],packet[3],packet[4]|_RH_FLAGS_ACK);
+                    // # reject Retries if we have seen this idetifier from this source before
+                    if (seen_ids[packet[2]] == packet[3] && packet[4]&_RH_FLAGS_RETRY){
+                        free(packet);
+                        packet= NULL;
+                    }
+                    else{ //Save identifier from source
+                        seen_ids[packet[2]] = packet[3];
+                    }
+
+                }
+                if (!with_header && packet != NULL){
+                     //TODO: # skip the header if not wanted
+                }
+            }
+
+        }
+        if (keep_listening)listen();        
+        else idle();
+        return (char*)packet;
+
+    }
+
+
+
+
 
 
 
@@ -651,15 +848,24 @@ class RFM69{
 
 const int slaveSelectPin = 10;
 int ResetPin = 9;
-uint8_t synch[3] = {0xAA,0x2D,0xD4};
-float f = 433;
-
-RFM69 radio(f,*synch,ResetPin);;
+//PRIMER BYTE es el tamaño del array 
+uint8_t synch[] = {3,0xAA,0x2D,0xD4};
+//uint8_t sync_size = 3;
+RFM69 radio;
 
 
 
 void setup() {
   Serial.begin(9600);
+  SPI.begin();
+  pinMode(slaveSelectPin,OUTPUT);
+  pinMode(ResetPin,OUTPUT);
+  digitalWrite(slaveSelectPin,HIGH);
+  digitalWrite(ResetPin,LOW);
+  radio.init(synch,ResetPin);
+  //radio.readAllRegs();
+  //while (1);
+  
   
   
   
@@ -667,7 +873,16 @@ void setup() {
 }
 
 void loop() {
-  radio.send("hola");
-  // put your main code here, to run repeatedly:
-
+  Serial.println("Ciclo");
+  //radio.send("hola",4);
+  int i=0;
+  char* packet = radio.receive(false);
+  if (!(packet == NULL || packet[0] == 0)){
+    for (i=0;i<packet[0];i++){
+  Serial.print(packet[i+1]);
+  }
+  Serial.println("");
+  }
+  //radio.readAllRegs();
+  free(packet);
 }

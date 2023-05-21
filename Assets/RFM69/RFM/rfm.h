@@ -186,6 +186,7 @@ char rfmSend(char* dato,const unsigned char n){
         d = spiRead8(_REG_IRQ_FLAGS2 & 0x8) >> 3;
         Delay(100);
         i+=100;
+        if (i> xmit_timeout)Serial.println("Timeout");
     }
     idle();
     free(payload);

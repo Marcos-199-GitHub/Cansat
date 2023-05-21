@@ -606,6 +606,7 @@ class RFM69{
             payload[5+i] = data[i];
         // # Write payload to transmit fifo
         spi_write_from(_REG_FIFO, payload,5+sizeof(data));
+        free(payload);
         // # Turn on transmit mode to send out the packet.
         transmit();
         // # Wait for packet sent interrupt with explicit polling (not ideal but
@@ -623,6 +624,82 @@ class RFM69{
         else  //# Enter idle mode to stop receiving other packets.
             idle();
         return !timed_out;
+    }
+    bool send_with_ack(){
+        return false;
+    }
+    uint8_t* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,bool with_header = false){
+        //         """Wait to receive a packet from the receiver. If a packet is found the payload bytes
+        // are returned, otherwise None is returned (which indicates the timeout elapsed with no
+        // reception).
+        // If keep_listening is True (the default) the chip will immediately enter listening mode
+        // after reception of a packet, otherwise it will fall back to idle mode and ignore any
+        // future reception.
+        // All packets must have a 4 byte header for compatibilty with the
+        // RadioHead library.
+        // The header consists of 4 bytes (To,From,ID,Flags). The default setting will  strip
+        // the header before returning the packet to the caller.
+        // If with_header is True then the 4 byte header will be returned with the packet.
+        // The payload then begins at packet[4].
+        // If with_ack is True, send an ACK after receipt (Reliable Datagram mode)
+        // """
+        bool timed_out = false;
+        int start = 0;
+        uint8_t fifo_length;
+        uint8_t* packet;
+        if (timeout==0){
+            listen();
+            start = timeSec();
+            while (!timed_out && !payload_ready()){
+                if ((timeSec() - start) >= xmit_timeout)
+                    timed_out = true;
+            }
+
+        }
+        //TODO: define packet
+        last_rssi = rssi_get();
+        // Enter idle mode to stop receiving other packets.
+        idle();
+        if (!timed_out){
+            fifo_length = spi_read_u8(_REG_FIFO);
+            //  # Handle if the received packet is too small to include the 4 byte
+            // # RadioHead header and at least one byte of data --reject this packet and ignore it.
+            if (fifo_length > 0){
+                packet = (uint8_t*)malloc(fifo_length+1);
+                spi_read_into(_REG_FIFO,packet,fifo_length);
+                print(packet);
+            }
+            if (fifo_length < 5){
+                packet = NULL;
+            }
+            else{
+                if (node != _RH_BROADCAST_ADDRESS && packet[0] != _RH_BROADCAST_ADDRESS && packet[0] != node){
+                    packet = NULL;
+                }
+                //# send ACK unless this was an ACK or a broadcast
+                else if (with_ack && (packet[3]&_RH_FLAGS_ACK)==0 && packet[0] != _RH_BROADCAST_ADDRESS){
+                    if (ack_delay != 0)sleep_ms((int)(ack_delay/1000));
+                    //# send ACK packet to sender (data is b'!')
+                    send('!',false,packet[1],packet[0],packet[2],packet[3]);
+                    // # reject Retries if we have seen this idetifier from this source before
+                    if (seen_ids[packet[1]] == packet[2] && packet[3]&_RH_FLAGS_RETRY){
+                        packet= NULL;
+                    }
+                    else{ //Save identifier from source
+                        seen_ids[packet[1]] = packet[2];
+                    }
+
+                }
+                if (!with_header && packet != NULL){
+                     //TODO: # skip the header if not wanted
+                }
+            }
+
+        }
+        if (keep_listening)listen();
+        else idle();
+        return packet;
+
     }
 
 

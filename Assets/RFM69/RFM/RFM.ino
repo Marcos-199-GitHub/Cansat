@@ -16,7 +16,7 @@ void setup() {
   pinMode(IRQ, INPUT);
   // Inicializar bus SPI
   SPI.begin();
-  //Serial.begin(9600);
+  Serial.begin(9600);
   RFMinit();
   //Serial.println("Starting");
   RFM69_Config();
@@ -25,7 +25,7 @@ void setup() {
 }
  
 void loop() {
-//char* s = receive();
+char* s = receive();
 
 //Serial.println(s);
 //char dat = readFIFO(); 
