@@ -141,6 +141,11 @@ class RFM69{
     _RegisterBits address_filter = _RegisterBits(_REG_PACKET_CONFIG1, 1, 2);
     _RegisterBits mode_ready = _RegisterBits(_REG_IRQ_FLAGS1, 7);
     _RegisterBits dio_0_mapping = _RegisterBits(_REG_DIO_MAPPING1, 6, 2);
+    _RegisterBits dio_1_mapping = _RegisterBits(_REG_DIO_MAPPING1, 4, 2);
+    _RegisterBits dio_2_mapping = _RegisterBits(_REG_DIO_MAPPING1, 2, 2);
+    _RegisterBits dio_3_mapping = _RegisterBits(_REG_DIO_MAPPING1, 0, 2);
+    _RegisterBits dio_4_mapping = _RegisterBits(_REG_DIO_MAPPING1+1, 6, 2);
+    _RegisterBits dio_5_mapping = _RegisterBits(_REG_DIO_MAPPING1+1, 4, 2);
     //Extras
     int8_t _tx_power;
     int8_t tx_power;
@@ -206,6 +211,7 @@ class RFM69{
         //TODO:set reset io
         //TODO:reset
         reset();
+        //readAllRegs();
         
         version = spi_read_u8(_REG_VERSION);
         if (version != 0x24){
@@ -320,13 +326,19 @@ class RFM69{
         //_REG_DIO_MAPPING1
         spi_write_u8(_REG_DIO_MAPPING1,0x00);
         //101 → FXOSC / 32
-        spi_write_u8(_REG_DIO_MAPPING1+1,0x05);
+        spi_write_u8(_REG_DIO_MAPPING1+1,0b101);
         //RSSI_THRESH
         spi_write_u8(0x29,0xFF);
         //INIT payload length to 0
-        spi_write_u8(0x38,0x00);
+        spi_write_u8(0x38,0x40);
         //AutoRxRestartOn
         spi_write_u8(_REG_PACKET_CONFIG2,0x02);
+        //Con esto se puede colocar un LED en DIO2 y ver los datos que se reciben y se envian
+        dio_2_mapping.set(0b01);
+        //Asi se puede saber si el buffer FIFO tiene algun dato
+        dio_1_mapping.set(0b10);
+        //En modo rx, da informacion acerca del RSSI (Recieved Signal Strength Indicator)
+        dio_3_mapping.set(0b01);
 
 
 
@@ -657,7 +669,9 @@ class RFM69{
     }
     bool payload_ready(){
                 // """Receive status"""
-        return (spi_read_u8(_REG_IRQ_FLAGS2) & 0x4) >> 2;
+        uint8_t p = spi_read_u8(_REG_IRQ_FLAGS2);
+        //Serial.println(p,BIN);
+        return (p & 0x4) >> 2;
     }
 
     bool send(uint8_t* data,uint8_t len, bool keep_listening = false, uint16_t _destination=256, uint16_t _node=256,uint16_t _identifier= 256, uint16_t _flags = 256){
@@ -735,7 +749,26 @@ class RFM69{
             idle();
         return !timed_out;
     }
-        bool send_with_ack(){
+    bool send_with_ack(uint8_t* data,uint8_t len){
+        // Reliable Datagram mode:
+        // Send a packet with data and wait for an ACK response.
+        // The packet header is automatically generated.
+        // If enabled, the packet transmission will be retried on failure
+        int retries_remaining = 0;
+        bool got_ack = false;
+        if (ack_retries)retries_remaining = ack_retries;
+        else retries_remaining=1;
+        sequence_number = (sequence_number+1) & 0xFF;
+        while (!got_ack && retries_remaining){
+            identifier = sequence_number;
+            send(data,len,true);
+            // Don't look for ACK from Broadcast message
+            if (destination = _RH_BROADCAST_ADDRESS)got_ack = true;
+            else{
+                //TODO: terminar
+            }
+
+        }
         return false;
     }
     char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,bool with_header = false){
@@ -756,14 +789,19 @@ class RFM69{
         bool timed_out = false;
         int start = 0;
         uint8_t fifo_length;
-        uint8_t* packet;
+        uint8_t* packet= NULL;
         if (timeout == 0)timeout = receive_timeout;
         if (timeout!=0){
+            //readAllRegs();
+            //while(1){}
             listen();
             start = timeSec();
             while (!timed_out && !payload_ready()){
-                if ((timeSec() - start) >= xmit_timeout)
+                //delay(20);
+                if ((timeSec() - start) >= xmit_timeout){
+                    Serial.println("Timed out");
                     timed_out = true;
+                    }
             }
 
         }
@@ -813,6 +851,7 @@ class RFM69{
             }
 
         }
+        
         if (keep_listening)listen();        
         else idle();
         return (char*)packet;
@@ -875,8 +914,9 @@ void setup() {
 void loop() {
   Serial.println("Ciclo");
   //radio.send("hola",4);
+
   int i=0;
-  char* packet = radio.receive(false);
+  char* packet = radio.receive();
   if (!(packet == NULL || packet[0] == 0)){
     for (i=0;i<packet[0];i++){
   Serial.print(packet[i+1]);
@@ -885,4 +925,5 @@ void loop() {
   }
   //radio.readAllRegs();
   free(packet);
+  delay(100);
 }
