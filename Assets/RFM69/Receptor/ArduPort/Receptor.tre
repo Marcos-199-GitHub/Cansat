@@ -1,0 +1,244 @@
+ÀÄReceptor
+   ÃÄMAIN  0/1102  Ram=6
+   ³  ÃÄ@cinit1  (Inline)  Ram=0
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
+   ³  ³  ÀÄ_RegisterBits_  0/62  Ram=7
+   ³  ÃÄ@cinit2  (Inline)  Ram=0
+   ³  ÃÄusb_init  0/14  Ram=0
+   ³  ³  ÃÄusb_init_cs  0/6  Ram=0
+   ³  ³  ³  ÀÄusb_detach  0/40  Ram=1
+   ³  ³  ³     ÀÄusb_token_reset  0/48  Ram=3
+   ³  ³  ³        ÀÄusb_cdc_init  0/64  Ram=4
+   ³  ³  ÀÄusb_task  0/68  Ram=1
+   ³  ³     ÃÄusb_enumerated  0/6  Ram=0
+   ³  ³     ÃÄusb_cdc_flush_tx_buffer  0/114  Ram=4
+   ³  ³     ³  ÃÄusb_put_packet  0/158  Ram=10
+   ³  ³     ³  ³  ÃÄusb_tbe  0/86  Ram=4
+   ³  ³     ³  ³  ³  ÀÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ³  ÀÄusb_flush_in  0/332  Ram=10
+   ³  ³     ³  ³     ÃÄusb_tbe  0/86  Ram=4
+   ³  ³     ³  ³     ³  ÀÄ*
+   ³  ³     ³  ³     ÃÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ³     ÃÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ³     ÃÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ³     ÃÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ³     ÀÄ@MUL1616  0/34  Ram=5
+   ³  ³     ³  ÀÄmemmove  0/220  Ram=13
+   ³  ³     ÃÄusb_attach  0/46  Ram=0
+   ³  ³     ³  ÀÄusb_token_reset  0/48  Ram=3
+   ³  ³     ³     ÀÄ*
+   ³  ³     ÀÄusb_detach  0/40  Ram=1
+   ³  ³        ÀÄ*
+   ³  ÃÄreadAllRegs  0/182  Ram=22
+   ³  ³  ÃÄ@const1559  0/36  Ram=0
+   ³  ³  ÃÄprintln  0/34  Ram=8
+   ³  ³  ³  ÃÄusbPrint  0/20  Ram=2
+   ³  ³  ³  ³  ÃÄusb_task  0/68  Ram=1
+   ³  ³  ³  ³  ³  ÀÄ*
+   ³  ³  ³  ³  ÃÄusb_enumerated  0/6  Ram=0
+   ³  ³  ³  ³  ÀÄ@PSTRINGR_744  0/38  Ram=2
+   ³  ³  ³  ³     ÀÄusb_cdc_putc  0/60  Ram=1
+   ³  ³  ³  ³        ÃÄusb_tbe  0/86  Ram=4
+   ³  ³  ³  ³        ³  ÀÄ*
+   ³  ³  ³  ³        ÃÄusb_cdc_flush_tx_buffer  0/114  Ram=4
+   ³  ³  ³  ³        ³  ÀÄ*
+   ³  ³  ³  ³        ÀÄusb_cdc_putc_fast  0/10  Ram=1
+   ³  ³  ³  ³           ÀÄ_usb_cdc_putc_fast_noflush  0/76  Ram=4
+   ³  ³  ³  ³              ÀÄusb_cdc_flush_tx_buffer  0/114  Ram=4
+   ³  ³  ³  ³                 ÀÄ*
+   ³  ³  ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ³     ÀÄ*
+   ³  ³  ÃÄspi_read_u8  0/28  Ram=1
+   ³  ³  ³  ÀÄspi_read_into  0/84  Ram=7
+   ³  ³  ³     ÃÄspiBegin  0/16  Ram=0
+   ³  ³  ³     ³  ÀÄsetOutput  0/52  Ram=2
+   ³  ³  ³     ³     ÃÄ@WRITEBITA  0/66  Ram=6
+   ³  ³  ³     ³     ÀÄ@WRITEBITA  0/66  Ram=6
+   ³  ³  ³     ÃÄ@delay_us1  0/40  Ram=1
+   ³  ³  ³     ÀÄspiEnd  0/16  Ram=0
+   ³  ³  ³        ÀÄsetOutput  0/52  Ram=2
+   ³  ³  ³           ÀÄ*
+   ³  ³  ÃÄprint  0/152  Ram=17
+   ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
+   ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
+   ³  ³  ³  ÃÄ@PRINTF_X_1362  0/72  Ram=2
+   ³  ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
+   ³  ³  ³  ³  ÀÄ@SPRINTF  0/30  Ram=1
+   ³  ³  ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ³     ÀÄ*
+   ³  ³  ÃÄprint  0/12  Ram=2
+   ³  ³  ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ³     ÀÄ*
+   ³  ³  ÃÄprint  0/152  Ram=17
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄprint  0/12  Ram=2
+   ³  ³  ³  ÀÄ*
+   ³  ³  ÃÄprintln  0/34  Ram=8
+   ³  ³  ³  ÃÄprint  0/152  Ram=17
+   ³  ³  ³  ³  ÀÄ*
+   ³  ³  ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ³     ÀÄ*
+   ³  ³  ÀÄspiEnd  0/16  Ram=0
+   ³  ³     ÀÄ*
+   ³  ÀÄ@delay_ms1  0/44  Ram=1
+   ÀÄusb_isr  0/136  Ram=2
+      ÃÄusb_isr_activity  0/18  Ram=0
+      ÃÄusb_isr_stall  0/14  Ram=0
+      ³  ÀÄusb_init_ep0_setup  0/42  Ram=2
+      ÃÄusb_isr_uerr  0/8  Ram=0
+      ÃÄusb_isr_rst  0/48  Ram=0
+      ³  ÃÄusb_disable_endpoints  0/30  Ram=1
+      ³  ³  ÀÄusb_disable_endpoint  0/112  Ram=5
+      ³  ³     ÃÄusb_endpoint_is_valid  0/78  Ram=3
+      ³  ³     ³  ÃÄ@const853  0/32  Ram=0
+      ³  ³     ³  ÀÄ@const856  0/32  Ram=0
+      ³  ³     ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³     ÀÄ@MUL1616  0/34  Ram=5
+      ³  ÃÄusb_token_reset  0/48  Ram=3
+      ³  ³  ÀÄ*
+      ³  ÃÄusb_clear_trn  0/4  Ram=0
+      ³  ÀÄusb_init_ep0_setup  0/42  Ram=2
+      ÃÄusb_isr_uidle  0/10  Ram=0
+      ÃÄusb_isr_sof  0/6  Ram=0
+      ÃÄusb_clear_trn  0/4  Ram=0
+      ÃÄusb_isr_tok_dne  0/248  Ram=3
+      ³  ÃÄusb_isr_tok_setup_dne  0/50  Ram=0
+      ³  ³  ÃÄusb_isr_tkn_setup_StandardDevice  0/188  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_stall  0/4  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_stall  0/4  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_Get_Descriptor  0/190  Ram=1
+      ³  ³  ³  ³  ÃÄ@const879  0/60  Ram=0
+      ³  ³  ³  ³  ÃÄ@const879  0/60  Ram=0
+      ³  ³  ³  ³  ÃÄ@const871  0/24  Ram=0
+      ³  ³  ³  ³  ÃÄ@const865  0/84  Ram=0
+      ³  ³  ³  ³  ÃÄusb_request_stall  0/4  Ram=0
+      ³  ³  ³  ³  ÃÄusb_request_stall  0/4  Ram=0
+      ³  ³  ³  ³  ÀÄusb_copy_desc_seg_to_ep  0/136  Ram=4
+      ³  ³  ³  ³     ÃÄ@const865  0/84  Ram=0
+      ³  ³  ³  ³     ÃÄ@const879  0/60  Ram=0
+      ³  ³  ³  ³     ÃÄ@const876  0/34  Ram=0
+      ³  ³  ³  ³     ÀÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_set_configured  0/490  Ram=12
+      ³  ³  ³  ³  ÃÄusb_disable_endpoints  0/30  Ram=1
+      ³  ³  ³  ³  ³  ÀÄ*
+      ³  ³  ³  ³  ÃÄusb_disable_endpoint  0/112  Ram=5
+      ³  ³  ³  ³  ³  ÀÄ*
+      ³  ³  ³  ³  ÃÄ@const856  0/32  Ram=0
+      ³  ³  ³  ³  ÃÄ@const862  0/48  Ram=0
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÃÄ@const862  0/48  Ram=0
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÃÄ@const853  0/32  Ram=0
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÃÄ@const859  0/48  Ram=0
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÀÄ@const853  0/32  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÀÄusb_request_stall  0/4  Ram=0
+      ³  ³  ÃÄusb_isr_tkn_setup_StandardInterface  0/160  Ram=3
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄ@const868  0/18  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_stall  0/4  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_stall  0/4  Ram=0
+      ³  ³  ³  ÀÄusb_request_stall  0/4  Ram=0
+      ³  ³  ÃÄusb_isr_tkn_setup_StandardEndpoint  0/106  Ram=0
+      ³  ³  ³  ÃÄusb_endpoint_is_valid  0/78  Ram=3
+      ³  ³  ³  ³  ÀÄ*
+      ³  ³  ³  ÃÄusb_unstall_ep  0/122  Ram=6
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÀÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_stall_ep  0/102  Ram=6
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÀÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_endpoint_stalled  0/118  Ram=5
+      ³  ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ³  ÀÄ@MUL1616  0/34  Ram=5
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÀÄusb_request_stall  0/4  Ram=0
+      ³  ³  ÃÄusb_isr_tkn_cdc  0/156  Ram=2
+      ³  ³  ³  ÃÄusb_request_get_data  0/6  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_get_data  0/6  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÀÄusb_request_stall  0/4  Ram=0
+      ³  ³  ÀÄusb_request_stall  0/4  Ram=0
+      ³  ÃÄusb_flush_out  0/256  Ram=9
+      ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ÃÄ@const862  0/48  Ram=0
+      ³  ³  ÃÄ@MUL1616  0/34  Ram=5
+      ³  ³  ÀÄ@MUL1616  0/34  Ram=5
+      ³  ÃÄusb_flush_out  0/256  Ram=9
+      ³  ³  ÀÄ*
+      ³  ÃÄusb_flush_in  0/332  Ram=10
+      ³  ³  ÀÄ*
+      ³  ÃÄusb_isr_tok_out_dne  0/30  Ram=1
+      ³  ³  ÃÄusb_isr_tok_out_cdc_control_dne  0/72  Ram=0
+      ³  ³  ³  ÃÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ³  ÀÄusb_request_send_response  0/6  Ram=1
+      ³  ³  ÀÄusb_isr_tok_out_cdc_data_dne  0/28  Ram=0
+      ³  ³     ÃÄusb_rx_packet_size  0/64  Ram=3
+      ³  ³     ³  ÀÄ@MUL1616  0/34  Ram=5
+      ³  ³     ÀÄusb_cdc_get_discard  0/18  Ram=0
+      ³  ³        ÀÄusb_flush_out  0/256  Ram=9
+      ³  ³           ÀÄ*
+      ³  ÃÄusb_flush_out  0/256  Ram=9
+      ³  ³  ÀÄ*
+      ³  ÃÄusb_flush_in  0/332  Ram=10
+      ³  ³  ÀÄ*
+      ³  ÃÄusb_isr_tok_in_dne  0/50  Ram=1
+      ³  ³  ÃÄusb_copy_desc_seg_to_ep  0/136  Ram=4
+      ³  ³  ³  ÀÄ*
+      ³  ³  ÃÄusb_finish_set_address  0/14  Ram=0
+      ³  ³  ³  ÀÄusb_set_address  0/26  Ram=1
+      ³  ³  ÀÄusb_isr_tok_in_cdc_data_dne  0/6  Ram=0
+      ³  ³     ÀÄusb_cdc_flush_tx_buffer  0/114  Ram=4
+      ³  ³        ÀÄ*
+      ³  ÃÄusb_flush_in  0/332  Ram=10
+      ³  ³  ÀÄ*
+      ³  ÃÄusb_isr_tok_out_dne  0/30  Ram=1
+      ³  ³  ÀÄ*
+      ³  ÀÄusb_isr_tok_in_dne  0/50  Ram=1
+      ³     ÀÄ*
+      ÀÄRDA_isr  0/4  Ram=0

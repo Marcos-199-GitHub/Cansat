@@ -1,0 +1,66 @@
+000     @SCRATCH
+001     @SCRATCH
+001     _RETURN_
+002     @SCRATCH
+003     @SCRATCH
+005     main.@SCRATCH1
+006     @delay_ms2.P1
+F83     PSP_DATA
+FB4.6   C1OUT
+FB4.7   C2OUT
+FBB     CCP_2
+FBB     CCP_2_LOW
+FBC     CCP_2_HIGH
+FBE     CCP_1
+FBE     CCP_1_LOW
+FBF     CCP_1_HIGH
+FE1-FE2 @READ_PACKED_MEMORY.P1
+FE1-FE2 @WRITE_PACKED_MEMORY.P2
+FE9-FEA @READ_PROGRAM_MEMORY.P1
+FE9-FEA @READ_PACKED_MEMORY.P2
+FE9-FEA @WRITE_PROGRAM_MEMORY.P3
+FE9-FEA @WRITE_PACKED_MEMORY.P4
+FF6-FF8 @READ_PROGRAM_MEMORY.P1
+FF6-FF8 @WRITE_PROGRAM_MEMORY.P2
+
+ROM Allocation:
+000004  @delay_ms2
+000030  main
+000030  @cinit1
+000040  @cinit2
+
+Project Directory:
+    I:\CanSat\Nueva carpeta\RFM69\Receptor\New\CCS_Tuto\
+
+Project Files:
+    main.c                                                  [06-may.-23 11:50  CRC=D872A938]
+    main.h                                                  [06-may.-23 11:48  CRC=D872A938]
+    C:\Program Files (x86)\PICC\Devices\18F4550.h           [21-oct.-22 11:08  CRC=5418AFD6]
+
+Source signature=5916B21C
+Program memory checksum=0000
+Hex file CRC=DD83
+
+Units:
+    I:\CanSat\Nueva carpeta\RFM69\Receptor\New\CCS_Tuto\main (main)
+
+Compiler Settings:
+    Processor:      PIC18F4550
+    Pointer Size:   16
+    ADC Range:      0-1023
+    Opt Level:      9
+    Short,Int,Long: UNSIGNED: 1,8,16
+    Float,Double:   32,32
+    Compile Mode:   CCS5
+
+Output Files:
+    XREF file:   main.xsym
+    Errors:      main.err
+    Ext Symbols: main.esym
+    INHX32:      main.hex
+    Symbols:     main.sym
+    List:        main.lst
+    Debug/COFF:  main.cof
+    Project:     main.ccspjt
+    Call Tree:   main.tre
+    Statistics:  main.STA

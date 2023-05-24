@@ -1,0 +1,91 @@
+//Global buffer for SPI commands
+uint8_t _BUFFER[4];
+
+void setOutput(int pin, int value){
+    output_bit(pin,value);
+}
+void usbPrint(char* str){
+      usb_task();  //Verifica la comunicación USB
+      if(usb_enumerated()) {
+         printf(usb_cdc_putc,str); 
+      }
+}
+
+void spiBegin(){
+SPI.beginTransaction(SPISettings(SPIBAUD, MSBFIRST, SPI_MODE0));
+setOutput(SSPin, 0);
+
+}
+void spiEnd(){
+setOutput(SSPin, 1);    
+SPI.endTransaction();
+}
+
+void print(char* str){
+    //Serial.print(str);
+    usbPrint(str);
+}
+void print(int str, int format){
+    char* converted[11];
+    int i;
+    if (format == HEX) sprintf(converted,"0x%02X",str);
+    else if (format == BIN){
+    //Conversion manual
+    converted[0] = '0';
+    converted[1] = 'b';
+    for (i=0;i<8;i++){
+    converted[i+2] = (str >> (7-i)) + '0';
+    }
+    converted[11] = '\0';
+    }
+    usbPrint(converted);
+    //Serial.print(str,format);
+}
+void println(char* str){
+    usbPrint(str);
+    usbPrint("\n");
+    //Serial.println(str);
+}
+void println(int str, int format){
+    print(str,format);
+    usbPrint("\n");
+    //Serial.println(str,format);
+}
+float timeSec(){
+    return millis()/1000;
+}
+void spi_read_into(uint8_t address,uint8_t* array, uint8_t length){
+    int i=0;
+    //Select
+    spiBegin();
+    _BUFFER[0] = address & 0x7F; //Strip MSB byte to read
+    //Write address
+    SPI.transfer(_BUFFER[0]);
+    for (i=0;i<length;i++)
+        array[i] = SPI.transfer(0xFF);
+    spiEnd();
+
+}
+void spi_write_from(uint8_t address,uint8_t* array, uint8_t length){
+    int i=0;
+    spiBegin();
+    SPI.transfer(address | 0b10000000);
+    //El address se aumenta en 1 automaticamente
+   //Serial.println("Writing SPI");
+    for (i=0;i<length;i++){
+      // Serial.println((char)array[i]);
+      SPI.transfer(array[i]);}
+    spiEnd();    
+}
+uint8_t spi_read_u8(uint8_t address){
+    spi_read_into(address,_BUFFER,1);
+    return _BUFFER[0];
+}
+uint8_t spi_write_u8(uint8_t address,uint8_t val){
+    _BUFFER[0] = val;
+    spi_write_from(address,_BUFFER,1);
+    return _BUFFER[0];
+}
+void sleep_ms(int ms){
+    delay_ms(ms);
+}

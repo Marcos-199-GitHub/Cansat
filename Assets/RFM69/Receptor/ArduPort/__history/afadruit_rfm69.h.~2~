@@ -5,7 +5,7 @@ const float _FXOSC = 32000000.0;
 const float _FSTEP = _FXOSC / 524288;
 
 
-class _RegisterBits{
+class _RegisterBits(){
     public:
     uint8_t address;
     uint8_t mask;
@@ -690,7 +690,7 @@ class RFM69{
             identifier = sequence_number;
             send(data,len,true);
             // Don't look for ACK from Broadcast message
-            if (destination == _RH_BROADCAST_ADDRESS)got_ack = true;
+            if (destination = _RH_BROADCAST_ADDRESS)got_ack = true;
             else{
                 ack_packet = receive(true,false,ack_wait,true);
                 if(ack_packet != NULL){

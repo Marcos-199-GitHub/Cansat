@@ -1,0 +1,56 @@
+#include <Receptor.h>
+
+#fuses HSPLL, NOWDT, NOPROTECT, NODEBUG, USBDIV, PLL4, CPUDIV1, VREGEN
+
+#use spi (MASTER, SPI1, ENABLE=PIN_A5, BAUD=10000, MODE=0, BITS=8, STREAM=SPI_1)
+
+#use delay(clock=48000000)
+
+#byte porta = 0xf80 // Identificador para el puerto A. 
+#byte portb = 0xf81 // Identificador para el puerto B. 
+#byte portc = 0xf82 // Identificador para el puerto C. 
+#byte portd = 0xf83 // Identificador para el puerto D. 
+#byte porte = 0xf84 // Identificador para el puerto E.
+
+
+// if USB_CDC_ISR is defined, then this function will be called
+// by the USB ISR when there incoming CDC (virtual com port) data.
+// this is useful if you want to port old RS232 code that was use
+// #int_rda to CDC.
+#define USB_CDC_ISR() RDA_isr()
+
+// in order for handle_incoming_usb() to be able to transmit the entire
+// USB message in one pass, we need to increase the CDC buffer size from
+// the normal size and use the USB_CDC_DELAYED_FLUSH option.
+// failure to do this would cause some loss of data.
+#define USB_CDC_DELAYED_FLUSH
+#define USB_CDC_DATA_LOCAL_SIZE  128
+
+static void RDA_isr(void);
+
+#include <stddef.h>
+#include <stdlibm.h>
+#include <stdint.h>
+
+
+#ZERO_RAM
+
+/* TODO: Use usb_cdc_putc() to transmit data to the USB
+virtual COM port. Use usb_cdc_kbhit() and usb_cdc_getc() to
+receive data from the USB virtual COM port. usb_enumerated()
+can be used to see if connected to a host and ready to
+communicate. */
+
+void main()
+{
+   setup_adc_ports(NO_ANALOGS, VSS_VDD);
+   usb_init();
+
+   while(TRUE)
+   {
+
+
+      //TODO: User Code
+   }
+
+}

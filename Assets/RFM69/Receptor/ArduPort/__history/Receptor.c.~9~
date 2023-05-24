@@ -1,0 +1,88 @@
+#include <Receptor.h>
+
+#use spi (MASTER, SPI1, ENABLE=PIN_A5, BAUD=10000, MODE=0, BITS=8, STREAM=SPI_1)
+
+#byte porta = 0xf80 // Identificador para el puerto A. 
+#byte portb = 0xf81 // Identificador para el puerto B. 
+#byte portc = 0xf82 // Identificador para el puerto C. 
+#byte portd = 0xf83 // Identificador para el puerto D. 
+#byte porte = 0xf84 // Identificador para el puerto E.
+
+
+
+
+
+#include <stddef.h>
+#include <stdlibm.h>
+#include <stdint.h>
+
+
+#ZERO_RAM
+
+
+//Define la interrupción por recepción Serial
+static void RDA_isr(void)
+{  
+ while(usb_cdc_kbhit())
+   {
+    int i=0,ini=0,fin=0;
+    char dat[5];
+    char degC[5];
+    
+    // Almacena 5 datos leidos del USB CDC
+     for(i=0;i<5;i++){
+        dat[i]=usb_cdc_getc();
+       }
+   
+   
+   
+   //Busco el valor de los datos recibidos
+   for(i=0;i<5;i++){
+     if(dat[i]=='S'){
+       ini=i+1;
+       i=10;
+     }
+    }
+    for(i=ini;i<5;i++){
+     if(dat[i]=='$'){
+       fin=i-1;
+       i=10;
+     }
+    }
+    if(ini!=0 && fin!=0){
+       // salvo en degC el caracter con el escalon
+       for(i=ini;i<=fin;i++){
+        degC[i-ini]=dat[i];
+       }
+       
+        deg = atol(degC); //Convierte el String en un valor numerico
+        
+        if(deg==101)
+         output_toggle(LED1);
+         
+        if(deg==102)
+         output_toggle(LED2);
+    }
+  }
+}
+
+
+/* TODO: Use usb_cdc_putc() to transmit data to the USB
+virtual COM port. Use usb_cdc_kbhit() and usb_cdc_getc() to
+receive data from the USB virtual COM port. usb_enumerated()
+can be used to see if connected to a host and ready to
+communicate. */
+
+void main()
+{
+   setup_adc_ports(NO_ANALOGS, VSS_VDD);
+   usb_init();
+
+   while(TRUE)
+   {
+
+
+      //TODO: User Code
+   }
+
+}
