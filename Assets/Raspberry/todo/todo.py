@@ -185,12 +185,17 @@ while True:
     total_kb += size_kb
 
     rf_data = bytes(utf,"utf-8")
-    rfm69.send(rf_data[:59])
-    print("Enviados {size_kb} kilobytes de datos por RF y Serial")
+    c = 0
+    while (c < len(utf)):
+        rfm69.send(rf_data[c:c+59])
+        c+=59
+    print(f"Enviados {size_kb} kilobytes de datos por RF y Serial")
 
     print(utf)
     display.fill(0)
-    display.text(f"{n} paquetes enviados ({total_kb}) kb",0,15,1)
+    display.text(f"{n} paquetes enviados",0,15,1)
+    display.text(f" ({total_kb}) kb",0,30,1)
+
     display.show()
     f.write(utf)
 

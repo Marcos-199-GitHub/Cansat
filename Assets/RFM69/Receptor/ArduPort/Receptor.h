@@ -31,3 +31,14 @@ static void RDA_isr(void);
 
 #include <usb_cdc.h>
 
+uint16_t globalMs;
+uint8_t globalSec;
+uint16_t globalMin;
+
+
+
+
+
+
+
+

@@ -1,12 +1,16 @@
-D G "__PCH__" 0 71 ""5.112""
-D G "__DEVICE__" 0 71 "4550"
-D G "__DATE__" 0 71 ""24-May-23""
-D G "__TIME__" 0 71 ""00:30:52""
-D G "_UNICODE" 0 71 ""?""
-D G "__EVAL" 0 71 ""?""
+F N "Z" 19 8 ""
+D G "__PCH__" 19 8 ""5.112""
+D G "__DEVICE__" 19 8 "4550"
+D G "__DATE__" 19 8 ""29-May-23""
+D G "__TIME__" 19 8 ""23:05:58""
+D G "_UNICODE" 19 8 ""?""
+D G "__EVAL" 19 8 ""?""
 D G "HEX" 0 1 "16"
 D G "BIN" 0 2 "2"
-D G "SSPin" 0 3 "PIN_A5"
+D G "DEC" 0 3 "10"
+D G "SSPin" 0 4 "PIN_A5"
+D G "TIMER_START" 0 5 "114"
+D G "TIMER_STEP_MS" 0 6 "3"
 c L "set_tris_a" 2 1 6 "FUNCTION"
 F N "set_tris_a" 2 45 ""
 V L "value" 2 45 "int8" `55 
@@ -2557,45 +2561,48 @@ F G "get_string_usb" 3 820 "void(*int8 s,int8 max)" `736
 V L "len" 3 821 "int8" `1277 
 V L "c" 3 822 "int8" `1278 
 C L "get_string_usb" 3 828 1 "FUNCTION"
+V G "globalMs" 1 34 "uint16_t" `1279 
+V G "globalSec" 1 35 "uint8_t" `1280 
+V G "globalMin" 1 36 "uint16_t" `1281 
 D G "_STDLIBM" 15 14 ""
-T G "node_t" 15 29 "{int16 size,int16 next}" `1290 
+T G "node_t" 15 29 "{int16 size,int16 next}" `1293 
 D G "debug_stdlibm" 15 41 "(s)"
 D G "_STDLIBM_TRACK_WORST_INC" 15 69 "(_x)"
 D G "_STDLIBM_TRACK_WORST_DEC" 15 70 "(_x)"
 D G "_MEMMGMT_CSIZE" 16 12 "32768"
 D G "_MEMMGMT_POS" 16 13 "15"
 F N "create_node" 16 22 ""
-V L "size" 16 22 "int16" `1293 
-V L "ptr" 16 22 "nodet *" `1294  "create node at given location"
-F G "create_node" 16 23 "nodet *(int16 size,nodet * ptr)" `1292 
-V L "result" 16 24 "nodet *" `1295 
+V L "size" 16 22 "int16" `1296 
+V L "ptr" 16 22 "nodet *" `1297  "create node at given location"
+F G "create_node" 16 23 "nodet *(int16 size,nodet * ptr)" `1295 
+V L "result" 16 24 "nodet *" `1298 
 F N "update_node" 16 30 ""
-V L "node" 16 30 "nodet *" `1297 
-V L "size" 16 30 "int16" `1298  "update the size of given node"
-F G "update_node" 16 31 "void(nodet * node,int16 size)" `1296 
+V L "node" 16 30 "nodet *" `1300 
+V L "size" 16 30 "int16" `1301  "update the size of given node"
+F G "update_node" 16 31 "void(nodet * node,int16 size)" `1299 
 C L "insert_node_after" 16 2 2 "FUNCTION"
 F N "insert_node_after" 16 36 ""
-V L "place" 16 36 "nodet *" `1300 
-V L "node" 16 36 "nodet *" `1301  "place the node after another given node"
-F G "insert_node_after" 16 37 "void(nodet * place,nodet * node)" `1299 
+V L "place" 16 36 "nodet *" `1303 
+V L "node" 16 36 "nodet *" `1304  "place the node after another given node"
+F G "insert_node_after" 16 37 "void(nodet * place,nodet * node)" `1302 
 F N "remove_node" 16 47 ""
-V L "node" 16 47 "nodet *" `1303 
-F G "remove_node" 16 47 "void(nodet * node)" `1302  "remove the given node from the memlist"
-V L "ptr" 16 48 "nodet *" `1304 
+V L "node" 16 47 "nodet *" `1306 
+F G "remove_node" 16 47 "void(nodet * node)" `1305  "remove the given node from the memlist"
+V L "ptr" 16 48 "nodet *" `1307 
 F N "traverse" 15 75 ""
-F G "traverse" 15 76 "void()" `1305 
-V L "node" 15 77 "nodet *" `1306 
-V L "temp" 15 77 "nodet *" `1307 
-V L "nsize" 15 78 "int16" `1308 
-V L "nextsize" 15 78 "int16" `1309 
+F G "traverse" 15 76 "void()" `1308 
+V L "node" 15 77 "nodet *" `1309 
+V L "temp" 15 77 "nodet *" `1310 
+V L "nsize" 15 78 "int16" `1311 
+V L "nextsize" 15 78 "int16" `1312 
 C L "traverse" 15 90 1 "FUNCTION"
 C L "traverse" 15 90 1 "FUNCTION"
 F N "malloc" 15 117 ""
-V L "size" 15 117 "int16" `1311 
-F G "malloc" 15 118 "*int8(int16 size)" `1310 
-V L "node" 15 119 "nodet *" `1312 
-V L "new" 15 119 "nodet *" `1313 
-V L "nsize" 15 120 "int16" `1314 
+V L "size" 15 117 "int16" `1314 
+F G "malloc" 15 118 "*int8(int16 size)" `1313 
+V L "node" 15 119 "nodet *" `1315 
+V L "new" 15 119 "nodet *" `1316 
+V L "nsize" 15 120 "int16" `1317 
 C L "malloc" 15 90 1 "FUNCTION"
 C L "malloc" 15 90 1 "FUNCTION"
 C L "malloc" 15 90 1 "FUNCTION"
@@ -2607,13 +2614,13 @@ C L "malloc" 15 90 1 "FUNCTION"
 C L "malloc" 15 90 1 "FUNCTION"
 C L "malloc" 15 90 1 "FUNCTION"
 F N "calloc" 15 175 ""
-V L "nmemb" 15 175 "int16" `1316 
-V L "size" 15 175 "int16" `1317 
-F G "calloc" 15 176 "*int8(int16 nmemb,int16 size)" `1315 
-V L "node" 15 177 "nodet *" `1318 
-V L "new" 15 177 "nodet *" `1319 
-V L "nsize" 15 178 "int16" `1320 
-V L "resize" 15 178 "int16" `1321 
+V L "nmemb" 15 175 "int16" `1319 
+V L "size" 15 175 "int16" `1320 
+F G "calloc" 15 176 "*int8(int16 nmemb,int16 size)" `1318 
+V L "node" 15 177 "nodet *" `1321 
+V L "new" 15 177 "nodet *" `1322 
+V L "nsize" 15 178 "int16" `1323 
+V L "resize" 15 178 "int16" `1324 
 C L "calloc" 15 90 1 "FUNCTION"
 C L "calloc" 15 90 1 "FUNCTION"
 C L "calloc" 15 90 1 "FUNCTION"
@@ -2625,23 +2632,23 @@ C L "calloc" 15 90 1 "FUNCTION"
 C L "calloc" 15 90 1 "FUNCTION"
 C L "calloc" 15 90 1 "FUNCTION"
 F N "free" 15 224 ""
-V L "ptr" 15 224 "*void" `1327 
-F G "free" 15 225 "void(*void ptr)" `1326 
-V L "node" 15 226 "nodet *" `1328 
-V L "nsize" 15 227 "int16" `1329 
+V L "ptr" 15 224 "*void" `1330 
+F G "free" 15 225 "void(*void ptr)" `1329 
+V L "node" 15 226 "nodet *" `1331 
+V L "nsize" 15 227 "int16" `1332 
 C L "free" 15 90 1 "FUNCTION"
 C L "free" 15 90 1 "FUNCTION"
 C L "free" 15 90 1 "FUNCTION"
 F N "realloc" 15 255 ""
-V L "ptr" 15 255 "*void" `1331 
-V L "size" 15 255 "int16" `1332 
-F G "realloc" 15 256 "*int8(*void ptr,int16 size)" `1330 
-V L "node" 15 257 "nodet *" `1333 
-V L "new" 15 257 "nodet *" `1334 
-V L "temp" 15 257 "nodet *" `1335 
-V L "nsize" 15 258 "int16" `1336 
-V L "nextsize" 15 258 "int16" `1337 
-V L "newptr" 15 259 "*int8" `1338 
+V L "ptr" 15 255 "*void" `1334 
+V L "size" 15 255 "int16" `1335 
+F G "realloc" 15 256 "*int8(*void ptr,int16 size)" `1333 
+V L "node" 15 257 "nodet *" `1336 
+V L "new" 15 257 "nodet *" `1337 
+V L "temp" 15 257 "nodet *" `1338 
+V L "nsize" 15 258 "int16" `1339 
+V L "nextsize" 15 258 "int16" `1340 
+V L "newptr" 15 259 "*int8" `1341 
 C L "realloc" 15 90 1 "FUNCTION"
 C L "realloc" 15 90 1 "FUNCTION"
 C L "realloc" 15 90 1 "FUNCTION"
@@ -2672,13 +2679,13 @@ C L "realloc" 15 90 1 "FUNCTION"
 C L "realloc" 15 90 1 "FUNCTION"
 C L "realloc" 15 90 1 "FUNCTION"
 C L "realloc" 15 90 1 "FUNCTION"
-T G "heap_status_t" 15 367 "{int16 bytesUsed,int16 largestUsedSeg,int8 segmentsUsed,int16 bytesFree,int16 largestFreeSeg,int8 segmentsFree}" `1346 
+T G "heap_status_t" 15 367 "{int16 bytesUsed,int16 largestUsedSeg,int8 segmentsUsed,int16 bytesFree,int16 largestFreeSeg,int8 segmentsFree}" `1349 
 F N "GetHeapStatus" 15 369 ""
-V L "pHeapStatus" 15 369 " *" `1348 
-F G "GetHeapStatus" 15 370 "void( * pHeapStatus)" `1347 
-V L "status" 15 371 "heap_status_t" `1349 
-V L "node" 15 372 "nodet *" `1350 
-V L "nsize" 15 373 "int16" `1351 
+V L "pHeapStatus" 15 369 " *" `1351 
+F G "GetHeapStatus" 15 370 "void( * pHeapStatus)" `1350 
+V L "status" 15 371 "heap_status_t" `1352 
+V L "node" 15 372 "nodet *" `1353 
+V L "nsize" 15 373 "int16" `1354 
 C L "GetHeapStatus" 15 90 1 "FUNCTION"
 D G "_REG_FIFO" 17 3 "0x00"
 D G "_REG_OP_MODE" 17 4 "0x01"
@@ -2723,251 +2730,262 @@ D G "STANDBY_MODE" 17 56 "0b001"
 D G "FS_MODE" 17 57 "0b010"
 D G "TX_MODE" 17 58 "0b011"
 D G "RX_MODE" 17 59 "0b100"
-V G "_BUFFER" 18 2 "uint8_t[4]" `1352 
+V G "_BUFFER" 18 2 "uint8_t[4]" `1355 
 F N "setOutput" 18 4 ""
-V L "pin" 18 4 "int8" `1354 
-V L "value" 18 4 "int8" `1355 
-F G "setOutput" 18 4 "void(int8 pin,int8 value)" `1353 
+V L "pin" 18 4 "int8" `1357 
+V L "value" 18 4 "int8" `1358 
+F G "setOutput" 18 4 "void(int8 pin,int8 value)" `1356 
 F N "usbPrint" 18 7 ""
-V L "str" 18 7 "*int8" `1361 
-F G "usbPrint" 18 7 "void(*int8 str)" `1360 
+V L "str" 18 7 "*int8" `1364 
+F G "usbPrint" 18 7 "void(*int8 str)" `1363 
 C L "usbPrint" 18 1 1 "FUNCTION"
 F N "spiBegin" 18 14 ""
-F G "spiBegin" 18 14 "void()" `1366  "SPI.beginTransaction(SPISettings(SPIBAUD, MSBFIRST, SPI_MODE0));"
+F G "spiBegin" 18 14 "void()" `1369  "SPI.beginTransaction(SPISettings(SPIBAUD, MSBFIRST, SPI_MODE0));"
 F N "spiEnd" 18 19 ""
-F G "spiEnd" 18 19 "void()" `1367 
+F G "spiEnd" 18 19 "void()" `1370 
 C L "spiEnd" 18 1 1 "FUNCTION"
 F N "print" 18 24 ""
-V L "str" 18 24 "*int8" `1369 
-F G "print" 18 24 "void(*int8 str)" `1368  "Serial.print(str);"
+V L "str" 18 24 "*int8" `1372 
+F G "print" 18 24 "void(*int8 str)" `1371  "Serial.print(str);"
 F N "print" 18 29 ""
-V L "str" 18 29 "int8" `1371 
-V L "format" 18 29 "int8" `1372 
-F G "print" 18 29 "void(int8 str,int8 format)" `1370 
-V L "converted" 18 30 "int8[11]" `1373 
-V L "i" 18 31 "int8" `1374 
+V L "str" 18 29 "int8" `1374 
+V L "format" 18 29 "int8" `1375 
+F G "print" 18 29 "void(int8 str,int8 format)" `1373 
+V L "converted" 18 30 "int8[11]" `1376 
+V L "i" 18 31 "int8" `1377 
 C L "print" 18 1 1 "FUNCTION"
 C L "print" 18 1 1 "FUNCTION"
-F N "println" 18 45 ""
-V L "str" 18 45 "*int8" `1380 
-F G "println" 18 45 "void(*int8 str)" `1379 
+F N "println" 18 48 ""
+V L "str" 18 48 "*int8" `1390 
+F G "println" 18 48 "void(*int8 str)" `1389 
 C L "println" 18 1 1 "FUNCTION"
-F N "println" 18 50 ""
-V L "str" 18 50 "int8" `1384 
-V L "format" 18 50 "int8" `1385 
-F G "println" 18 50 "void(int8 str,int8 format)" `1383 
+F N "println" 18 53 ""
+V L "str" 18 53 "int8" `1394 
+V L "format" 18 53 "int8" `1395 
+F G "println" 18 53 "void(int8 str,int8 format)" `1393 
 C L "println" 18 1 1 "FUNCTION"
-F N "timeSec" 18 55 ""
-F G "timeSec" 18 55 "float()" `1388  "TODO: implementar timers"
+F N "print" 18 58 ""
+V L "str" 18 58 "float" `1399 
+F G "print" 18 58 "void(float str)" `1398 
+V L "converted" 18 59 "int8[11]" `1400 
+F N "println" 18 63 ""
+V L "str" 18 63 "float" `1414 
+F G "println" 18 63 "void(float str)" `1413 
+F N "timeSec" 18 67 ""
+F G "timeSec" 18 67 "float()" `1417 
+V L "t" 18 68 "float" `1418 
 C L "timeSec" 18 1 1 "FUNCTION"
-F N "spi_read_into" 18 60 ""
-V L "address" 18 60 "uint8_t" `1390 
-V L "array" 18 60 "??0 *" `1391 
-V L "length" 18 60 "uint8_t" `1392 
-F G "spi_read_into" 18 60 "void(uint8_t address,??0 * array,uint8_t length)" `1389 
-V L "i" 18 61 "int8" `1393 
+F N "spi_read_into" 18 75 ""
+V L "address" 18 75 "uint8_t" `1425 
+V L "array" 18 75 "??0 *" `1426 
+V L "length" 18 75 "uint8_t" `1427 
+F G "spi_read_into" 18 75 "void(uint8_t address,??0 * array,uint8_t length)" `1424 
+V L "i" 18 76 "int8" `1428 
 C L "spi_read_into" 18 1 1 "FUNCTION"
 C L "spi_read_into" 18 1 2 "FUNCTION"
 C L "spi_read_into" 18 1 1 "FUNCTION"
-F N "spi_write_from" 18 73 ""
-V L "address" 18 73 "uint8_t" `1395 
-V L "array" 18 73 "??0 *" `1396 
-V L "length" 18 73 "uint8_t" `1397 
-F G "spi_write_from" 18 73 "void(uint8_t address,??0 * array,uint8_t length)" `1394 
-V L "i" 18 74 "int8" `1398 
+F N "spi_write_from" 18 88 ""
+V L "address" 18 88 "uint8_t" `1430 
+V L "array" 18 88 "??0 *" `1431 
+V L "length" 18 88 "uint8_t" `1432 
+F G "spi_write_from" 18 88 "void(uint8_t address,??0 * array,uint8_t length)" `1429 
+V L "i" 18 89 "int8" `1433 
 C L "spi_write_from" 18 1 2 "FUNCTION"
 C L "spi_write_from" 18 1 1 "FUNCTION"
-F N "spi_read_u8" 18 84 ""
-V L "address" 18 84 "uint8_t" `1400 
-F G "spi_read_u8" 18 84 "uint8_t(uint8_t address)" `1399 
-F N "spi_write_u8" 18 88 ""
-V L "address" 18 88 "uint8_t" `1402 
-V L "val" 18 88 "uint8_t" `1403 
-F G "spi_write_u8" 18 88 "uint8_t(uint8_t address,uint8_t val)" `1401 
-F N "sleep_ms" 18 93 ""
-V L "ms" 18 93 "int8" `1405 
-F G "sleep_ms" 18 93 "void(int8 ms)" `1404 
-V G "_FXOSC" 19 4 "float" `1406 
-V G "_FSTEP" 19 5 "float" `1408 
+F N "spi_read_u8" 18 99 ""
+V L "address" 18 99 "uint8_t" `1435 
+F G "spi_read_u8" 18 99 "uint8_t(uint8_t address)" `1434 
+F N "spi_write_u8" 18 103 ""
+V L "address" 18 103 "uint8_t" `1437 
+V L "val" 18 103 "uint8_t" `1438 
+F G "spi_write_u8" 18 103 "uint8_t(uint8_t address,uint8_t val)" `1436 
+F N "sleep_ms" 18 108 ""
+V L "ms" 18 108 "int8" `1440 
+F G "sleep_ms" 18 108 "void(int8 ms)" `1439 
+V G "_FXOSC" 19 4 "float" `1441 
+V G "_FSTEP" 19 5 "float" `1443 
 F N "readAllRegs" 19 7 ""
-f G "readAllRegs" 19 7 "void()" `1410 
+f G "readAllRegs" 19 7 "void()" `1445 
 F N "init" 19 8 ""
-V L "_sync_word" 19 8 "??0 *" `1412 
-V L "resetPin" 19 8 "int8" `1413 
-V L "_preamble_length" 19 8 "uint8_t" `1414 
-V L "_high_power" 19 8 "int8" `1415 
-V L "baudrate" 19 8 "uint32_t" `1416 
-V L "encrypt" 19 8 "??0 *" `1417 
-f G "init" 19 8 "void(??0 * _sync_word,int8 resetPin,uint8_t=4 _preamble_length,int8=1 _high_power,uint32_t=2000000 baudrate,*uint8_t=0 encrypt)" `1411 
+V L "_sync_word" 19 8 "??0 *" `1447 
+V L "resetPin" 19 8 "int8" `1448 
+V L "_preamble_length" 19 8 "uint8_t" `1449 
+V L "_high_power" 19 8 "int8" `1450 
+V L "baudrate" 19 8 "uint32_t" `1451 
+V L "encrypt" 19 8 "??0 *" `1452 
+f G "init" 19 8 "void(??0 * _sync_word,int8 resetPin,uint8_t=4 _preamble_length,int8=1 _high_power,uint32_t=2000000 baudrate,*uint8_t=0 encrypt)" `1446 
 F N "reset" 19 9 ""
-f G "reset" 19 9 "void()" `1422 
+f G "reset" 19 9 "void()" `1457 
 F N "set_boost" 19 10 ""
-V L "setting" 19 10 "uint8_t" `1424 
-f G "set_boost" 19 10 "void(uint8_t setting)" `1423 
+V L "setting" 19 10 "uint8_t" `1459 
+f G "set_boost" 19 10 "void(uint8_t setting)" `1458 
 F N "idle" 19 11 ""
-f G "idle" 19 11 "void()" `1425 
+f G "idle" 19 11 "void()" `1460 
 F N "rfm_sleep" 19 12 ""
-f G "rfm_sleep" 19 12 "void()" `1426 
+f G "rfm_sleep" 19 12 "void()" `1461 
 F N "listen" 19 13 ""
-f G "listen" 19 13 "void()" `1427 
+f G "listen" 19 13 "void()" `1462 
 F N "transmit" 19 14 ""
-f G "transmit" 19 14 "void()" `1428 
+f G "transmit" 19 14 "void()" `1463 
 F N "temperature_get" 19 15 ""
-f G "temperature_get" 19 15 "float()" `1429 
+f G "temperature_get" 19 15 "float()" `1464 
 F N "operation_mode_get" 19 16 ""
-f G "operation_mode_get" 19 16 "uint8_t()" `1430 
+f G "operation_mode_get" 19 16 "uint8_t()" `1465 
 F N "operation_mode_set" 19 17 ""
-V L "val" 19 17 "uint8_t" `1432 
-f G "operation_mode_set" 19 17 "void(uint8_t val)" `1431 
+V L "val" 19 17 "uint8_t" `1467 
+f G "operation_mode_set" 19 17 "void(uint8_t val)" `1466 
 F N "sync_word_get" 19 18 ""
-f G "sync_word_get" 19 18 "??0 *()" `1433 
+f G "sync_word_get" 19 18 "??0 *()" `1468 
 F N "sync_word_set" 19 19 ""
-V L "wrd" 19 19 "??0 *" `1435 
-f G "sync_word_set" 19 19 "void(??0 * wrd)" `1434 
+V L "wrd" 19 19 "??0 *" `1470 
+f G "sync_word_set" 19 19 "void(??0 * wrd)" `1469 
 F N "preamble_length_get" 19 20 ""
-f G "preamble_length_get" 19 20 "uint16_t()" `1436 
+f G "preamble_length_get" 19 20 "uint16_t()" `1471 
 F N "preamble_length_set" 19 21 ""
-V L "val" 19 21 "uint16_t" `1438 
-f G "preamble_length_set" 19 21 "void(uint16_t val)" `1437 
+V L "val" 19 21 "uint16_t" `1473 
+f G "preamble_length_set" 19 21 "void(uint16_t val)" `1472 
 F N "frequency_mhz_get" 19 22 ""
-f G "frequency_mhz_get" 19 22 "float()" `1439 
+f G "frequency_mhz_get" 19 22 "float()" `1474 
 F N "frequency_mhz_set" 19 23 ""
-f G "frequency_mhz_set" 19 23 "void()" `1440 
+f G "frequency_mhz_set" 19 23 "void()" `1475 
 F N "encryption_key_get" 19 24 ""
-f G "encryption_key_get" 19 24 "??0 *()" `1441 
+f G "encryption_key_get" 19 24 "??0 *()" `1476 
 F N "encryption_key_set" 19 25 ""
-V L "val" 19 25 "??0 *" `1443 
-f G "encryption_key_set" 19 25 "void(??0 * val)" `1442 
+V L "val" 19 25 "??0 *" `1478 
+f G "encryption_key_set" 19 25 "void(??0 * val)" `1477 
 F N "tx_power_get" 19 26 ""
-f G "tx_power_get" 19 26 "int8_t()" `1444 
+f G "tx_power_get" 19 26 "int8_t()" `1479 
 F N "tx_power_set" 19 27 ""
-V L "val" 19 27 "int8_t" `1446 
-f G "tx_power_set" 19 27 "void(int8_t val)" `1445 
+V L "val" 19 27 "int8_t" `1481 
+f G "tx_power_set" 19 27 "void(int8_t val)" `1480 
 F N "rssi_get" 19 28 ""
-f G "rssi_get" 19 28 "float()" `1447 
+f G "rssi_get" 19 28 "float()" `1482 
 F N "bitrate_get" 19 29 ""
-f G "bitrate_get" 19 29 "float()" `1448 
+f G "bitrate_get" 19 29 "float()" `1483 
 F N "bitrate_set" 19 30 ""
-V L "val" 19 30 "float" `1450 
-f G "bitrate_set" 19 30 "void(float val)" `1449 
+V L "val" 19 30 "float" `1485 
+f G "bitrate_set" 19 30 "void(float val)" `1484 
 F N "frequency_deviation_get" 19 31 ""
-f G "frequency_deviation_get" 19 31 "float()" `1451 
+f G "frequency_deviation_get" 19 31 "float()" `1486 
 F N "frequency_deviation_set" 19 32 ""
-V L "val" 19 32 "float" `1453 
-f G "frequency_deviation_set" 19 32 "void(float val)" `1452 
+V L "val" 19 32 "float" `1488 
+f G "frequency_deviation_set" 19 32 "void(float val)" `1487 
 F N "packet_sent" 19 33 ""
-f G "packet_sent" 19 33 "int8()" `1454 
+f G "packet_sent" 19 33 "int8()" `1489 
 F N "payload_ready" 19 34 ""
-f G "payload_ready" 19 34 "int8()" `1455 
+f G "payload_ready" 19 34 "int8()" `1490 
 F N "send" 19 35 ""
-V L "data" 19 35 "??0 *" `1457 
-V L "len" 19 35 "uint8_t" `1458 
-V L "keep_listening" 19 35 "int8" `1459 
-V L "_destination" 19 35 "uint16_t" `1460 
-V L "_node" 19 35 "uint16_t" `1461 
-V L "_identifier" 19 35 "uint16_t" `1462 
-V L "_flags" 19 35 "uint16_t" `1463 
-f G "send" 19 35 "int8(??0 * data,uint8_t len,int8=0 keep_listening,uint16_t=256 _destination,uint16_t=256 _node,uint16_t=256 _identifier,uint16_t=256 _flags)" `1456 
+V L "data" 19 35 "??0 *" `1492 
+V L "len" 19 35 "uint8_t" `1493 
+V L "keep_listening" 19 35 "int8" `1494 
+V L "_destination" 19 35 "uint16_t" `1495 
+V L "_node" 19 35 "uint16_t" `1496 
+V L "_identifier" 19 35 "uint16_t" `1497 
+V L "_flags" 19 35 "uint16_t" `1498 
+f G "send" 19 35 "int8(??0 * data,uint8_t len,int8=0 keep_listening,uint16_t=256 _destination,uint16_t=256 _node,uint16_t=256 _identifier,uint16_t=256 _flags)" `1491 
 F N "send_with_ack" 19 36 ""
-V L "data" 19 36 "??0 *" `1470 
-V L "len" 19 36 "uint8_t" `1471 
-f G "send_with_ack" 19 36 "int8(??0 * data,uint8_t len)" `1469 
+V L "data" 19 36 "??0 *" `1505 
+V L "len" 19 36 "uint8_t" `1506 
+f G "send_with_ack" 19 36 "int8(??0 * data,uint8_t len)" `1504 
 F N "receive" 19 37 ""
-V L "keep_listening" 19 37 "int8" `1473 
-V L "with_ack" 19 37 "int8" `1474 
-V L "timeout" 19 37 "float" `1475 
-V L "with_header" 19 37 "int8" `1476 
-f G "receive" 19 37 "*int8(int8=1 keep_listening,int8=0 with_ack,float=0 timeout,int8=0 with_header)" `1472 
+V L "keep_listening" 19 37 "int8" `1508 
+V L "with_ack" 19 37 "int8" `1509 
+V L "timeout" 19 37 "float" `1510 
+V L "with_header" 19 37 "int8" `1511 
+f G "receive" 19 37 "*int8(int8=1 keep_listening,int8=0 with_ack,float=0 timeout,int8=0 with_header)" `1507 
 F N "set" 19 45 ""
-V L "val" 19 45 "uint8_t" `1486 
-V L "obj" 19 45 "{uint8_t address,uint8_t mask,uint8_t offset}" `1487 
-F G "set" 19 45 "void(uint8_t val,{uint8_t address,uint8_t mask,uint8_t offset} obj)" `1485 
-V L "regVal" 19 46 "uint8_t" `1488 
+V L "val" 19 45 "uint8_t" `1521 
+V L "obj" 19 45 "{uint8_t address,uint8_t mask,uint8_t offset}" `1522 
+F G "set" 19 45 "void(uint8_t val,{uint8_t address,uint8_t mask,uint8_t offset} obj)" `1520 
+V L "regVal" 19 46 "uint8_t" `1523 
 F N "get" 19 51 ""
-V L "obj" 19 51 "{uint8_t address,uint8_t mask,uint8_t offset}" `1490 
-F G "get" 19 51 "uint8_t({uint8_t address,uint8_t mask,uint8_t offset} obj)" `1489 
-V L "regVal" 19 52 "uint8_t" `1491 
+V L "obj" 19 51 "{uint8_t address,uint8_t mask,uint8_t offset}" `1525 
+F G "get" 19 51 "uint8_t({uint8_t address,uint8_t mask,uint8_t offset} obj)" `1524 
+V L "regVal" 19 52 "uint8_t" `1526 
 F N "_debug_" 19 55 ""
-V L "obj" 19 55 "{uint8_t address,uint8_t mask,uint8_t offset}" `1493 
-F G "_debug_" 19 55 "uint8_t({uint8_t address,uint8_t mask,uint8_t offset} obj)" `1492 
+V L "obj" 19 55 "{uint8_t address,uint8_t mask,uint8_t offset}" `1528 
+F G "_debug_" 19 55 "uint8_t({uint8_t address,uint8_t mask,uint8_t offset} obj)" `1527 
 F N "_RegisterBits_" 19 61 ""
-V L "_address" 19 61 "uint8_t" `1497 
-V L "_offset" 19 61 "uint8_t" `1498 
-V L "bits" 19 61 "uint8_t" `1499 
-F G "_RegisterBits_" 19 61 "{uint8_t address,uint8_t mask,uint8_t offset}(uint8_t _address,uint8_t _offset,uint8_t=1 bits)" `1496 
-V L "i" 19 63 "uint8_t" `1501 
-V L "ret" 19 64 "{uint8_t address,uint8_t mask,uint8_t offset}" `1502 
+V L "_address" 19 61 "uint8_t" `1532 
+V L "_offset" 19 61 "uint8_t" `1533 
+V L "bits" 19 61 "uint8_t" `1534 
+F G "_RegisterBits_" 19 61 "{uint8_t address,uint8_t mask,uint8_t offset}(uint8_t _address,uint8_t _offset,uint8_t=1 bits)" `1531 
+V L "i" 19 63 "uint8_t" `1536 
+V L "ret" 19 64 "{uint8_t address,uint8_t mask,uint8_t offset}" `1537 
 C L "_RegisterBits_" 19 2 1 "FUNCTION"
-V G "data_mode" 19 113 "{uint8_t address,uint8_t mask,uint8_t offset}" `1503 
-V G "modulation_type" 19 114 "{uint8_t address,uint8_t mask,uint8_t offset}" `1504 
-V G "modulation_shaping" 19 115 "{uint8_t address,uint8_t mask,uint8_t offset}" `1505 
-V G "temp_start" 19 116 "{uint8_t address,uint8_t mask,uint8_t offset}" `1506 
-V G "temp_running" 19 117 "{uint8_t address,uint8_t mask,uint8_t offset}" `1507 
-V G "sync_on" 19 118 "{uint8_t address,uint8_t mask,uint8_t offset}" `1508 
-V G "sync_size" 19 119 "{uint8_t address,uint8_t mask,uint8_t offset}" `1509 
-V G "aes_on" 19 120 "{uint8_t address,uint8_t mask,uint8_t offset}" `1510 
-V G "pa_0_on" 19 121 "{uint8_t address,uint8_t mask,uint8_t offset}" `1511 
-V G "pa_1_on" 19 122 "{uint8_t address,uint8_t mask,uint8_t offset}" `1512 
-V G "pa_2_on" 19 123 "{uint8_t address,uint8_t mask,uint8_t offset}" `1513 
-V G "output_power" 19 124 "{uint8_t address,uint8_t mask,uint8_t offset}" `1514 
-V G "rx_bw_dcc_freq" 19 125 "{uint8_t address,uint8_t mask,uint8_t offset}" `1515 
-V G "rx_bw_mantissa" 19 126 "{uint8_t address,uint8_t mask,uint8_t offset}" `1516 
-V G "rx_bw_exponent" 19 127 "{uint8_t address,uint8_t mask,uint8_t offset}" `1517 
-V G "afc_bw_dcc_freq" 19 128 "{uint8_t address,uint8_t mask,uint8_t offset}" `1518 
-V G "afc_bw_mantissa" 19 129 "{uint8_t address,uint8_t mask,uint8_t offset}" `1519 
-V G "afc_bw_exponent" 19 130 "{uint8_t address,uint8_t mask,uint8_t offset}" `1520 
-V G "packet_format" 19 131 "{uint8_t address,uint8_t mask,uint8_t offset}" `1521 
-V G "dc_free" 19 132 "{uint8_t address,uint8_t mask,uint8_t offset}" `1522 
-V G "crc_on" 19 133 "{uint8_t address,uint8_t mask,uint8_t offset}" `1523 
-V G "crc_auto_clear_off" 19 134 "{uint8_t address,uint8_t mask,uint8_t offset}" `1524 
-V G "address_filter" 19 135 "{uint8_t address,uint8_t mask,uint8_t offset}" `1525 
-V G "mode_ready" 19 136 "{uint8_t address,uint8_t mask,uint8_t offset}" `1526 
-V G "dio_0_mapping" 19 137 "{uint8_t address,uint8_t mask,uint8_t offset}" `1527 
-V G "dio_1_mapping" 19 138 "{uint8_t address,uint8_t mask,uint8_t offset}" `1528 
-V G "dio_2_mapping" 19 139 "{uint8_t address,uint8_t mask,uint8_t offset}" `1529 
-V G "dio_3_mapping" 19 140 "{uint8_t address,uint8_t mask,uint8_t offset}" `1530 
-V G "dio_4_mapping" 19 141 "{uint8_t address,uint8_t mask,uint8_t offset}" `1531 
-V G "dio_5_mapping" 19 142 "{uint8_t address,uint8_t mask,uint8_t offset}" `1532 
-V G "_tx_power" 19 145 "int8_t" `1533 
-V G "tx_power" 19 146 "int8_t" `1534 
-V G "high_power" 19 147 "bool" `1535 
-V G "sync_word" 19 148 "??0 *" `1536 
-V G "preamble_length" 19 149 "uint16_t" `1537 
-V G "frequency_mhz" 19 150 "uint32_t" `1538 
-V G "bitrate" 19 151 "float" `1539 
-V G "rssi" 19 152 "float" `1540 
-V G "last_rssi" 19 153 "float" `1541 
-V G "ack_wait" 19 154 "float" `1542 
-V G "receive_timeout" 19 155 "float" `1543 
-V G "xmit_timeout" 19 156 "float" `1544 
-V G "ack_retries" 19 157 "uint8_t" `1545 
-V G "ack_delay" 19 158 "float" `1546 
-V G "sequence_number" 19 159 "uint8_t" `1547 
-V G "seen_ids" 19 160 "uint8_t[8]" `1548 
-V G "node" 19 161 "uint8_t" `1549 
-V G "destination" 19 162 "uint8_t" `1550 
-V G "identifier" 19 163 "uint8_t" `1551 
-V G "flags" 19 164 "uint8_t" `1552 
-V G "operation_mode" 19 165 "uint8_t" `1553 
-V G "temperature" 19 166 "float" `1554 
-V G "encryption_key" 19 167 "uint8_t[16]" `1555 
-V G "frequency_deviation" 19 168 "float" `1556 
-V G "_reset_pin" 19 169 "int8" `1557 
+V G "data_mode" 19 113 "{uint8_t address,uint8_t mask,uint8_t offset}" `1538 
+V G "modulation_type" 19 114 "{uint8_t address,uint8_t mask,uint8_t offset}" `1539 
+V G "modulation_shaping" 19 115 "{uint8_t address,uint8_t mask,uint8_t offset}" `1540 
+V G "temp_start" 19 116 "{uint8_t address,uint8_t mask,uint8_t offset}" `1541 
+V G "temp_running" 19 117 "{uint8_t address,uint8_t mask,uint8_t offset}" `1542 
+V G "sync_on" 19 118 "{uint8_t address,uint8_t mask,uint8_t offset}" `1543 
+V G "sync_size" 19 119 "{uint8_t address,uint8_t mask,uint8_t offset}" `1544 
+V G "aes_on" 19 120 "{uint8_t address,uint8_t mask,uint8_t offset}" `1545 
+V G "pa_0_on" 19 121 "{uint8_t address,uint8_t mask,uint8_t offset}" `1546 
+V G "pa_1_on" 19 122 "{uint8_t address,uint8_t mask,uint8_t offset}" `1547 
+V G "pa_2_on" 19 123 "{uint8_t address,uint8_t mask,uint8_t offset}" `1548 
+V G "output_power" 19 124 "{uint8_t address,uint8_t mask,uint8_t offset}" `1549 
+V G "rx_bw_dcc_freq" 19 125 "{uint8_t address,uint8_t mask,uint8_t offset}" `1550 
+V G "rx_bw_mantissa" 19 126 "{uint8_t address,uint8_t mask,uint8_t offset}" `1551 
+V G "rx_bw_exponent" 19 127 "{uint8_t address,uint8_t mask,uint8_t offset}" `1552 
+V G "afc_bw_dcc_freq" 19 128 "{uint8_t address,uint8_t mask,uint8_t offset}" `1553 
+V G "afc_bw_mantissa" 19 129 "{uint8_t address,uint8_t mask,uint8_t offset}" `1554 
+V G "afc_bw_exponent" 19 130 "{uint8_t address,uint8_t mask,uint8_t offset}" `1555 
+V G "packet_format" 19 131 "{uint8_t address,uint8_t mask,uint8_t offset}" `1556 
+V G "dc_free" 19 132 "{uint8_t address,uint8_t mask,uint8_t offset}" `1557 
+V G "crc_on" 19 133 "{uint8_t address,uint8_t mask,uint8_t offset}" `1558 
+V G "crc_auto_clear_off" 19 134 "{uint8_t address,uint8_t mask,uint8_t offset}" `1559 
+V G "address_filter" 19 135 "{uint8_t address,uint8_t mask,uint8_t offset}" `1560 
+V G "mode_ready" 19 136 "{uint8_t address,uint8_t mask,uint8_t offset}" `1561 
+V G "dio_0_mapping" 19 137 "{uint8_t address,uint8_t mask,uint8_t offset}" `1562 
+V G "dio_1_mapping" 19 138 "{uint8_t address,uint8_t mask,uint8_t offset}" `1563 
+V G "dio_2_mapping" 19 139 "{uint8_t address,uint8_t mask,uint8_t offset}" `1564 
+V G "dio_3_mapping" 19 140 "{uint8_t address,uint8_t mask,uint8_t offset}" `1565 
+V G "dio_4_mapping" 19 141 "{uint8_t address,uint8_t mask,uint8_t offset}" `1566 
+V G "dio_5_mapping" 19 142 "{uint8_t address,uint8_t mask,uint8_t offset}" `1567 
+V G "_tx_power" 19 145 "int8_t" `1568 
+V G "tx_power" 19 146 "int8_t" `1569 
+V G "high_power" 19 147 "bool" `1570 
+V G "sync_word" 19 148 "??0 *" `1571 
+V G "preamble_length" 19 149 "uint16_t" `1572 
+V G "frequency_mhz" 19 150 "uint32_t" `1573 
+V G "bitrate" 19 151 "float" `1574 
+V G "rssi" 19 152 "float" `1575 
+V G "last_rssi" 19 153 "float" `1576 
+V G "ack_wait" 19 154 "float" `1577 
+V G "receive_timeout" 19 155 "float" `1578 
+V G "xmit_timeout" 19 156 "float" `1579 
+V G "ack_retries" 19 157 "uint8_t" `1580 
+V G "ack_delay" 19 158 "float" `1581 
+V G "sequence_number" 19 159 "uint8_t" `1582 
+V G "seen_ids" 19 160 "uint8_t[8]" `1583 
+V G "node" 19 161 "uint8_t" `1584 
+V G "destination" 19 162 "uint8_t" `1585 
+V G "identifier" 19 163 "uint8_t" `1586 
+V G "flags" 19 164 "uint8_t" `1587 
+V G "operation_mode" 19 165 "uint8_t" `1588 
+V G "temperature" 19 166 "float" `1589 
+V G "encryption_key" 19 167 "uint8_t[16]" `1590 
+V G "frequency_deviation" 19 168 "float" `1591 
+V G "_reset_pin" 19 169 "int8" `1592 
 F N "readAllRegs" 19 172 ""
-F G "readAllRegs" 19 173 "void()" `1410 
-V L "regVal" 19 174 "uint8_t" `1558 
-V L "regAddr" 19 177 "uint8_t" `1561 
+F G "readAllRegs" 19 173 "void()" `1445 
+V L "regVal" 19 174 "uint8_t" `1593 
+V L "regAddr" 19 177 "uint8_t" `1596 
 C L "readAllRegs" 19 2 4 "FUNCTION"
-F N "init" 19 197 ""
-V L "_sync_word" 19 197 "??0 *" `1412 
-V L "resetPin" 19 197 "int8" `1413 
-V L "_preamble_length" 19 197 "uint8_t" `1414 
-V L "_high_power" 19 197 "int8" `1415 
-V L "baudrate" 19 197 "uint32_t" `1416 
-V L "encrypt" 19 197 "??0 *" `1417 
-F G "init" 19 197 "void(??0 * _sync_word,int8 resetPin,uint8_t=4 _preamble_length,int8=1 _high_power,uint32_t=2000000 baudrate,*uint8_t=0 encrypt)" `1411 
-V L "version" 19 198 "uint8_t" `1564 
-C L "init" 19 2 2 "FUNCTION"
+F N "checkId" 19 194 ""
+F G "checkId" 19 194 "int8()" `1599 
+V L "version" 19 195 "uint8_t" `1600 
+F N "init" 19 202 ""
+V L "_sync_word" 19 202 "??0 *" `1447 
+V L "resetPin" 19 202 "int8" `1448 
+V L "_preamble_length" 19 202 "uint8_t" `1449 
+V L "_high_power" 19 202 "int8" `1450 
+V L "baudrate" 19 202 "uint32_t" `1451 
+V L "encrypt" 19 202 "??0 *" `1452 
+F G "init" 19 202 "void(??0 * _sync_word,int8 resetPin,uint8_t=4 _preamble_length,int8=1 _high_power,uint32_t=2000000 baudrate,*uint8_t=0 encrypt)" `1446 
+V L "version" 19 203 "uint8_t" `1601 
+C L "init" 19 2 1 "FUNCTION"
 C L "init" 19 2 1 "FUNCTION"
 C L "init" 19 2 1 "FUNCTION"
 C L "init" 19 2 2 "FUNCTION"
@@ -3002,149 +3020,149 @@ C L "init" 19 2 1 "FUNCTION"
 C L "init" 19 2 1 "FUNCTION"
 C L "init" 19 2 1 "FUNCTION"
 C L "init" 19 2 1 "FUNCTION"
-F N "reset" 19 324 ""
-F G "reset" 19 324 "void()" `1422 
-F N "set_boost" 19 330 ""
-V L "setting" 19 330 "uint8_t" `1570 
-F G "set_boost" 19 330 "void(uint8_t setting)" `1423  "Set preamp boost if needed."
-F N "idle" 19 337 ""
-F G "idle" 19 337 "void()" `1425  "Enter idle standby mode (switching off high power amplifiers if necessary)."
+F N "reset" 19 336 ""
+F G "reset" 19 336 "void()" `1457 
+F N "set_boost" 19 342 ""
+V L "setting" 19 342 "uint8_t" `1612 
+F G "set_boost" 19 342 "void(uint8_t setting)" `1458  "Set preamp boost if needed."
+F N "idle" 19 349 ""
+F G "idle" 19 349 "void()" `1460  "Enter idle standby mode (switching off high power amplifiers if necessary)."
 C L "idle" 19 2 1 "FUNCTION"
-F N "rfm_sleep" 19 345 ""
-F G "rfm_sleep" 19 345 "void()" `1426 
-F N "listen" 19 348 ""
-F G "listen" 19 348 "void()" `1427  "Listen for packets to be received by the chip.  Use :py:func:`receive` to listen, wait"
+F N "rfm_sleep" 19 357 ""
+F G "rfm_sleep" 19 357 "void()" `1461 
+F N "listen" 19 360 ""
+F G "listen" 19 360 "void()" `1462  "Listen for packets to be received by the chip.  Use :py:func:`receive` to listen, wait"
 C L "listen" 19 2 2 "FUNCTION"
 C L "listen" 19 2 1 "FUNCTION"
-C L "listen" 19 2 2 "FUNCTION"
-F N "transmit" 19 361 ""
-F G "transmit" 19 361 "void()" `1428  "Transmit a packet which is queued in the FIFO.  This is a low level function for"
+C L "listen" 19 2 1 "FUNCTION"
+F N "transmit" 19 373 ""
+F G "transmit" 19 373 "void()" `1463  "Transmit a packet which is queued in the FIFO.  This is a low level function for"
 C L "transmit" 19 2 3 "FUNCTION"
 C L "transmit" 19 2 1 "FUNCTION"
 C L "transmit" 19 2 2 "FUNCTION"
 C L "temperature_get" 19 2 2 "FUNCTION"
-F N "temperature_get" 19 376 ""
-F G "temperature_get" 19 376 "float()" `1429  "The internal temperature of the chip in degrees Celsius. Be warned this is not"
+F N "temperature_get" 19 388 ""
+F G "temperature_get" 19 388 "float()" `1464  "The internal temperature of the chip in degrees Celsius. Be warned this is not"
 C L "temperature_get" 19 2 3 "FUNCTION"
 C L "temperature_get" 19 2 1 "FUNCTION"
-F N "operation_mode_get" 19 387 ""
-F G "operation_mode_get" 19 387 "uint8_t()" `1430  """"The operation mode value.  Unless you're manually controlling the chip you shouldn't"
+F N "operation_mode_get" 19 402 ""
+F G "operation_mode_get" 19 402 "uint8_t()" `1465  """"The operation mode value.  Unless you're manually controlling the chip you shouldn't"
 C L "operation_mode_get" 19 2 3 "FUNCTION"
-F N "operation_mode_set" 19 396 ""
-V L "val" 19 396 "uint8_t" `1575 
-F G "operation_mode_set" 19 396 "void(uint8_t val)" `1431 
-V L "start" 19 397 "float" `1574  "TODO: assert 0 <= val <= 4"
+F N "operation_mode_set" 19 411 ""
+V L "val" 19 411 "uint8_t" `1612 
+F G "operation_mode_set" 19 411 "void(uint8_t val)" `1466 
+V L "start" 19 412 "float" `1611  "TODO: assert 0 <= val <= 4"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "sync_word_get" 19 2 1 "FUNCTION"
-F N "sync_word_get" 19 429 ""
-F G "sync_word_get" 19 429 "??0 *()" `1433  """"The synchronization word value.  This is a byte string up to 8 bytes long (64 bits)"
+F N "sync_word_get" 19 454 ""
+F G "sync_word_get" 19 454 "??0 *()" `1468  """"The synchronization word value.  This is a byte string up to 8 bytes long (64 bits)"
 C L "sync_word_get" 19 2 5 "FUNCTION"
 C L "sync_word_get" 19 2 1 "FUNCTION"
-F N "sync_word_set" 19 445 ""
-V L "wrd" 19 445 "??0 *" `1583 
-F G "sync_word_set" 19 445 "void(??0 * wrd)" `1434 
-V L "len" 19 446 "uint8_t" `1582 
+F N "sync_word_set" 19 470 ""
+V L "wrd" 19 470 "??0 *" `1622 
+F G "sync_word_set" 19 470 "void(??0 * wrd)" `1469 
+V L "len" 19 471 "uint8_t" `1621 
 C L "sync_word_set" 19 2 1 "FUNCTION"
 C L "sync_word_set" 19 2 1 "FUNCTION"
-F N "preamble_length_get" 19 457 ""
-F G "preamble_length_get" 19 457 "uint16_t()" `1436  "The length of the preamble for sent and received packets, an unsigned 16-bit value."
+F N "preamble_length_get" 19 482 ""
+F G "preamble_length_get" 19 482 "uint16_t()" `1471  "The length of the preamble for sent and received packets, an unsigned 16-bit value."
 C L "preamble_length_get" 19 2 2 "FUNCTION"
-V L "msb" 19 461 "uint8_t" `1583 
-V L "lsb" 19 462 "uint8_t" `1584 
-F N "preamble_length_set" 19 465 ""
-V L "val" 19 465 "uint16_t" `1586 
-F G "preamble_length_set" 19 465 "void(uint16_t val)" `1437 
-F N "frequency_mhz_get" 19 469 ""
-F G "frequency_mhz_get" 19 469 "float()" `1439  """"The frequency of the radio in Megahertz. Only the allowed values for your radio must be"
+V L "msb" 19 486 "uint8_t" `1622 
+V L "lsb" 19 487 "uint8_t" `1623 
+F N "preamble_length_set" 19 490 ""
+V L "val" 19 490 "uint16_t" `1625 
+F G "preamble_length_set" 19 490 "void(uint16_t val)" `1472 
+F N "frequency_mhz_get" 19 494 ""
+F G "frequency_mhz_get" 19 494 "float()" `1474  """"The frequency of the radio in Megahertz. Only the allowed values for your radio must be"
 C L "frequency_mhz_get" 19 2 4 "FUNCTION"
-V L "msb" 19 476 "uint8_t" `1585 
-V L "mid" 19 477 "uint8_t" `1586 
-V L "lsb" 19 478 "uint8_t" `1587 
-V L "frf" 19 479 "uint32_t" `1588 
-V L "frequency" 19 480 "float" `1589 
+V L "msb" 19 501 "uint8_t" `1624 
+V L "mid" 19 502 "uint8_t" `1625 
+V L "lsb" 19 503 "uint8_t" `1626 
+V L "frf" 19 504 "uint32_t" `1627 
+V L "frequency" 19 505 "float" `1628 
 C L "frequency_mhz_set" 19 2 1 "FUNCTION"
-F N "frequency_mhz_set" 19 484 ""
-F G "frequency_mhz_set" 19 484 "void()" `1440  "FRF = int((freq/_FSTEP)*1,000,000) & 0xFFFFFF"
-V L "msb" 19 486 "uint8_t" `1598 
-V L "lsb" 19 486 "uint8_t" `1599 
-V L "mid" 19 486 "uint8_t" `1600  "TODO: añadir soporte para otras frecuencias"
+F N "frequency_mhz_set" 19 509 ""
+F G "frequency_mhz_set" 19 509 "void()" `1475  "FRF = int((freq/_FSTEP)*1,000,000) & 0xFFFFFF"
+V L "msb" 19 511 "uint8_t" `1634 
+V L "lsb" 19 511 "uint8_t" `1635 
+V L "mid" 19 511 "uint8_t" `1636  "TODO: añadir soporte para otras frecuencias"
 C L "frequency_mhz_set" 19 2 10 "FUNCTION"
-F N "encryption_key_get" 19 509 ""
-F G "encryption_key_get" 19 509 "??0 *()" `1441  """"The AES encryption key used to encrypt and decrypt packets by the chip. This can be set"
+F N "encryption_key_get" 19 534 ""
+F G "encryption_key_get" 19 534 "??0 *()" `1476  """"The AES encryption key used to encrypt and decrypt packets by the chip. This can be set"
 C L "encryption_key_get" 19 2 4 "FUNCTION"
-F N "encryption_key_set" 19 520 ""
-V L "val" 19 520 "??0 *" `1602 
-F G "encryption_key_set" 19 520 "void(??0 * val)" `1442 
+F N "encryption_key_set" 19 545 ""
+V L "val" 19 545 "??0 *" `1638 
+F G "encryption_key_set" 19 545 "void(??0 * val)" `1477 
 C L "encryption_key_set" 19 2 2 "FUNCTION"
-F N "tx_power_get" 19 529 ""
-F G "tx_power_get" 19 529 "int8_t()" `1444  "The transmit power in dBm. Can be set to a value from -2 to 20 for high power devices"
+F N "tx_power_get" 19 554 ""
+F G "tx_power_get" 19 554 "int8_t()" `1479  "The transmit power in dBm. Can be set to a value from -2 to 20 for high power devices"
 C L "tx_power_get" 19 2 4 "FUNCTION"
-V L "pa0" 19 536 "uint8_t" `1601 
-V L "pa1" 19 537 "uint8_t" `1602 
-V L "pa2" 19 538 "uint8_t" `1603 
-V L "current_output_power" 19 539 "uint8_t" `1604 
+V L "pa0" 19 561 "uint8_t" `1637 
+V L "pa1" 19 562 "uint8_t" `1638 
+V L "pa2" 19 563 "uint8_t" `1639 
+V L "current_output_power" 19 564 "uint8_t" `1640 
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
-F N "tx_power_set" 19 556 ""
-V L "val" 19 556 "int8_t" `1608 
-F G "tx_power_set" 19 556 "void(int8_t val)" `1445  "Determine power amplifier and output power values depending on"
+F N "tx_power_set" 19 583 ""
+V L "val" 19 583 "int8_t" `1644 
+F G "tx_power_set" 19 583 "void(int8_t val)" `1480  "Determine power amplifier and output power values depending on"
 C L "tx_power_set" 19 2 1 "FUNCTION"
-V L "_pa_0_on" 19 559 "uint8_t" `1607 
-V L "_pa_1_on" 19 560 "uint8_t" `1608 
-V L "_pa_2_on" 19 561 "uint8_t" `1609 
-V L "_output_power" 19 562 "uint8_t" `1610 
+V L "_pa_0_on" 19 586 "uint8_t" `1643 
+V L "_pa_1_on" 19 587 "uint8_t" `1644 
+V L "_pa_2_on" 19 588 "uint8_t" `1645 
+V L "_output_power" 19 589 "uint8_t" `1646 
 C L "tx_power_set" 19 2 2 "FUNCTION"
 C L "tx_power_set" 19 2 2 "FUNCTION"
 C L "tx_power_set" 19 2 3 "FUNCTION"
 C L "tx_power_set" 19 2 1 "FUNCTION"
-F N "rssi_get" 19 594 ""
-F G "rssi_get" 19 594 "float()" `1447  """The received strength indicator (in dBm)."
+F N "rssi_get" 19 621 ""
+F G "rssi_get" 19 621 "float()" `1482  """The received strength indicator (in dBm)."
 C L "rssi_get" 19 2 3 "FUNCTION"
-F N "bitrate_get" 19 603 ""
-F G "bitrate_get" 19 603 "float()" `1448  """"The modulation bitrate in bits/second (or chip rate if Manchester encoding is enabled)."
+F N "bitrate_get" 19 630 ""
+F G "bitrate_get" 19 630 "float()" `1483  """"The modulation bitrate in bits/second (or chip rate if Manchester encoding is enabled)."
 C L "bitrate_get" 19 2 2 "FUNCTION"
-V L "msb" 19 608 "uint8_t" `1611 
-V L "lsb" 19 609 "uint8_t" `1612 
-F N "bitrate_set" 19 613 ""
-V L "val" 19 613 "float" `1614 
-F G "bitrate_set" 19 613 "void(float val)" `1449  "TODO: assert (_FXOSC / 65535) <= val <= 32000000.0"
+V L "msb" 19 635 "uint8_t" `1647 
+V L "lsb" 19 636 "uint8_t" `1648 
+F N "bitrate_set" 19 640 ""
+V L "val" 19 640 "float" `1650 
+F G "bitrate_set" 19 640 "void(float val)" `1484  "TODO: assert (_FXOSC / 65535) <= val <= 32000000.0"
 C L "bitrate_set" 19 2 1 "FUNCTION"
-V L "_bitrate" 19 616 "uint32_t" `1613 
-F N "frequency_deviation_get" 19 620 ""
-F G "frequency_deviation_get" 19 620 "float()" `1451  """"The frequency deviation in Hertz.""""
-V L "msb" 19 622 "uint8_t" `1616 
-V L "lsb" 19 623 "uint8_t" `1617 
-F N "frequency_deviation_set" 19 627 ""
-V L "val" 19 627 "float" `1619 
-F G "frequency_deviation_set" 19 627 "void(float val)" `1452  "TODO: assert 0 <= val <= (_FSTEP * 16383)  # fdev is a 14-bit unsigned value"
+V L "_bitrate" 19 643 "uint32_t" `1649 
+F N "frequency_deviation_get" 19 647 ""
+F G "frequency_deviation_get" 19 647 "float()" `1486  """"The frequency deviation in Hertz.""""
+V L "msb" 19 649 "uint8_t" `1652 
+V L "lsb" 19 650 "uint8_t" `1653 
+F N "frequency_deviation_set" 19 654 ""
+V L "val" 19 654 "float" `1655 
+F G "frequency_deviation_set" 19 654 "void(float val)" `1487  "TODO: assert 0 <= val <= (_FSTEP * 16383)  # fdev is a 14-bit unsigned value"
 C L "frequency_deviation_set" 19 2 1 "FUNCTION"
-V L "fdev" 19 630 "uint32_t" `1618 
-F N "packet_sent" 19 634 ""
-F G "packet_sent" 19 634 "int8()" `1454  "Transmit status"
-F N "payload_ready" 19 638 ""
-F G "payload_ready" 19 638 "int8()" `1455  """"Receive status""""
-V L "p" 19 640 "uint8_t" `1619 
+V L "fdev" 19 657 "uint32_t" `1654 
+F N "packet_sent" 19 661 ""
+F G "packet_sent" 19 661 "int8()" `1489  "Transmit status"
+F N "payload_ready" 19 665 ""
+F G "payload_ready" 19 665 "int8()" `1490  """"Receive status""""
+V L "p" 19 667 "uint8_t" `1655 
 C L "payload_ready" 19 2 1 "FUNCTION"
-F N "send" 19 644 ""
-V L "data" 19 644 "??0 *" `1457 
-V L "len" 19 644 "uint8_t" `1458 
-V L "keep_listening" 19 644 "int8" `1459 
-V L "_destination" 19 644 "uint16_t" `1460 
-V L "_node" 19 644 "uint16_t" `1461 
-V L "_identifier" 19 644 "uint16_t" `1462 
-V L "_flags" 19 644 "uint16_t" `1463 
-F G "send" 19 644 "int8(??0 * data,uint8_t len,int8=0 keep_listening,uint16_t=256 _destination,uint16_t=256 _node,uint16_t=256 _identifier,uint16_t=256 _flags)" `1456  """"Send a string of data using the transmitter."
+F N "send" 19 671 ""
+V L "data" 19 671 "??0 *" `1492 
+V L "len" 19 671 "uint8_t" `1493 
+V L "keep_listening" 19 671 "int8" `1494 
+V L "_destination" 19 671 "uint16_t" `1495 
+V L "_node" 19 671 "uint16_t" `1496 
+V L "_identifier" 19 671 "uint16_t" `1497 
+V L "_flags" 19 671 "uint16_t" `1498 
+F G "send" 19 671 "int8(??0 * data,uint8_t len,int8=0 keep_listening,uint16_t=256 _destination,uint16_t=256 _node,uint16_t=256 _identifier,uint16_t=256 _flags)" `1491  """"Send a string of data using the transmitter."
 C L "send" 19 2 17 "FUNCTION"
 C L "send" 19 2 3 "FUNCTION"
-V L "i" 19 667 "uint32_t" `1620 
-V L "payload" 19 668 "*int8" `1621 
+V L "i" 19 694 "uint32_t" `1656 
+V L "payload" 19 695 "*int8" `1657 
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
@@ -3157,37 +3175,37 @@ C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 2 "FUNCTION"
-V L "start" 19 703 "float" `1624 
-V L "timed_out" 19 704 "bool" `1625 
+V L "start" 19 730 "float" `1660 
+V L "timed_out" 19 731 "bool" `1661 
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
-F N "send_with_ack" 19 717 ""
-V L "data" 19 717 "??0 *" `1470 
-V L "len" 19 717 "uint8_t" `1628 
-F G "send_with_ack" 19 717 "int8(??0 * data,uint8_t len)" `1469  "Reliable Datagram mode:"
+F N "send_with_ack" 19 745 ""
+V L "data" 19 745 "??0 *" `1505 
+V L "len" 19 745 "uint8_t" `1664 
+F G "send_with_ack" 19 745 "int8(??0 * data,uint8_t len)" `1504  "Reliable Datagram mode:"
 C L "send_with_ack" 19 2 3 "FUNCTION"
-V L "retries_remaining" 19 722 "int8" `1626 
-V L "got_ack" 19 723 "bool" `1627 
-V L "ack_packet" 19 724 "??0 *" `1628 
+V L "retries_remaining" 19 750 "int8" `1662 
+V L "got_ack" 19 751 "bool" `1663 
+V L "ack_packet" 19 752 "??0 *" `1664 
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
-F N "receive" 19 758 ""
-V L "keep_listening" 19 758 "int8" `1473 
-V L "with_ack" 19 758 "int8" `1474 
-V L "timeout" 19 758 "float" `1475 
-V L "with_header" 19 758 "int8" `1476 
-F G "receive" 19 758 "*int8(int8=1 keep_listening,int8=0 with_ack,float=0 timeout,int8=0 with_header)" `1472  "Wait to receive a packet from the receiver. If a packet is found the payload bytes"
+F N "receive" 19 786 ""
+V L "keep_listening" 19 786 "int8" `1508 
+V L "with_ack" 19 786 "int8" `1509 
+V L "timeout" 19 786 "float" `1510 
+V L "with_header" 19 786 "int8" `1511 
+F G "receive" 19 786 "*int8(int8=1 keep_listening,int8=0 with_ack,float=0 timeout,int8=0 with_header)" `1507  "Wait to receive a packet from the receiver. If a packet is found the payload bytes"
 C L "receive" 19 2 12 "FUNCTION"
-V L "timed_out" 19 773 "bool" `1629 
-V L "start" 19 774 "int8" `1630 
-V L "i" 19 775 "int8" `1631 
-V L "fifo_length" 19 776 "uint8_t" `1632 
-V L "packet" 19 777 "??0 *" `1633 
-V L "fifo_len_str" 19 778 "int8[4]" `1634 
+V L "timed_out" 19 801 "bool" `1665 
+V L "start" 19 802 "int8" `1666 
+V L "i" 19 803 "int8" `1667 
+V L "fifo_length" 19 804 "uint8_t" `1668 
+V L "packet" 19 805 "??0 *" `1669 
+V L "fifo_len_str" 19 806 "int8[4]" `1670 
 C L "receive" 19 2 2 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
@@ -3199,18 +3217,30 @@ C L "receive" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
-C L "RDA_isr" 0 33 1 "FUNCTION"
-F N "RDA_isr" 0 34 ""
-F G "RDA_isr" 0 35 "void()" `732  "TODO: Use usb_cdc_putc() to transmit data to the USB"
-C L "MAIN" 0 33 4 "FUNCTION"
-F N "MAIN" 0 46 ""
-F G "MAIN" 0 47 "void()" `1647  "RFM69 radio;"
-C L "MAIN" 0 33 1 "FUNCTION"
-V L "synch" 0 51 "uint8_t[1]" `1648 
-V L "resetPin" 0 52 "int8" `1649 
-C L "MAIN" 0 33 1 "FUNCTION"
-C L "MAIN" 0 33 1 "FUNCTION"
-C L "MAIN" 0 33 4 "FUNCTION"
+C L "RDA_isr" 0 35 1 "FUNCTION"
+F N "RDA_isr" 0 36 ""
+F G "RDA_isr" 0 37 "void()" `732  "TODO: Use usb_cdc_putc() to transmit data to the USB"
+C L "MAIN" 0 35 10 "FUNCTION"
+F N "MAIN" 0 57 ""
+F G "MAIN" 0 58 "void()" `1677  "Timer de 8 bits"
+C L "MAIN" 0 35 1 "FUNCTION"
+C L "MAIN" 0 35 8 "FUNCTION"
+C L "MAIN" 0 35 1 "FUNCTION"
+C L "MAIN" 0 35 2 "FUNCTION"
+V L "synch" 0 81 "uint8_t[1]" `1680 
+V L "resetPin" 0 82 "int8" `1681 
+C L "MAIN" 0 35 1 "FUNCTION"
+C L "MAIN" 0 35 1 "FUNCTION"
+V L "packet" 0 94 "*int8" `1685 
+V L "i" 0 96 "int8" `1686 
+C L "MAIN" 0 35 1 "FUNCTION"
+C L "MAIN" 0 35 9 "FUNCTION"
+C L "MAIN" 0 35 1 "FUNCTION"
+C L "timer0" 0 35 1 "FUNCTION"
+F N "timer0" 0 123 ""
+F G "timer0" 0 123 "void()" `1689 
+C L "timer0" 0 35 2 "FUNCTION"
+C L "timer0" 0 35 3 "FUNCTION"
 F B "reset_cpu" 0 0
 F B "abs" 1 0
 F B "sleep" 0 1

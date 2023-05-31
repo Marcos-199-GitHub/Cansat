@@ -1,25 +1,24 @@
-Compiling I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\Receptor on 24-may.-23 at 00:30
->>> Warning 203 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 210(1,1): Condition always TRUE
->>> Warning 203 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 406(1,1): Condition always TRUE
->>> Warning 203 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 423(1,1): Condition always TRUE
->>> Warning 203 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 553(1,1): Condition always TRUE
->>> Warning 204 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 679(1,1): Condition always FALSE
->>> Warning 204 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 683(1,1): Condition always FALSE
->>> Warning 216 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\Receptor.c" Line 69(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_token_reset)
->>> Warning 216 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\Receptor.c" Line 69(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_cdc_flush_tx_buffer)
->>> Warning 216 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\Receptor.c" Line 69(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_tbe)
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 113(22,31): Variable never used:   data_mode
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 114(22,37): Variable never used:   modulation_type
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 133(22,28): Variable never used:   crc_on
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 134(22,40): Variable never used:   crc_auto_clear_off
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 135(22,36): Variable never used:   address_filter
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 141(22,35): Variable never used:   dio_4_mapping
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 142(22,35): Variable never used:   dio_5_mapping
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 146(8,16): Variable never used:   tx_power
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 149(10,25): Variable never used:   preamble_length
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 150(10,23): Variable never used:   frequency_mhz
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\Receptor.c" Line 51(12,17): Variable never used:   synch
->>> Warning 202 "I:\CanSat\Nueva carpeta\RFM69\Receptor\ArduPort\Receptor.c" Line 52(8,16): Variable never used:   resetPin
-      Memory usage:   ROM=22%      RAM=32% - 37%
-      0 Errors,  21 Warnings.
+Compiling I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor on 29-may.-23 at 23:05
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 215(1,1): Condition always TRUE
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 423(1,1): Condition always TRUE
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 445(1,1): Condition always TRUE
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 578(1,1): Condition always TRUE
+>>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 706(1,1): Condition always FALSE
+>>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 710(1,1): Condition always FALSE
+>>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_token_reset)
+>>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_cdc_flush_tx_buffer)
+>>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_tbe)
+>>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (@MUL1616)
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 113(22,31): Variable never used:   data_mode
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 114(22,37): Variable never used:   modulation_type
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 133(22,28): Variable never used:   crc_on
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 134(22,40): Variable never used:   crc_auto_clear_off
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 135(22,36): Variable never used:   address_filter
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 141(22,35): Variable never used:   dio_4_mapping
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 142(22,35): Variable never used:   dio_5_mapping
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 146(8,16): Variable never used:   tx_power
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 149(10,25): Variable never used:   preamble_length
+>>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 150(10,23): Variable never used:   frequency_mhz
+      Memory usage:   ROM=48%      RAM=33% - 44%
+      0 Errors,  20 Warnings.
 Build Successful.

@@ -1,7 +1,9 @@
 #define HEX 16
 #define BIN 2
+#define DEC 10
 #define SSPin PIN_A5
-
+#define TIMER_START 114
+#define TIMER_STEP_MS 3
 #include <Receptor.h>
 
 
@@ -43,8 +45,36 @@ receive data from the USB virtual COM port. usb_enumerated()
 can be used to see if connected to a host and ready to
 communicate. */
 
+/*
+Conexiones
+MOSI: RX (23)
+MISO: B0 (00) (SDI)
+CLK: B1 (01) (SCK)
+CS: A5 (13)
+Reset: E0
+*/
+
 void main()
 {
+   //Timer de 8 bits
+//timer0 (RTCC_INTERNAL), Preescaler de 256, timer de 8 bits
+setup_timer_0(RTCC_INTERNAL | RTCC_DIV_256 | RTCC_8_bit); 
+//el timer se va a desbordar dependiendo de la formula:
+//tiempo_desbordamiento =  (Valor_maximo_del_timer * (4*Preescaler))/Freq
+
+//EJEMPLO, 
+//para un divisor de 64, reloj de 48 MHZ y tiempo de 1ms
+//Dado que el oscilador funciona a 48 Mhz, la formula es:
+//t = 256*4*64 / 48000000 = 1.365 ms (aprox. 1ms),
+//Para hacerlo mas preciso, es posible inicializar el timer a un valor mayor a 0, por lo que el desbordamiento ocurriria antes:
+//con un valor de inicio de 67 (contando el 0, esto es 68 pasos) (256-68 = 180), el valor da 1.0026ms
+
+
+set_rtcc(TIMER_START);
+//Interrupciones del timer
+enable_interrupts(INT_RTCC);
+enable_interrupts(GLOBAL);
+
 
    //RFM69 radio;
    //PRIMER BYTE es el tamaño del array 
@@ -54,16 +84,60 @@ void main()
    
    setup_adc_ports(NO_ANALOGS, VSS_VDD);
    usb_init();
-   //init(synch,ResetPin);
+   //Esperar un segundo antes de iniciar
+   delay_ms(1000);
+   while (!checkId())println((char*)"Id incorrecto");
+   init(synch,ResetPin);
+   println((char*)"INIT DONE");
    while(TRUE)
    {
-   readAllRegs();
+   char* packet = receive(1,0,0,0);
+   if (!(packet == NULL || packet[0] == 0)){
+    for (int i=0;i<packet[0];i++){
+      print((char*)packet[i+1]);
+      }
+  println((char*)"");
+   }
+   else println((char*) "Esperando");
+  //radio.readAllRegs();
+  free(packet);
+   //println(globalSec,DEC);
+   
+   //readAllRegs();
+   //print((char*)"RFM ");
+   
+   //if (!checkId())println((char*)"incorrecto");
+   //else println((char*)"Correcto");
    //radio.readAllRegs();
 //!   println((char*)"HOLA USB");
 //!   println(134,HEX);
 //!   println(47,BIN);
-   delay_ms(1000);
+   delay_ms(100);
       //TODO: User Code
    }
 
+}
+
+//Interrupcion del timer
+#INT_RTCC  //TIMER0
+void timer0(void){
+   set_rtcc(TIMER_START); //Timer0
+   //println((char*)"Timer INT");
+   globalMs += TIMER_STEP_MS ;       
+   if (globalMs >= 1000){
+   globalSec ++;
+   globalMs -= 1000;
+   }
+   if (globalSec >= 60){
+   globalMin ++;
+   globalSec -= 60;
+   }
+   //Inicializar todo al llegar a 60 minutos
+   //Puede introducir un bug rarisimo en el que una diferencia entre tiempos de negativa, pero es muy poco probable
+   //Y aun asi el bug ocurrira cuando gloabalMin desborde
+   if (globalMin >= 60){
+   globalMs = 0;
+   globalSec= 0;
+   globalMin = 0;
+   }
 }

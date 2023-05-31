@@ -191,12 +191,17 @@ void readAllRegs()
   spiEnd();
 }    
 
+bool checkId(){
+uint8_t version;
+version = spi_read_u8(_REG_VERSION);
+return version==0x24;
+}
 
 
 
 void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _high_power=true,uint32_t baudrate = 2000000,uint8_t* encrypt = NULL){
     uint8_t version=0;
-    //Serial.println("Initial conf starts");
+    println((char*)"Initial conf starts");
     //Serial.println("HOLA 2");
     _tx_power = 13;
     _reset_pin = resetPin;
@@ -207,10 +212,15 @@ void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _hig
     version = spi_read_u8(_REG_VERSION);
     if (version != 0x24){
         println((char*)"Error: ID del RFM incorrecta");
-        while(1){}
+        while(1){
+        println((char*)"ID Loop");
+        usb_task();
+        }
         //exit(-1);
     }
+    print((char*)"Idle");
     idle();
+    println((char*)"Ready");
     //Chip setup
     //Set FIFO TX condition to not empty and the default FIFO threshold to 15.
     spi_write_u8(_REG_FIFO_THRESH, 0b10001111);
@@ -221,9 +231,11 @@ void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _hig
     spi_write_u8(_REG_TEST_PA2, _TEST_PA2_NORMAL);
     //set sync word
     //IMPORTANTE: Recuerda alocar el espacio para que no se sobreescriba
+    print((char*)"Freq");
     sync_word_set( _sync_word); 
     preamble_length_set(_preamble_length);
     frequency_mhz_set(); 
+    println((char*)"Ready");
     //TODO: set encryption key
     //encryption_key = encrypt;
     //encryption_key_set(encrypt);
@@ -355,7 +367,7 @@ void listen(){
     // Enable payload ready interrupt for D0 line.
     set(0b01,dio_0_mapping);
     // Enter RX mode (will clear FIFO!).
-    //Serial.println("HOLAAA");        
+          
     operation_mode_set(RX_MODE); 
 }
 void transmit(){
@@ -380,7 +392,10 @@ float temperature_get(){
     // # Start a measurement then poll the measurement finished bit.
     set(1,temp_start);
     //WARNING:LOOP infinito
-    while (get(temp_running) > 0){}
+    while (get(temp_running) > 0){
+    usb_task();
+    
+    }
     temperature = 166.0 - (float)spi_read_u8(_REG_TEMP2);
     return temperature;
 }
@@ -398,12 +413,17 @@ void operation_mode_set(uint8_t val){
     //TODO: assert 0 <= val <= 4
     start = timeSec();
     while (!get(mode_ready)){
-      
+      delay_ms(100);
+      usb_task();
+      println((char*)"OP Loop 1");
         if ((timeSec() - start) >= 3){
                  
             print ((char*)"Operation Mode couldnt be set\n");
             println(spi_read_u8(0x27),BIN);
-            while (1){}
+            while (1){ 
+            usb_task();
+            }
+            
             //exit(-2);
         }
     }      
@@ -417,10 +437,15 @@ void operation_mode_set(uint8_t val){
     // Wait for mode to change by polling interrupt bit.
     start = timeSec();
     while (!get(mode_ready)){
+    usb_task();
+    println((char*)"OP Loop 2");
         if ((timeSec() - start) >= 3){
             print ((char*)"Timeout on Operation Mode Set\n");
             println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
-            while (1){}
+            while (1){
+            usb_task();
+            
+            }
             //exit(-2);
         }
     }
@@ -550,7 +575,9 @@ int8_t tx_power_get(){
         //# 5 to 20 dBm range
         return -11 + current_output_power;
     print((char*)"Tx power power amps state unknown!");
-    while (1){}
+    while (1){
+    usb_task();
+    }
     //exit(-3);
 }
 void tx_power_set(int8_t val){
@@ -703,6 +730,7 @@ bool send(uint8_t* data,uint8_t len, bool keep_listening = false, uint16_t _dest
     float start = timeSec();
     bool timed_out = false;
     while (!timed_out && !packet_sent()){
+    usb_task();
         if ((timeSec() - start) >= xmit_timeout)
             timed_out = true;
     }
@@ -783,6 +811,7 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
         listen();
         start = timeSec();
         while (!timed_out && !payload_ready()){
+        usb_task();
             //delay(20);
             if ((timeSec() - start) >= xmit_timeout){
                 println((char*)"Timed out");

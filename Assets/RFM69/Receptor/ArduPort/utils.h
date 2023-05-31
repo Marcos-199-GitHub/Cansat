@@ -39,6 +39,9 @@ void print(int str, int format){
     }
     converted[10] = '\0';
     }
+    else if (format == DEC){
+      sprintf(converted,"%d",str);
+    }
     usbPrint(converted);
     //Serial.print(str,format);
 }
@@ -52,10 +55,22 @@ void println(int str, int format){
     usbPrint((char*)"\n");
     //Serial.println(str,format);
 }
+void print(float str){
+ char converted[11];
+ sprintf(converted,"%03f",str);
+ usbPrint(converted);
+}
+void println(float str){
+    print(str);
+    usbPrint((char*)"\n");
+}
 float timeSec(){
-   //TODO: implementar timers
-   return 0;
-    //return millis()/1000;
+   float t;
+   t = (float)(60*globalMin);
+   t += (float)globalSec;
+   t += (float)((float)globalMs*0.001);
+   //println(t);
+   return t;
 }
 void spi_read_into(uint8_t address,uint8_t* array, uint8_t length){
     int i=0;
