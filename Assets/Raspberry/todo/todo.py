@@ -16,7 +16,7 @@ import bmm150
 # Import the RFM69 radio module.
 import adafruit_rfm69
 import busio
-
+import subprocess
 
 from digitalio import DigitalInOut, Direction, Pull
 import os
@@ -131,11 +131,13 @@ def bmm_update():
 
 def camera_update():
     if not btnA.value:
-        filename = f"{int(time.time())}.jpeg"
-        os.system(f"{PHOTO_CMD} {filename}")
         display.fill(0)
         display.text("tomando foto",0,15,1)
         display.show()
+        filename = f"{int(time.time())}.jpeg"
+        c = subprocess.run([f"{PHOTO_CMD} {filename}"], shell=True, capture_output = True)
+        print (c)
+
         return filename
     return ""
 n=0
@@ -153,7 +155,12 @@ while True:
             print (raw)
         except:
             print("PHOTO SEND ERROR")
-            pass
+            display.fill(0)
+            display.text("Photo ERROR",0,15,1)
+            display.show()
+            time.sleep(1)
+            
+            
 
     diccionario["T1"] = f"{bmp280.temperature}"
     ##diccionario["T2"] = f"{sht30.temperature[0]}"
@@ -193,8 +200,8 @@ while True:
 
     print(utf)
     display.fill(0)
-    display.text(f"{n} paquetes enviados",0,15,1)
-    display.text(f" ({total_kb}) kb",0,30,1)
+    display.text(f"{n} paquetes enviados",0,0,1)
+    display.text(f" ({total_kb}) kb",0,10,1)
 
     display.show()
     f.write(utf)
