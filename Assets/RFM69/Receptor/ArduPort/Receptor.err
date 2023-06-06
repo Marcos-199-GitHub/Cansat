@@ -1,10 +1,12 @@
-Compiling I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor on 29-may.-23 at 23:05
+Compiling I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor on 04-jun.-23 at 11:14
 >>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 215(1,1): Condition always TRUE
->>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 423(1,1): Condition always TRUE
->>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 445(1,1): Condition always TRUE
->>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 578(1,1): Condition always TRUE
->>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 706(1,1): Condition always FALSE
->>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 710(1,1): Condition always FALSE
+>>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 422(1,1): Condition always FALSE
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 426(1,1): Condition always TRUE
+>>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 448(1,1): Condition always FALSE
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 451(1,1): Condition always TRUE
+>>> Warning 203 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 584(1,1): Condition always TRUE
+>>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 712(1,1): Condition always FALSE
+>>> Warning 204 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 716(1,1): Condition always FALSE
 >>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_token_reset)
 >>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_cdc_flush_tx_buffer)
 >>> Warning 216 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor.c" Line 143(1,2): Interrupts disabled during call to prevent re-entrancy:  (usb_tbe)
@@ -19,6 +21,6 @@ Compiling I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\Receptor on 29-may.-23
 >>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 146(8,16): Variable never used:   tx_power
 >>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 149(10,25): Variable never used:   preamble_length
 >>> Warning 202 "I:\CanSat\Cansat\Assets\RFM69\Receptor\ArduPort\afadruit_rfm69.h" Line 150(10,23): Variable never used:   frequency_mhz
-      Memory usage:   ROM=48%      RAM=33% - 44%
-      0 Errors,  20 Warnings.
+      Memory usage:   ROM=46%      RAM=33% - 43%
+      0 Errors,  22 Warnings.
 Build Successful.

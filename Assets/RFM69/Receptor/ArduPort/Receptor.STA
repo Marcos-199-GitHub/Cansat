@@ -1,12 +1,12 @@
 
-ROM used:   15826/32768 (48%)
-            15826/32768 (48%) including unused fragments
+ROM used:   14996/32768 (46%)
+            14996/32768 (46%) including unused fragments
 
-            1.8 Average locations per line
-            10.2 Average locations per statement
+            1.7 Average locations per line
+            9.6 Average locations per statement
 
 RAM used:   682/2048 (33%) at main() level
-            895/2048 (44%) worst case
+            880/2048 (43%) worst case
 
 Stack used: 17 worst case (10 in main + 7 for interrupts)
 Stack size: 31
@@ -32,9 +32,9 @@ Lines Stmts  %   Files
    76    13   1  C:\Program Files (x86)\PICC\Drivers\memmgmt.c
    64     0   0  adafruit_rfm69_registers.h
   111    53   3  utils.h
-  878   327  21  afadruit_rfm69.h
+  884   330  21  afadruit_rfm69.h
 ----- -----
- 8891  1558 Total
+ 8897  1561 Total
 
 Page ROM  %  RAM    Vol Diff  Functions:
 ---- --- --- ---    --- ----  ----------
@@ -57,14 +57,14 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0     68   0    1    439  5.0  usb_task
 0     14   0    0     61  2.5  usb_init
 0    332   1   10    976  5.9  usb_flush_in
-0    158   0   10    344  6.1  usb_put_packet
+0    158   1   10    344  6.1  usb_put_packet
 0    256   1    9    914  5.0  usb_flush_out
 0     64   0    3     66  2.7  usb_rx_packet_size
 0    102   0    6    264  4.6  usb_stall_ep
 0    122   0    6    329  4.7  usb_unstall_ep
 0    118   0    5    373  6.0  usb_endpoint_stalled
 0     26   0    1     94  2.7  usb_set_address
-0    492   2   12   1785 11.3  usb_set_configured
+0    490   2   12   1785 11.3  usb_set_configured
 0    112   0    5    199  3.2  usb_disable_endpoint
 0     30   0    1     99  3.0  usb_disable_endpoints
 0      4   0    0     61  4.0  usb_clear_trn
@@ -93,7 +93,7 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0     14   0    0     76  1.8  usb_finish_set_address
 0    136   0    4    624  8.9  usb_copy_desc_seg_to_ep
 0     72   0    0    302  6.2  usb_isr_tok_out_cdc_control_dne
-0    156   0    2   1200  8.6  usb_isr_tkn_cdc
+0    156   1    2   1200  8.6  usb_isr_tkn_cdc
 0     28   0    0    174  3.6  usb_isr_tok_out_cdc_data_dne
 0      6   0    0     81  0.9  usb_isr_tok_in_cdc_data_dne
 0    220   1   13    496  8.2  memmove
@@ -118,14 +118,11 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0     14   0    0     25  1.2  spiBegin
 0     16   0    0     25  1.2  spiEnd
 0     12   0    2     29  1.6  print
-0    186   1   17    624  7.8  print
-0     72   0    2             @PRINTF_X_1365
 0     44   0    3             @DIV88
-0    188   1    6             @PRINTF_D_1365
+0    190   1    6             @PRINTF_D_1365
 0     32   0    8     57  1.8  println
-0     34   0    8     80  2.3  println
 0    248   1   11             @MULFF
-0    260   1    8    149  3.8  timeSec
+0    264   1    8    149  3.8  timeSec
 0     54   0    2             @ITOF
 0    632   2   16             @ADDFF
 0     82   0    7    324  5.1  spi_read_into
@@ -133,68 +130,66 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0     26   0    1     69  2.2  spi_read_u8
 0     30   0    2    116  3.0  spi_write_u8
 0      8   0    1     24  1.2  sleep_ms
-0     58   0    6    222  4.8  set
+0     54   0    6    222  4.8  set
 0     40   0    5    122  3.5  get
 0     62   0    7    414  5.7  _RegisterBits_
 0     36   0    1     63  2.3  checkId
-0    972   3   41   2416  5.1  init
+0    990   3   41   2416  5.1  init
 0     36   0    0             @const1602
 0     46   0    0             @const1604
 0     24   0    0             @const1605
 0     44   0    0             @const1610
 0     50   0    0     88  1.7  reset
 0     46   0    1     92  2.5  set_boost
-0     24   0    0     32  1.0  idle
+0     22   0    0     32  1.0  idle
 0     50   0    0     59  1.6  listen
 0     50   0    0     59  1.6  transmit
-0    668   2   73    870  6.9  operation_mode_set
-0     26   0    0    840  6.9  @const1612
-0    122   0   10             @FLT
-0     48   0    0             @const1617
-0     26   0    0             @const1618
-0     48   0    0             @const1620
-0    136   0    5    284  5.8  sync_word_set
-0     46   0    4     98  2.5  preamble_length_set
+0    242   1   64    893  6.9  operation_mode_set
+0     26   0    0             @const1612
+0     26   0    0             @const1615
+0    134   0    5    284  5.8  sync_word_set
+0     42   0    4     98  2.5  preamble_length_set
 0    350   1   14             @DIVFF
-0     52   0    3    117  1.6  frequency_mhz_set
+0     46   0    3    117  1.6  frequency_mhz_set
 0    180   1    5    712  5.3  tx_power_set
 0     98   0    1     55  2.2  rssi_get
-0     60   0    4    142  3.5  @SFTOI
-0    164   1   13    170  3.8  bitrate_set
-0    164   1   13    172  3.6  frequency_deviation_set
+0     60   0    4             @SFTOI
+0    158   1   13    170  3.8  bitrate_set
+0    158   1   13    172  3.6  frequency_deviation_set
 0     36   0    1     44  1.7  packet_sent
 0     42   0    2     69  2.5  payload_ready
-0    612   2   40   1669  9.3  send
-0     26   0    0   1669  9.3  @const1658
-0   1166   4   44   2859 13.2  receive
-0     26   0    0   2859 13.2  @const1671
+0    614   2   40   1669  9.3  send
+0     26   0    0             @const1655
+0    122   0   10             @FLT
+0   1162   4   44   2859 13.2  receive
+0     26   0    0             @const1671
 0     28   0    0             @const1673
 0      4   0    0      5  1.0  RDA_isr
-0   1524   5   24   1026  9.4  MAIN
-0     30   0    0   1026  9.4  @const1682
+0   1518   5   24   1026  9.4  MAIN
+0     30   0    0             @const1682
 0     26   0    0             @const1684
 0     26   0    0             @const1688
 0     84   0    0    280  4.1  timer0
- Inline         0    280  4.1  @cinit1
+ Inline         0             @cinit1
 
 Program metrics:
-    Functions               105
-    Statements              1558
-    Comments                6446
-    Volume (V)              89475
-    Difficulty (D)          479.3
-    Effort to implement (E) 42883553
-    Time to implement (T)   661 hours, 47 minutes
-    Est Delivered Bugs (B)  41
-    Cyclomatic Complexity   205
-    Maintainability (MI)    71
+    Functions               97
+    Statements              1561
+    Comments                6448
+    Volume (V)              74571
+    Difficulty (D)          420.9
+    Effort to implement (E) 31389079
+    Time to implement (T)   484 hours, 24 minutes
+    Est Delivered Bugs (B)  33
+    Cyclomatic Complexity   174
+    Maintainability (MI)    94
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00002     4  0  
 00004-00006     4  0  
 00008-000B8   178  0  
-000BA-07FFE  15640  16942  
+000BA-07FFE  14810  17772  
 
 
 

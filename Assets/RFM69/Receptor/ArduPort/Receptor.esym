@@ -1,8 +1,8 @@
-F N "Z" 19 8 ""
+F N "init" 19 8 ""
 D G "__PCH__" 19 8 ""5.112""
 D G "__DEVICE__" 19 8 "4550"
-D G "__DATE__" 19 8 ""29-May-23""
-D G "__TIME__" 19 8 ""23:05:58""
+D G "__DATE__" 19 8 ""04-Jun-23""
+D G "__TIME__" 19 8 ""11:14:45""
 D G "_UNICODE" 19 8 ""?""
 D G "__EVAL" 19 8 ""?""
 D G "HEX" 0 1 "16"
@@ -3050,119 +3050,119 @@ F G "operation_mode_get" 19 402 "uint8_t()" `1465  """"The operation mode value.
 C L "operation_mode_get" 19 2 3 "FUNCTION"
 F N "operation_mode_set" 19 411 ""
 V L "val" 19 411 "uint8_t" `1612 
-F G "operation_mode_set" 19 411 "void(uint8_t val)" `1466 
-V L "start" 19 412 "float" `1611  "TODO: assert 0 <= val <= 4"
+F G "operation_mode_set" 19 411 "void(uint8_t val)" `1466  "float start;"
+V L "n" 19 413 "int8" `1611  "TODO: assert 0 <= val <= 4"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
-C L "operation_mode_set" 19 2 1 "FUNCTION"
+C L "operation_mode_set" 19 2 2 "FUNCTION"
 C L "operation_mode_set" 19 2 1 "FUNCTION"
 C L "sync_word_get" 19 2 1 "FUNCTION"
-F N "sync_word_get" 19 454 ""
-F G "sync_word_get" 19 454 "??0 *()" `1468  """"The synchronization word value.  This is a byte string up to 8 bytes long (64 bits)"
+F N "sync_word_get" 19 460 ""
+F G "sync_word_get" 19 460 "??0 *()" `1468  """"The synchronization word value.  This is a byte string up to 8 bytes long (64 bits)"
 C L "sync_word_get" 19 2 5 "FUNCTION"
 C L "sync_word_get" 19 2 1 "FUNCTION"
-F N "sync_word_set" 19 470 ""
-V L "wrd" 19 470 "??0 *" `1622 
-F G "sync_word_set" 19 470 "void(??0 * wrd)" `1469 
-V L "len" 19 471 "uint8_t" `1621 
+F N "sync_word_set" 19 476 ""
+V L "wrd" 19 476 "??0 *" `1619 
+F G "sync_word_set" 19 476 "void(??0 * wrd)" `1469 
+V L "len" 19 477 "uint8_t" `1618 
 C L "sync_word_set" 19 2 1 "FUNCTION"
 C L "sync_word_set" 19 2 1 "FUNCTION"
-F N "preamble_length_get" 19 482 ""
-F G "preamble_length_get" 19 482 "uint16_t()" `1471  "The length of the preamble for sent and received packets, an unsigned 16-bit value."
+F N "preamble_length_get" 19 488 ""
+F G "preamble_length_get" 19 488 "uint16_t()" `1471  "The length of the preamble for sent and received packets, an unsigned 16-bit value."
 C L "preamble_length_get" 19 2 2 "FUNCTION"
-V L "msb" 19 486 "uint8_t" `1622 
-V L "lsb" 19 487 "uint8_t" `1623 
-F N "preamble_length_set" 19 490 ""
-V L "val" 19 490 "uint16_t" `1625 
-F G "preamble_length_set" 19 490 "void(uint16_t val)" `1472 
-F N "frequency_mhz_get" 19 494 ""
-F G "frequency_mhz_get" 19 494 "float()" `1474  """"The frequency of the radio in Megahertz. Only the allowed values for your radio must be"
+V L "msb" 19 492 "uint8_t" `1619 
+V L "lsb" 19 493 "uint8_t" `1620 
+F N "preamble_length_set" 19 496 ""
+V L "val" 19 496 "uint16_t" `1622 
+F G "preamble_length_set" 19 496 "void(uint16_t val)" `1472 
+F N "frequency_mhz_get" 19 500 ""
+F G "frequency_mhz_get" 19 500 "float()" `1474  """"The frequency of the radio in Megahertz. Only the allowed values for your radio must be"
 C L "frequency_mhz_get" 19 2 4 "FUNCTION"
-V L "msb" 19 501 "uint8_t" `1624 
-V L "mid" 19 502 "uint8_t" `1625 
-V L "lsb" 19 503 "uint8_t" `1626 
-V L "frf" 19 504 "uint32_t" `1627 
-V L "frequency" 19 505 "float" `1628 
+V L "msb" 19 507 "uint8_t" `1621 
+V L "mid" 19 508 "uint8_t" `1622 
+V L "lsb" 19 509 "uint8_t" `1623 
+V L "frf" 19 510 "uint32_t" `1624 
+V L "frequency" 19 511 "float" `1625 
 C L "frequency_mhz_set" 19 2 1 "FUNCTION"
-F N "frequency_mhz_set" 19 509 ""
-F G "frequency_mhz_set" 19 509 "void()" `1475  "FRF = int((freq/_FSTEP)*1,000,000) & 0xFFFFFF"
-V L "msb" 19 511 "uint8_t" `1634 
-V L "lsb" 19 511 "uint8_t" `1635 
-V L "mid" 19 511 "uint8_t" `1636  "TODO: añadir soporte para otras frecuencias"
+F N "frequency_mhz_set" 19 515 ""
+F G "frequency_mhz_set" 19 515 "void()" `1475  "FRF = int((freq/_FSTEP)*1,000,000) & 0xFFFFFF"
+V L "msb" 19 517 "uint8_t" `1631 
+V L "lsb" 19 517 "uint8_t" `1632 
+V L "mid" 19 517 "uint8_t" `1633  "TODO: añadir soporte para otras frecuencias"
 C L "frequency_mhz_set" 19 2 10 "FUNCTION"
-F N "encryption_key_get" 19 534 ""
-F G "encryption_key_get" 19 534 "??0 *()" `1476  """"The AES encryption key used to encrypt and decrypt packets by the chip. This can be set"
+F N "encryption_key_get" 19 540 ""
+F G "encryption_key_get" 19 540 "??0 *()" `1476  """"The AES encryption key used to encrypt and decrypt packets by the chip. This can be set"
 C L "encryption_key_get" 19 2 4 "FUNCTION"
-F N "encryption_key_set" 19 545 ""
-V L "val" 19 545 "??0 *" `1638 
-F G "encryption_key_set" 19 545 "void(??0 * val)" `1477 
+F N "encryption_key_set" 19 551 ""
+V L "val" 19 551 "??0 *" `1635 
+F G "encryption_key_set" 19 551 "void(??0 * val)" `1477 
 C L "encryption_key_set" 19 2 2 "FUNCTION"
-F N "tx_power_get" 19 554 ""
-F G "tx_power_get" 19 554 "int8_t()" `1479  "The transmit power in dBm. Can be set to a value from -2 to 20 for high power devices"
+F N "tx_power_get" 19 560 ""
+F G "tx_power_get" 19 560 "int8_t()" `1479  "The transmit power in dBm. Can be set to a value from -2 to 20 for high power devices"
 C L "tx_power_get" 19 2 4 "FUNCTION"
-V L "pa0" 19 561 "uint8_t" `1637 
-V L "pa1" 19 562 "uint8_t" `1638 
-V L "pa2" 19 563 "uint8_t" `1639 
-V L "current_output_power" 19 564 "uint8_t" `1640 
+V L "pa0" 19 567 "uint8_t" `1634 
+V L "pa1" 19 568 "uint8_t" `1635 
+V L "pa2" 19 569 "uint8_t" `1636 
+V L "current_output_power" 19 570 "uint8_t" `1637 
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
 C L "tx_power_get" 19 2 1 "FUNCTION"
-F N "tx_power_set" 19 583 ""
-V L "val" 19 583 "int8_t" `1644 
-F G "tx_power_set" 19 583 "void(int8_t val)" `1480  "Determine power amplifier and output power values depending on"
+F N "tx_power_set" 19 589 ""
+V L "val" 19 589 "int8_t" `1641 
+F G "tx_power_set" 19 589 "void(int8_t val)" `1480  "Determine power amplifier and output power values depending on"
 C L "tx_power_set" 19 2 1 "FUNCTION"
-V L "_pa_0_on" 19 586 "uint8_t" `1643 
-V L "_pa_1_on" 19 587 "uint8_t" `1644 
-V L "_pa_2_on" 19 588 "uint8_t" `1645 
-V L "_output_power" 19 589 "uint8_t" `1646 
+V L "_pa_0_on" 19 592 "uint8_t" `1640 
+V L "_pa_1_on" 19 593 "uint8_t" `1641 
+V L "_pa_2_on" 19 594 "uint8_t" `1642 
+V L "_output_power" 19 595 "uint8_t" `1643 
 C L "tx_power_set" 19 2 2 "FUNCTION"
 C L "tx_power_set" 19 2 2 "FUNCTION"
 C L "tx_power_set" 19 2 3 "FUNCTION"
 C L "tx_power_set" 19 2 1 "FUNCTION"
-F N "rssi_get" 19 621 ""
-F G "rssi_get" 19 621 "float()" `1482  """The received strength indicator (in dBm)."
+F N "rssi_get" 19 627 ""
+F G "rssi_get" 19 627 "float()" `1482  """The received strength indicator (in dBm)."
 C L "rssi_get" 19 2 3 "FUNCTION"
-F N "bitrate_get" 19 630 ""
-F G "bitrate_get" 19 630 "float()" `1483  """"The modulation bitrate in bits/second (or chip rate if Manchester encoding is enabled)."
+F N "bitrate_get" 19 636 ""
+F G "bitrate_get" 19 636 "float()" `1483  """"The modulation bitrate in bits/second (or chip rate if Manchester encoding is enabled)."
 C L "bitrate_get" 19 2 2 "FUNCTION"
-V L "msb" 19 635 "uint8_t" `1647 
-V L "lsb" 19 636 "uint8_t" `1648 
-F N "bitrate_set" 19 640 ""
-V L "val" 19 640 "float" `1650 
-F G "bitrate_set" 19 640 "void(float val)" `1484  "TODO: assert (_FXOSC / 65535) <= val <= 32000000.0"
+V L "msb" 19 641 "uint8_t" `1644 
+V L "lsb" 19 642 "uint8_t" `1645 
+F N "bitrate_set" 19 646 ""
+V L "val" 19 646 "float" `1647 
+F G "bitrate_set" 19 646 "void(float val)" `1484  "TODO: assert (_FXOSC / 65535) <= val <= 32000000.0"
 C L "bitrate_set" 19 2 1 "FUNCTION"
-V L "_bitrate" 19 643 "uint32_t" `1649 
-F N "frequency_deviation_get" 19 647 ""
-F G "frequency_deviation_get" 19 647 "float()" `1486  """"The frequency deviation in Hertz.""""
-V L "msb" 19 649 "uint8_t" `1652 
-V L "lsb" 19 650 "uint8_t" `1653 
-F N "frequency_deviation_set" 19 654 ""
-V L "val" 19 654 "float" `1655 
-F G "frequency_deviation_set" 19 654 "void(float val)" `1487  "TODO: assert 0 <= val <= (_FSTEP * 16383)  # fdev is a 14-bit unsigned value"
+V L "_bitrate" 19 649 "uint32_t" `1646 
+F N "frequency_deviation_get" 19 653 ""
+F G "frequency_deviation_get" 19 653 "float()" `1486  """"The frequency deviation in Hertz.""""
+V L "msb" 19 655 "uint8_t" `1649 
+V L "lsb" 19 656 "uint8_t" `1650 
+F N "frequency_deviation_set" 19 660 ""
+V L "val" 19 660 "float" `1652 
+F G "frequency_deviation_set" 19 660 "void(float val)" `1487  "TODO: assert 0 <= val <= (_FSTEP * 16383)  # fdev is a 14-bit unsigned value"
 C L "frequency_deviation_set" 19 2 1 "FUNCTION"
-V L "fdev" 19 657 "uint32_t" `1654 
-F N "packet_sent" 19 661 ""
-F G "packet_sent" 19 661 "int8()" `1489  "Transmit status"
-F N "payload_ready" 19 665 ""
-F G "payload_ready" 19 665 "int8()" `1490  """"Receive status""""
-V L "p" 19 667 "uint8_t" `1655 
+V L "fdev" 19 663 "uint32_t" `1651 
+F N "packet_sent" 19 667 ""
+F G "packet_sent" 19 667 "int8()" `1489  "Transmit status"
+F N "payload_ready" 19 671 ""
+F G "payload_ready" 19 671 "int8()" `1490  """"Receive status""""
+V L "p" 19 673 "uint8_t" `1652 
 C L "payload_ready" 19 2 1 "FUNCTION"
-F N "send" 19 671 ""
-V L "data" 19 671 "??0 *" `1492 
-V L "len" 19 671 "uint8_t" `1493 
-V L "keep_listening" 19 671 "int8" `1494 
-V L "_destination" 19 671 "uint16_t" `1495 
-V L "_node" 19 671 "uint16_t" `1496 
-V L "_identifier" 19 671 "uint16_t" `1497 
-V L "_flags" 19 671 "uint16_t" `1498 
-F G "send" 19 671 "int8(??0 * data,uint8_t len,int8=0 keep_listening,uint16_t=256 _destination,uint16_t=256 _node,uint16_t=256 _identifier,uint16_t=256 _flags)" `1491  """"Send a string of data using the transmitter."
+F N "send" 19 677 ""
+V L "data" 19 677 "??0 *" `1492 
+V L "len" 19 677 "uint8_t" `1493 
+V L "keep_listening" 19 677 "int8" `1494 
+V L "_destination" 19 677 "uint16_t" `1495 
+V L "_node" 19 677 "uint16_t" `1496 
+V L "_identifier" 19 677 "uint16_t" `1497 
+V L "_flags" 19 677 "uint16_t" `1498 
+F G "send" 19 677 "int8(??0 * data,uint8_t len,int8=0 keep_listening,uint16_t=256 _destination,uint16_t=256 _node,uint16_t=256 _identifier,uint16_t=256 _flags)" `1491  """"Send a string of data using the transmitter."
 C L "send" 19 2 17 "FUNCTION"
 C L "send" 19 2 3 "FUNCTION"
-V L "i" 19 694 "uint32_t" `1656 
-V L "payload" 19 695 "*int8" `1657 
+V L "i" 19 700 "uint32_t" `1653 
+V L "payload" 19 701 "*int8" `1654 
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
@@ -3175,37 +3175,37 @@ C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 2 "FUNCTION"
-V L "start" 19 730 "float" `1660 
-V L "timed_out" 19 731 "bool" `1661 
+V L "start" 19 736 "float" `1657 
+V L "timed_out" 19 737 "bool" `1658 
 C L "send" 19 2 1 "FUNCTION"
 C L "send" 19 2 1 "FUNCTION"
-F N "send_with_ack" 19 745 ""
-V L "data" 19 745 "??0 *" `1505 
-V L "len" 19 745 "uint8_t" `1664 
-F G "send_with_ack" 19 745 "int8(??0 * data,uint8_t len)" `1504  "Reliable Datagram mode:"
+F N "send_with_ack" 19 751 ""
+V L "data" 19 751 "??0 *" `1505 
+V L "len" 19 751 "uint8_t" `1664 
+F G "send_with_ack" 19 751 "int8(??0 * data,uint8_t len)" `1504  "Reliable Datagram mode:"
 C L "send_with_ack" 19 2 3 "FUNCTION"
-V L "retries_remaining" 19 750 "int8" `1662 
-V L "got_ack" 19 751 "bool" `1663 
-V L "ack_packet" 19 752 "??0 *" `1664 
+V L "retries_remaining" 19 756 "int8" `1662 
+V L "got_ack" 19 757 "bool" `1663 
+V L "ack_packet" 19 758 "??0 *" `1664 
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "send_with_ack" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
-F N "receive" 19 786 ""
-V L "keep_listening" 19 786 "int8" `1508 
-V L "with_ack" 19 786 "int8" `1509 
-V L "timeout" 19 786 "float" `1510 
-V L "with_header" 19 786 "int8" `1511 
-F G "receive" 19 786 "*int8(int8=1 keep_listening,int8=0 with_ack,float=0 timeout,int8=0 with_header)" `1507  "Wait to receive a packet from the receiver. If a packet is found the payload bytes"
+F N "receive" 19 792 ""
+V L "keep_listening" 19 792 "int8" `1508 
+V L "with_ack" 19 792 "int8" `1509 
+V L "timeout" 19 792 "float" `1510 
+V L "with_header" 19 792 "int8" `1511 
+F G "receive" 19 792 "*int8(int8=1 keep_listening,int8=0 with_ack,float=0 timeout,int8=0 with_header)" `1507  "Wait to receive a packet from the receiver. If a packet is found the payload bytes"
 C L "receive" 19 2 12 "FUNCTION"
-V L "timed_out" 19 801 "bool" `1665 
-V L "start" 19 802 "int8" `1666 
-V L "i" 19 803 "int8" `1667 
-V L "fifo_length" 19 804 "uint8_t" `1668 
-V L "packet" 19 805 "??0 *" `1669 
-V L "fifo_len_str" 19 806 "int8[4]" `1670 
+V L "timed_out" 19 807 "bool" `1665 
+V L "start" 19 808 "int8" `1666 
+V L "i" 19 809 "int8" `1667 
+V L "fifo_length" 19 810 "uint8_t" `1668 
+V L "packet" 19 811 "??0 *" `1669 
+V L "fifo_len_str" 19 812 "int8[4]" `1670 
 C L "receive" 19 2 2 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"
 C L "receive" 19 2 1 "FUNCTION"

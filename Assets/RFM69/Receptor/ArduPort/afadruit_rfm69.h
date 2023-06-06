@@ -409,14 +409,17 @@ uint8_t operation_mode_get(){
     return operation_mode;
 }
 void operation_mode_set(uint8_t val){
-    float start;
+    //float start;
+    int n;
     //TODO: assert 0 <= val <= 4
-    start = timeSec();
+    n=0;
+    
     while (!get(mode_ready)){
       delay_ms(100);
+      n+=100;
       usb_task();
       println((char*)"OP Loop 1");
-        if ((timeSec() - start) >= 3){
+        if (n >= 3000){
                  
             print ((char*)"Operation Mode couldnt be set\n");
             println(spi_read_u8(0x27),BIN);
@@ -435,11 +438,14 @@ void operation_mode_set(uint8_t val){
     spi_write_u8(_REG_OP_MODE,operation_mode);
    
     // Wait for mode to change by polling interrupt bit.
-    start = timeSec();
+    // start = timeSec();
+    n=0;
     while (!get(mode_ready)){
     usb_task();
+    delay_ms(100);
+    n+=100;
     println((char*)"OP Loop 2");
-        if ((timeSec() - start) >= 3){
+        if (n >= 3000){
             print ((char*)"Timeout on Operation Mode Set\n");
             println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
             while (1){
