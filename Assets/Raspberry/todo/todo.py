@@ -20,7 +20,7 @@ import subprocess
 
 from digitalio import DigitalInOut, Direction, Pull
 import os
-
+import camara
 
 
 SHT30_ADDRESS = 0x44
@@ -43,8 +43,8 @@ bmp280.sea_level_pressure = 1013.25
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
 sht30 = adafruit_sht31d.SHT31D(i2c)
 
-#print("\033[1mSensor\033[0m = SHT31-D")
-#print("\033[1mSerial Number\033[0m = ", sht30.serial_number, "\n")
+print("\033[1mSensor\033[0m = SHT31-D")
+print("\033[1mSerial Number\033[0m = ", sht30.serial_number, "\n")
 sht30.frequency = adafruit_sht31d.FREQUENCY_1
 sht30.mode = adafruit_sht31d.MODE_PERIODIC
 
@@ -134,11 +134,7 @@ def camera_update():
         display.fill(0)
         display.text("tomando foto",0,15,1)
         display.show()
-        filename = f"{int(time.time())}.jpeg"
-        c = subprocess.run([f"{PHOTO_CMD} {filename}"], shell=True, capture_output = True)
-        print (c)
-
-        return filename
+        return camara.capture()
     return ""
 n=0
 total_kb=0
@@ -151,8 +147,9 @@ while True:
     if (foto != ""):
         try:
             #foto = camera_update()
-            raw = open(foto,"rb").readall()
-            print (raw)
+            #raw = open(foto,"rb").readall()
+            print (f"ahi te van {len(foto)} B de datos")
+            print (foto)
         except:
             print("PHOTO SEND ERROR")
             display.fill(0)
