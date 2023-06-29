@@ -8,9 +8,11 @@ RAD2DEG = 180/math.pi
 DEG2RAD = math.pi/180
 GRAVITY = np.array([[0],[0],[9.81]])
 g = GRAVITY[2][0]
-#TODO: valores reales de latitud y de velocidad de rotacion terrestre
-LATITUDE = 45
-Wie = 5
+# En donde estoy la Latitud es 19°50'0'' = 19° + 50'/60 + 0''/3600 
+# = 19.833°
+LATITUDE = 19.833 
+# Wie = 15 deg/h =  0.0041666666666 deg/s
+Wie = 0.00416666 # deg/s
 EARTH_ROTATION = np.array([[math.cos(LATITUDE*DEG2RAD)],[0],[math.sin(LATITUDE*DEG2RAD)]]) * Wie
 mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 ACC_ORIENTATION_SAVE_FILE = "calibration_data/Acc_orientation.npy"
@@ -372,7 +374,6 @@ def GetGyroOrientations(sensor: MPU,stillTime, save = True):
     return M
 
 
-
 U = GetAccOrientations(D,2,save=True)
 CalibrationAcc = Calibration()   
 CalibrationAcc.Accelerometer2(U)
@@ -382,79 +383,3 @@ U = GetGyroOrientations(D,2,save=True)
 CalibrationGyro = Calibration()   
 CalibrationGyro.Gyroscope(U)
 CalibrationGyro.saveCalibration(isGyro=True)
-
-    def __init__(self) -> None:
-        #  We will set the variables like so, these can also be tuned by the user 
-        self.Q_angle = 0.001
-        self.Q_bias = 0.003
-        self.R_measure = 0.03
-
-        self.angle = 0.0 #// Reset the angle
-        self.bias = 0.0 #// Reset bias
-        self.rate = 0.0
-        self.P = np.zeros((2,2))
-         #// Since we assume that the bias is 0 and we know the starting angle (use setAngle), 
-         # the error covariance matrix is set like so - see: http://en.wikipedia.org/wiki/Kalman_filter#Example_application.2C_technical
-        self.P[0,0] = 0.0
-        self.P[0,1] = 0.0
-        self.P[1,0] = 0.0
-        self.P[1,1] = 0.0
-    def getRate(self):
-        return self.rate
-    def setAngle(self,angle):
-        self.angle = angle
-    def setQangle(self,Qangle):
-        self.Q_angle = Qangle
-    def getQangle(self):
-        return self.Q_angle
-    def setQbias(self,Qbias):
-        self.Q_bias = Qbias
-    def getQbias(self):
-        return self.Q_bias
-    def setRmeasure(self,Rmeasure):
-        self.R_measure = Rmeasure
-    def getRmeasure(self):
-        return self.R_measure
-    #TODO: asegurarse que la notacion de c++ P[m][n] es equivalente a la de numpy P[m,n] 
-    # The angle should be in degrees and the rate should be in degrees per second and the delta time in seconds
-    def getAngle(self, newAngle,newRate,dt):
-        # KasBot V2  -  Kalman filter module - http://www.x-firm.com/?page_id=145
-        # Modified by Kristian Lauszus
-        # See my blog post for more information: http://blog.tkjelectronics.dk/2012/09/a-practical-approach-to-kalman-filter-and-how-to-implement-it
-        # Discrete Kalman filter time update equations - Time Update ("Predict")
-        # Update xhat - Project the state ahead
-        # Step 1
-        rate = newRate - bias
-        angle += dt * rate
-        #  Update estimation error covariance - Project the error covariance ahead
-        #  Step 2
-        P[0,0] += dt * (dt*P[1,1] - P[0,1] - P[1,0] + Q_angle)
-        P[0,1] -= dt * P[1,1]
-        P[1,0] -= dt * P[1,1]
-        P[1,1] += Q_bias * dt
-        # Discrete Kalman filter measurement update equations - Measurement Update ("Correct")
-        # Calculate Kalman gain - Compute the Kalman gain
-        # Step 4
-        S = P[0][0] + R_measure # // Estimate error
-        # Step 5
-        K = np.zeros((2,1)) #// Kalman gain - This is a 2x1 vector
-        K[0,0] = P[0,0] / S
-        K[1,0] = P[1,0] / S
-        # Calculate angle and bias - Update estimate with measurement zk (newAngle)
-        # Step 3
-        y = newAngle - angle # Angle difference
-        # Step 6
-        angle += K[0,0] * y
-        bias += K[1,0] * y
-
-        # Calculate estimation error covariance - Update the error covariance
-        # Step 7
-        P00_temp = P[0,0]
-        P01_temp = P[0,1]
-
-        P[0,0] -= K[0,0] * P00_temp
-        P[0,1] -= K[0,0] * P01_temp
-        P[1,0] -= K[1,0] * P00_temp
-        P[1,1] -= K[1,0] * P01_temp
-
-        return angle
