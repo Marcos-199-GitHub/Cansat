@@ -2,16 +2,21 @@ import numpy as np
 import serial
 import math
 import time
+import fusion
 
 RAD2DEG = 180/math.pi
 DEG2RAD = math.pi/180
 GRAVITY = np.array([[0],[0],[9.81]])
 g = GRAVITY[2][0]
+#TODO: valores reales de latitud y de velocidad de rotacion terrestre
 LATITUDE = 45
 Wie = 5
 EARTH_ROTATION = np.array([[math.cos(LATITUDE*DEG2RAD)],[0],[math.sin(LATITUDE*DEG2RAD)]]) * Wie
 mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-
+ACC_ORIENTATION_SAVE_FILE = "calibration_data/Acc_orientation.npy"
+GYRO_ORIENTATION_SAVE_FILE = "calibration_data/Gyro_orientation.npy"
+GYRO_CALIBRATION_SAVE_FILE = "calibration_data/Gyro_calibration.npy"
+ACC_CALIBRATION_SAVE_FILE = "calibration_data/Acc_calibration.npy"
 class MPU:  
     def __init__(self, COM: serial.Serial,offset = None) -> None:
         self.mpu = COM
@@ -121,6 +126,7 @@ class Calibration:
     def __init__(self) -> None:
         self.V = np.zeros((3,3))
         self.B = np.zeros((3,1))
+        self.SaveMat = np.zeros((3,4))
         pass
     # Calibrates Accelerometer, requires raw dato from accelerometer (6 orientations)
     def Accelerometer(self,U: np.ndarray):
@@ -268,10 +274,33 @@ class Calibration:
     def real(self,U:np.ndarray):
         corrected = np.matmul(self.V,U) - self.B
         return corrected   
-
-
-
-
+    #Saves calibration data on a file
+    def saveCalibration(self,isGyro = False):
+        for i in range(0,3):
+            for j in range (0,3):
+                self.SaveMat[i,j] = self.V[i,j]
+        for i in range (0,3):
+            self.SaveMat[i,4] = self.B[i,0]
+        if (isGyro):
+            with open(GYRO_CALIBRATION_SAVE_FILE,'wb') as f:
+                np.save(f,self.SaveMat)
+        else:
+            with open(ACC_CALIBRATION_SAVE_FILE,'wb') as f:
+                np.save(f,self.SaveMat)
+    #Loads calibration data from file
+    def loadCalibration(self, isGyro = False):
+        if (isGyro):
+            with open(GYRO_CALIBRATION_SAVE_FILE,'wb') as f:
+                self.SaveMat = np.load(f)
+        else:
+            with open(ACC_CALIBRATION_SAVE_FILE,'wb') as f:
+                self.SaveMat = np.load(f)
+        for i in range(0,3):
+            for j in range (0,3):
+                self.V[i,j] = self.SaveMat[i,j]
+        for i in range (0,3):
+            self.B[i,0] = self.SaveMat[i,4]
+        
 
 # g = GRAVITY[2][0]
 # #U debe contener 9 orientaciones diferentes
@@ -280,23 +309,24 @@ class Calibration:
 #               [0,0,0,0,g,-g]]) 
 
 #Primero hay que tomar 9 medidas en 9 diferentes orientaciones (H Zhang et al)
-def Orientaciones(stillTime):
+def GetAccOrientations(sensor: MPU,stillTime, save = True):
+    print (f"Orientacion del acelerometro")
     M = np.zeros((3,9))
     for i in range (0,9):
         print (f"Realiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
         input("Presiona enter para comenzar a medir")
         #Limpiar el buffer del puerto serial
-        mpu.read_all()
+        sensor.mpu.read_all()
         print ("Comenzando medicion")
         n = 0
         start = time.time()
         A = np.zeros((3,1))
         while ((time.time() - start) < stillTime):
             try:
-                D.update()
+                sensor.update()
             except:
                 continue
-            A = np.append(A,D.acceleration,axis=1)
+            A = np.append(A,sensor.acceleration,axis=1)
             n+=1
         #Quitar el primer vector que se uso para inicializar el array [[0],[0],[0]]]
         A = A[:,1:]
@@ -305,79 +335,54 @@ def Orientaciones(stillTime):
         #Colocarlo en la matriz final
         M[:,i] = MeanA
         print (f"El promedio de las {n} mediciones fue {MeanA}")
+    if (save):
+        with open(ACC_ORIENTATION_SAVE_FILE, 'wb') as f:
+            np.save(f,M)
+    return M
+#Primero hay que tomar 12 medidas en 12 diferentes orientaciones (H Zhang et al)
+def GetGyroOrientations(sensor: MPU,stillTime, save = True):
+    print (f"Orientacion del giroscopio")
+    M = np.zeros((3,12))
+    for i in range (0,12):
+        print (f"Realiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
+        input("Presiona enter para comenzar a medir")
+        #Limpiar el buffer del puerto serial
+        sensor.mpu.read_all()
+        print ("Comenzando medicion")
+        n = 0
+        start = time.time()
+        A = np.zeros((3,1))
+        while ((time.time() - start) < stillTime):
+            try:
+                sensor.update()
+            except:
+                continue
+            A = np.append(A,sensor.angularVelocity,axis=1)
+            n+=1
+        #Quitar el primer vector que se uso para inicializar el array [[0],[0],[0]]]
+        A = A[:,1:]
+        #Hacer el promedio de las mediciones
+        MeanA = np.mean(A,axis=1)
+        #Colocarlo en la matriz final
+        M[:,i] = MeanA
+        print (f"El promedio de las {n} mediciones fue {MeanA}")
+    if (save):
+        with open(GYRO_ORIENTATION_SAVE_FILE, 'wb') as f:
+            np.save(f,M)
     return M
 
-U = Orientaciones(2)
-C = Calibration()   
-C.Accelerometer2(U) 
 
 
-#Fuentes:
+U = GetAccOrientations(D,2,save=True)
+CalibrationAcc = Calibration()   
+CalibrationAcc.Accelerometer2(U)
+CalibrationAcc.saveCalibration(isGyro=False)
 
-# 1.- Data Fusion with 9 Degrees of Freedom Inertial Measurement Unit To Determine Object’s Orientation
-# By
-# Long Tran
-# Senior Project
-# Electrical Engineering Department
-# California Polytechnic State University San Luis Obispo June 2017
+U = GetGyroOrientations(D,2,save=True)
+CalibrationGyro = Calibration()   
+CalibrationGyro.Gyroscope(U)
+CalibrationGyro.saveCalibration(isGyro=True)
 
-# 2.- https://vanhunteradams.com/Pico/ReactionWheel/Complementary_Filters.html
-
-class Fusion:
-    def __init__(self) -> None:
-        self.roll = 0
-        self.pitch = 0
-        self.yaw = 0
-
-        self.Groll = 0
-        self.Gpitch = 0
-        self.Gyaw = 0
-
-        #Orden: [roll, pitch, yaw]
-        #CFAngle: complementary Filter angle
-        self.CFAngle = np.zeros((3,1))
-        #Complementary filter High pass weigth
-        self.CF_HPWeigth = 0
-        #Complementary filter Low pass weigth
-        #DONT USE: it will be overriden by HPWeigth
-        self.CF_LPWeigth = 0
-        #HP + LP = 1
-        
-    #Obtiene los valores de roll y pitch mediante los valores de aceleracion (ya deberian estar calibrados)
-    def Accelerometer(self,A:np.ndarray):
-        # roll = atan(ay/az)
-        self.roll = math.atan2(A[1,0], A[2,0])
-        # pitch = atan(-ax/sqrt(ay**2+az**2))
-        # math.hypot is hypotenuse
-        self.pitch = math.atan2(-A[0,0],math.hypot(a[1,0],a[2,0]))
-    def Magnetometer(self,M:np.ndarray,pitch,roll):
-        Mx = M[0,0]*math.cos(pitch) + m[2,0]*math.sin(pitch)
-        My = M[0,0]*math.sin(pitch)*math.sin(roll)+M[1,0]*math.cos(roll)-M[2,0]*math.sin(roll)*math.cos(pitch)
-        self.yaw = math.atan2(My,Mx)
-    def Gyroscope(self,G:np.ndarray,delta):
-        self.Groll = G[0,0]*delta
-        self.Gpitch = G[1,0]*delta
-        self.Gyaw = G[2,0]*delta
-
-    def ComplementaryFilter(self):
-        #Para el filtro complementario se utiliza para fusionar los sensores mediante una suma ponderada
-        #Este filtro se aprovecha del hecho que el acelerometro (y magnetometro) es mas preciso cuando se hacen medidas
-        # de baja frecuencia, pues no tiene un desfase ya que en forma estatica la aceleracion siempre es igual
-        # Y en el caso del giroscopio, este es mas preciso en medidas de alte frecuencia, pero debido a que se 
-        # necesita integrar para actualizar los angulos, existe un error que se acumula con el tiempo, por lo que no es
-        # idoneo en medidas de baja frecuencia
-        # El filtro complementario calcula un angulo de forma iterativa:
-        # CFAngle = HP*(CFAngle*gyro*delta) + LP*acc
-        # HP + LP = 1
-        self.CF_LPWeigth = 1 - self.CF_HPWeigth
-        self.CFAngle[0,0] = self.CF_HPWeigth * (self.CFAngle[0,0] * self.Groll) + self.CF_LPWeigth * self.roll
-        self.CFAngle[1,0] = self.CF_HPWeigth * (self.CFAngle[1,0] * self.Gpitch) + self.CF_LPWeigth * self.pitch
-        self.CFAngle[2,0] = self.CF_HPWeigth * (self.CFAngle[2,0] * self.Gyaw) + self.CF_LPWeigth * self.yaw
-
-
-#Implementacion basada en la implementacion del repositorio:
-# https://github.com/TKJElectronics/KalmanFilter
-class Kalman:
     def __init__(self) -> None:
         #  We will set the variables like so, these can also be tuned by the user 
         self.Q_angle = 0.001
@@ -398,8 +403,6 @@ class Kalman:
         return self.rate
     def setAngle(self,angle):
         self.angle = angle
-    def getAngle(self):
-        return self.angle
     def setQangle(self,Qangle):
         self.Q_angle = Qangle
     def getQangle(self):
@@ -455,4 +458,3 @@ class Kalman:
         P[1,1] -= K[1,0] * P01_temp
 
         return angle
-
