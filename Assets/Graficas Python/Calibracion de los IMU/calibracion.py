@@ -46,6 +46,10 @@ class MPU:
             self.offsets = np.array([[0,0],[0,0],[0,0]])
         else:
             self.offsets = offset
+    def clean(self):
+        self.mpu.read_all()
+        self.all_data = ""
+        self.ended = False
     def update(self):
         self.ended = False
         while not self.ended:
@@ -199,10 +203,10 @@ class Calibration:
         # Utilizando la ecuacion AT.A.x = AT.b y despejando x
         # x = (AT.b).inv(A.At)
         NTW = np.matmul(np.transpose(N),W)
-        NNT = np.matmul(N,np.transpose(N))
-        NNTI = np.linalg.inv(NNT)
+        NTN = np.matmul(np.transpose(N),N)
+        NTNI = np.linalg.inv(NTN)
         
-        Kr = np.matmul(NNTI,NTW)
+        Kr = np.matmul(NTNI,NTW)
         print (Kr)
         # Una ver obtenido Kv'r, se pueden obtener sqrt(r)*Ka y sqrt(r)*fa
         #Asumiendo que los factores de escala Sx, Sy, Sz son siempre positivos
@@ -215,7 +219,7 @@ class Calibration:
         srKa[2,1] = Kr[5,0]/srKa[2,2]
         srKa[2,0] = Kr[4,0]/srKa[2,2]
         #Fila 2
-        srKa[1,1] = lambda2*math.sqrt(Kr[1,0] - Kr[2,1]**2)
+        srKa[1,1] = lambda2*math.sqrt(Kr[1,0] - Kr[2,0]**2)
         srKa[1,0] = (Kr[3]-srKa[2,0]*srKa[2,1])/srKa[1,1]
         #Fila 3
         srKa[0,0] = lambda1*math.sqrt(Kr[0,0]-srKa[1,0]**2-srKa[2,0]**2)
@@ -226,9 +230,10 @@ class Calibration:
         srF0[0,0] = (Kr[6,0]-srKa[1,0]*srF0[1,0]-srKa[2,0]*srF0[2,0])/srKa[0,0]
         # Con esto, utilizando la siguiente ecuacion, se puede despejar r
         # |g|**2 = (Ka.Na-F0)T.(Ka.Na-F0); multiplicando ambos lados por r y despejando:
-        KNf = np.add(np.matmul(srKa, np.transpose([N[:,0]])) , -srF0)
+        NiT = np.transpose([U[:,0]])
+        KNf = np.add(np.matmul(srKa,NiT ) , -srF0)
         #Recordar que r es un escalar
-        r = (np.matmul(KNf,np.transpose(KNf)) / (g**2))[0]
+        r = (np.matmul(np.transpose(KNf),KNf) / (g**2))
         #Con esto 
         Ka = srKa / math.sqrt(r)
         F0 = srF0 / math.sqrt(r)
@@ -282,7 +287,7 @@ class Calibration:
             for j in range (0,3):
                 self.SaveMat[i,j] = self.V[i,j]
         for i in range (0,3):
-            self.SaveMat[i,4] = self.B[i,0]
+            self.SaveMat[i,3] = self.B[i,0]
         if (isGyro):
             with open(GYRO_CALIBRATION_SAVE_FILE,'wb') as f:
                 np.save(f,self.SaveMat)
@@ -292,16 +297,16 @@ class Calibration:
     #Loads calibration data from file
     def loadCalibration(self, isGyro = False):
         if (isGyro):
-            with open(GYRO_CALIBRATION_SAVE_FILE,'wb') as f:
+            with open(GYRO_CALIBRATION_SAVE_FILE,'rb') as f:
                 self.SaveMat = np.load(f)
         else:
-            with open(ACC_CALIBRATION_SAVE_FILE,'wb') as f:
+            with open(ACC_CALIBRATION_SAVE_FILE,'rb') as f:
                 self.SaveMat = np.load(f)
         for i in range(0,3):
             for j in range (0,3):
                 self.V[i,j] = self.SaveMat[i,j]
         for i in range (0,3):
-            self.B[i,0] = self.SaveMat[i,4]
+            self.B[i,0] = self.SaveMat[i,3]
         
 
 # g = GRAVITY[2][0]
@@ -318,7 +323,7 @@ def GetAccOrientations(sensor: MPU,stillTime, save = True):
         print (f"Realiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
         input("Presiona enter para comenzar a medir")
         #Limpiar el buffer del puerto serial
-        sensor.mpu.read_all()
+        sensor.clean()
         print ("Comenzando medicion")
         n = 0
         start = time.time()
@@ -349,7 +354,7 @@ def GetGyroOrientations(sensor: MPU,stillTime, save = True):
         print (f"Realiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
         input("Presiona enter para comenzar a medir")
         #Limpiar el buffer del puerto serial
-        sensor.mpu.read_all()
+        sensor.clean()
         print ("Comenzando medicion")
         n = 0
         start = time.time()
@@ -373,13 +378,16 @@ def GetGyroOrientations(sensor: MPU,stillTime, save = True):
             np.save(f,M)
     return M
 
+if __name__ == "__main__":
+    A = None
+    with open("calibration_data/Acc_orientation.npy", 'rb') as f:
+        A = np.load(f)
+    #U = GetAccOrientations(D,2,save=True)
+    CalibrationAcc = Calibration()   
+    CalibrationAcc.Accelerometer2(A)
+    CalibrationAcc.saveCalibration(isGyro=False)
 
-U = GetAccOrientations(D,2,save=True)
-CalibrationAcc = Calibration()   
-CalibrationAcc.Accelerometer2(U)
-CalibrationAcc.saveCalibration(isGyro=False)
-
-U = GetGyroOrientations(D,2,save=True)
-CalibrationGyro = Calibration()   
-CalibrationGyro.Gyroscope(U)
-CalibrationGyro.saveCalibration(isGyro=True)
+    # U = GetGyroOrientations(D,2,save=True)
+    # CalibrationGyro = Calibration()   
+    # CalibrationGyro.Gyroscope(U)
+    # CalibrationGyro.saveCalibration(isGyro=True)
