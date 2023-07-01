@@ -17,8 +17,10 @@ EARTH_ROTATION = np.array([[math.cos(LATITUDE*DEG2RAD)],[0],[math.sin(LATITUDE*D
 mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 ACC_ORIENTATION_SAVE_FILE = "calibration_data/Acc_orientation.npy"
 GYRO_ORIENTATION_SAVE_FILE = "calibration_data/Gyro_orientation.npy"
+GYRO_ORIENTATION_FORCE_SAVE_FILE = "calibration_data/Gyro_orientation_force.npy"
 GYRO_CALIBRATION_SAVE_FILE = "calibration_data/Gyro_calibration.npy"
 ACC_CALIBRATION_SAVE_FILE = "calibration_data/Acc_calibration.npy"
+
 class MPU:  
     def __init__(self, COM: serial.Serial,offset = None) -> None:
         self.mpu = COM
@@ -219,7 +221,7 @@ class Calibration:
         srKa[2,1] = Kr[5,0]/srKa[2,2]
         srKa[2,0] = Kr[4,0]/srKa[2,2]
         #Fila 2
-        srKa[1,1] = lambda2*math.sqrt(Kr[1,0] - Kr[2,0]**2)
+        srKa[1,1] = lambda2*math.sqrt(Kr[1,0] - srKa[2,1]**2)
         srKa[1,0] = (Kr[3]-srKa[2,0]*srKa[2,1])/srKa[1,1]
         #Fila 3
         srKa[0,0] = lambda1*math.sqrt(Kr[0,0]-srKa[1,0]**2-srKa[2,0]**2)
@@ -279,7 +281,7 @@ class Calibration:
         self.B = W0
     #Returns corrected value after calibration
     def real(self,U:np.ndarray):
-        corrected = np.matmul(self.V,U) - self.B
+        corrected = np.add(np.matmul(self.V,U), - self.B)
         return corrected   
     #Saves calibration data on a file
     def saveCalibration(self,isGyro = False):
@@ -319,9 +321,10 @@ class Calibration:
 def GetAccOrientations(sensor: MPU,stillTime, save = True):
     print (f"Orientacion del acelerometro")
     M = np.zeros((3,9))
-    for i in range (0,9):
-        print (f"Realiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
-        input("Presiona enter para comenzar a medir")
+    i=0
+    while (i<12):
+        print (f"\nRealiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
+        input("Presiona enter para comenzar a medir ")
         #Limpiar el buffer del puerto serial
         sensor.clean()
         print ("Comenzando medicion")
@@ -342,6 +345,11 @@ def GetAccOrientations(sensor: MPU,stillTime, save = True):
         #Colocarlo en la matriz final
         M[:,i] = MeanA
         print (f"El promedio de las {n} mediciones fue {MeanA}")
+        repeat = input("Escribe r y presiona enter para volver a hacer la medicion ")
+        if (repeat == "r" or repeat == "R"):
+            pass
+        else:
+            i+=1
     if (save):
         with open(ACC_ORIENTATION_SAVE_FILE, 'wb') as f:
             np.save(f,M)
@@ -350,44 +358,104 @@ def GetAccOrientations(sensor: MPU,stillTime, save = True):
 def GetGyroOrientations(sensor: MPU,stillTime, save = True):
     print (f"Orientacion del giroscopio")
     M = np.zeros((3,12))
-    for i in range (0,12):
-        print (f"Realiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
-        input("Presiona enter para comenzar a medir")
+    F = np.zeros((3,12))
+    i=0
+    while (i<12):
+        print (f"\nRealiza la orientacion {i+1} y mantente ahi por {stillTime} segundos")
+        input("Presiona enter para comenzar a medir ")
         #Limpiar el buffer del puerto serial
         sensor.clean()
         print ("Comenzando medicion")
         n = 0
         start = time.time()
         A = np.zeros((3,1))
+        B = np.zeros((3,1))
         while ((time.time() - start) < stillTime):
             try:
                 sensor.update()
             except:
                 continue
             A = np.append(A,sensor.angularVelocity,axis=1)
+            B = np.append(B,sensor.acceleration,axis=1)
             n+=1
         #Quitar el primer vector que se uso para inicializar el array [[0],[0],[0]]]
         A = A[:,1:]
+        B = B[:,1:]
         #Hacer el promedio de las mediciones
         MeanA = np.mean(A,axis=1)
+        MeanB = np.mean(B,axis=1)
         #Colocarlo en la matriz final
         M[:,i] = MeanA
-        print (f"El promedio de las {n} mediciones fue {MeanA}")
+        F[:,i] = MeanB
+        print (f"El promedio de las {n} mediciones de giroscopio fue {MeanA}, de la fuerza fue {MeanB}")
+        repeat = input("Escribe r y presiona enter para volver a hacer la medicion ")
+        if (repeat == "r" or repeat == "R"):
+            pass
+        else:
+            i+=1
     if (save):
         with open(GYRO_ORIENTATION_SAVE_FILE, 'wb') as f:
             np.save(f,M)
-    return M
+        with open(GYRO_ORIENTATION_FORCE_SAVE_FILE, 'wb') as f:
+            np.save(f,F)
+    return M, F
+
+def LoadOrientations(isGyro = False):
+    ret = None
+    
+    if (isGyro):
+        A = None
+        with open(GYRO_ORIENTATION_SAVE_FILE,'rb') as f:
+            ret = np.load(f)
+        with open(GYRO_ORIENTATION_FORCE_SAVE_FILE,'rb') as f:
+            A = np.load(f)
+        return ret,A
+    else:
+        with open(ACC_ORIENTATION_SAVE_FILE,'rb') as f:
+            ret = np.load(f)
+        return ret
+
+def CalibrarAcelerometro(sensor: MPU,stillTime, saveOrientation = True):
+    U = GetAccOrientations(sensor,stillTime, saveOrientation)
+    CalibrationAcc = Calibration()   
+    CalibrationAcc.Accelerometer2(U)
+    CalibrationAcc.saveCalibration(isGyro=False)
+def CalibrarGiroscopio(sensor: MPU,stillTime, saveOrientation = True):
+    #Este metodo retorna dos matrices: La de las mediciones del giroscopio y las de aceleracion
+    #Tambien se requiere que ya existan datos de calibracion del acelerometro
+    U,F = GetGyroOrientations(sensor,stillTime, saveOrientation)
+    Accel = Calibration()
+    Accel.loadCalibration()
+    #Corregir los valores de aceleracion con los datos del acelerometro ya calibrado
+    for i in range(0,F.shape[1]):
+        Ni = np.transpose([F[:,i]])
+        Fi = Accel.real(Ni)
+        F[:,i] = np.transpose(Fi)
+
+    CalibrationGyro = Calibration()  
+    CalibrationGyro.Gyroscope(U,F)
+    CalibrationGyro.saveCalibration(isGyro=True)
+def RutinaDeCalibracion(sensor: MPU,stillTime, saveOrientation = True):
+    CalibrarAcelerometro(sensor,stillTime, saveOrientation)
+    CalibrarGiroscopio(sensor,stillTime, saveOrientation)
+    
+ 
+    
+
 
 if __name__ == "__main__":
-    A = None
-    with open("calibration_data/Acc_orientation.npy", 'rb') as f:
-        A = np.load(f)
-    #U = GetAccOrientations(D,2,save=True)
-    CalibrationAcc = Calibration()   
-    CalibrationAcc.Accelerometer2(A)
-    CalibrationAcc.saveCalibration(isGyro=False)
+    RutinaDeCalibracion(D,5,True)
 
-    # U = GetGyroOrientations(D,2,save=True)
-    # CalibrationGyro = Calibration()   
-    # CalibrationGyro.Gyroscope(U)
-    # CalibrationGyro.saveCalibration(isGyro=True)
+    #Prueba del acelerometro
+    # Accelerometer = Calibration()
+    # Accelerometer.loadCalibration()
+    # print("Datos de calibraion del acelerometro:")
+    # print(f"\nMatriz de escala y no-ortogonalidad\n{Accelerometer.V}, \nMatriz de Bias\n{Accelerometer.B}\n")
+    # D.clean()
+    # D.update()
+    # Raw = D.acceleration
+    # R = Accelerometer.real(Raw)
+    # print (f"Datos en bruto: \n{Raw},\n Datos corregidos: \n{R}")
+
+    #Prueba del giroscopio
+    #TODO
