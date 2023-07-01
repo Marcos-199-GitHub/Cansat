@@ -1,14 +1,19 @@
 #include <18LF4550.h>
 #device ADC=10
 
-#fuses HSPLL, NOWDT, NOPROTECT, NODEBUG, USBDIV, PLL4, CPUDIV1, VREGEN
+//IMPORTANTE: el fuse PLL5 es un predivisor del reloj, que tiene valores 1,2,3,4,5,6,10,12
+//Dependiendo del cristal, se debe elegir el PLL para que al dividirlo
+//de una frecuencia de 4MHz
+#fuses HSPLL, NOWDT, NOPROTECT, NODEBUG, USBDIV, PLL5, CPUDIV1, VREGEN
 
-#use delay(clock=48MHz,crystal=16MHz,USB_FULL)
+#use delay(clock=48MHz,crystal=20MHz,USB_FULL)
 #use FIXED_IO( E_outputs=PIN_E0 )
+#use FIXED_IO( A_outputs=PIN_A4 )
 #define RF_RESET   PIN_E0
+#define INDICATOR_LED PIN_A4
 
 
-#define USB_CABLE_IS_ATTACHED()  input(PIN_B2)
+//#define USB_CABLE_IS_ATTACHED()  input(PIN_B2)
 #define USB_CONFIG_VID 0x2405
 #define USB_CONFIG_PID 0x000B
 #define USB_CONFIG_BUS_POWER 500

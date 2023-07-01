@@ -1,14 +1,17 @@
 #define HEX 16
 #define BIN 2
 #define DEC 10
+#define UDEC 11
 #define SSPin PIN_A5
 #define TIMER_START 114
 #define TIMER_STEP_MS 3
+#define FREQ_433
+
 #include <Receptor.h>
 
 
 
-#use spi (MASTER, SPI1, ENABLE=PIN_A5, BAUD=10000, MODE=0, BITS=8, STREAM=SPI_1)
+#use spi (MASTER, SPI1, ENABLE=PIN_A5, BAUD=8000, MODE=0, BITS=8, STREAM=SPI_1)
 
 #byte porta = 0xf80 // Identificador para el puerto A. 
 #byte portb = 0xf81 // Identificador para el puerto B. 
@@ -56,6 +59,8 @@ Reset: E0
 
 void main()
 {
+
+/*
    //Timer de 8 bits
 //timer0 (RTCC_INTERNAL), Preescaler de 256, timer de 8 bits
 setup_timer_0(RTCC_INTERNAL | RTCC_DIV_256 | RTCC_8_bit); 
@@ -75,20 +80,29 @@ set_rtcc(TIMER_START);
 enable_interrupts(INT_RTCC);
 enable_interrupts(GLOBAL);
 
-
+*/
    //RFM69 radio;
    //PRIMER BYTE es el tamaño del array 
    uint8_t synch[] = {3,0xAA,0x2D,0xD4};
    int ResetPin = RF_Reset;
+   setOutput(INDICATOR_LED,0);
    //radio.init(synch,ResetPin);
    
    setup_adc_ports(NO_ANALOGS, VSS_VDD);
    usb_init();
+   
    //Esperar un segundo antes de iniciar
-   delay_ms(1000);
-   while (!checkId())println((char*)"Id incorrecto");
+   sleep_ms(1000);
+   while (!checkId()){
+   usb_task();
+   println((char*)"Id incorrecto");
+   }
+   setOutput(INDICATOR_LED,1);
+   
    init(synch,ResetPin);
    println((char*)"INIT DONE");
+//!   readAllRegs();
+//!   while(1){}
    while(TRUE)
    {
    char* packet = receive(1,0,0,0);
@@ -118,6 +132,8 @@ enable_interrupts(GLOBAL);
 
 }
 
+/*
+
 //Interrupcion del timer
 #INT_RTCC  //TIMER0
 void timer0(void){
@@ -141,3 +157,5 @@ void timer0(void){
    globalMin = 0;
    }
 }
+
+*/

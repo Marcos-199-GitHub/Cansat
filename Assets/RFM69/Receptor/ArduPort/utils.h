@@ -26,7 +26,7 @@ void print(char* str){
     usbPrint(str);
 }
 
-void print(int str, int format){
+void print(int16 str, int format){
     char converted[11];
     int i;
     if (format == HEX) sprintf(converted,"0x%02X",str);
@@ -40,7 +40,10 @@ void print(int str, int format){
     converted[10] = '\0';
     }
     else if (format == DEC){
-      sprintf(converted,"%d",str);
+      sprintf(converted,"%Ld",str);
+    }
+    else if (format == UDEC){
+      sprintf(converted,"%Lu",str);
     }
     usbPrint(converted);
     //Serial.print(str,format);

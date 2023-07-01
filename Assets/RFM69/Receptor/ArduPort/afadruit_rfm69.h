@@ -194,6 +194,7 @@ void readAllRegs()
 bool checkId(){
 uint8_t version;
 version = spi_read_u8(_REG_VERSION);
+print(version);
 return version==0x24;
 }
 
@@ -410,7 +411,7 @@ uint8_t operation_mode_get(){
 }
 void operation_mode_set(uint8_t val){
     //float start;
-    int n;
+    uint16_t n;
     //TODO: assert 0 <= val <= 4
     n=0;
     
@@ -445,6 +446,8 @@ void operation_mode_set(uint8_t val){
     delay_ms(100);
     n+=100;
     println((char*)"OP Loop 2");
+    println(spi_read_u8(_REG_OP_MODE),BIN)  ;  
+    println(n,DEC);
         if (n >= 3000){
             print ((char*)"Timeout on Operation Mode Set\n");
             println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
@@ -807,6 +810,7 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
     bool timed_out = false;
     int start = 0;
     int i=0;
+    uint16_t n;
     uint8_t fifo_length;
     uint8_t* packet= NULL;
     char fifo_len_str [4];
@@ -818,8 +822,10 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
         start = timeSec();
         while (!timed_out && !payload_ready()){
         usb_task();
+        delay_ms(100);
+        n+=100;
             //delay(20);
-            if ((timeSec() - start) >= xmit_timeout){
+            if (n >= (1000*xmit_timeout)){
                 println((char*)"Timed out");
                 timed_out = true;
                 }
