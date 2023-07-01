@@ -1,4 +1,5 @@
 import numpy as np
+import math
 #Fuentes:
 
 # 1.- Data Fusion with 9 Degrees of Freedom Inertial Measurement Unit To Determine Object’s Orientation
@@ -43,9 +44,9 @@ class Fusion:
         self.roll = math.atan2(A[1,0], A[2,0])
         # pitch = atan(-ax/sqrt(ay**2+az**2))
         # math.hypot is hypotenuse
-        self.pitch = math.atan2(-A[0,0],math.hypot(a[1,0],a[2,0]))
+        self.pitch = math.atan2(-A[0,0],math.hypot(A[1,0],A[2,0]))
     def Magnetometer(self,M:np.ndarray,pitch,roll):
-        Mx = M[0,0]*math.cos(pitch) + m[2,0]*math.sin(pitch)
+        Mx = M[0,0]*math.cos(pitch) + M[2,0]*math.sin(pitch)
         My = M[0,0]*math.sin(pitch)*math.sin(roll)+M[1,0]*math.cos(roll)-M[2,0]*math.sin(roll)*math.cos(pitch)
         self.yaw = math.atan2(My,Mx)
     def Gyroscope(self,G:np.ndarray,delta):
@@ -116,37 +117,37 @@ class Kalman:
         # Discrete Kalman filter time update equations - Time Update ("Predict")
         # Update xhat - Project the state ahead
         # Step 1
-        rate = newRate - bias
-        angle += dt * rate
+        self.rate = newRate - self.bias
+        self.angle += dt * self.rate
         #  Update estimation error covariance - Project the error covariance ahead
         #  Step 2
-        P[0,0] += dt * (dt*P[1,1] - P[0,1] - P[1,0] + Q_angle)
-        P[0,1] -= dt * P[1,1]
-        P[1,0] -= dt * P[1,1]
-        P[1,1] += Q_bias * dt
+        self.P[0,0] += dt * (dt*self.P[1,1] - self.P[0,1] - self.P[1,0] + self.Q_angle)
+        self.P[0,1] -= dt * self.P[1,1]
+        self.P[1,0] -= dt * self.P[1,1]
+        self.P[1,1] += self.Q_bias * dt
         # Discrete Kalman filter measurement update equations - Measurement Update ("Correct")
         # Calculate Kalman gain - Compute the Kalman gain
         # Step 4
-        S = P[0][0] + R_measure # // Estimate error
+        S = self.P[0][0] + self.R_measure # // Estimate error
         # Step 5
         K = np.zeros((2,1)) #// Kalman gain - This is a 2x1 vector
-        K[0,0] = P[0,0] / S
-        K[1,0] = P[1,0] / S
+        K[0,0] = self.P[0,0] / S
+        K[1,0] = self.P[1,0] / S
         # Calculate angle and bias - Update estimate with measurement zk (newAngle)
         # Step 3
-        y = newAngle - angle # Angle difference
+        y = newAngle - self.angle # Angle difference
         # Step 6
-        angle += K[0,0] * y
-        bias += K[1,0] * y
+        self.angle += K[0,0] * y
+        self.bias += K[1,0] * y
 
         # Calculate estimation error covariance - Update the error covariance
         # Step 7
-        P00_temp = P[0,0]
-        P01_temp = P[0,1]
+        P00_temp = self.P[0,0]
+        P01_temp = self.P[0,1]
 
-        P[0,0] -= K[0,0] * P00_temp
-        P[0,1] -= K[0,0] * P01_temp
-        P[1,0] -= K[1,0] * P00_temp
-        P[1,1] -= K[1,0] * P01_temp
+        self.P[0,0] -= K[0,0] * P00_temp
+        self.P[0,1] -= K[0,0] * P01_temp
+        self.P[1,0] -= K[1,0] * P00_temp
+        self.P[1,1] -= K[1,0] * P01_temp
 
-        return angle
+        return self.angle

@@ -648,7 +648,7 @@ class RFM69{
             payload[5+i] = data[i];
            
         // # Write payload to transmit fifo
-        spi_write_from(_REG_FIFO, payload,5+len);
+        spi_write_from(_REG_FIFO, (uint8_t*)payload,5+len);
         print("Payload: ");
         println(payload+5);
 
@@ -692,7 +692,7 @@ class RFM69{
             // Don't look for ACK from Broadcast message
             if (destination == _RH_BROADCAST_ADDRESS)got_ack = true;
             else{
-                ack_packet = receive(true,false,ack_wait,true);
+                ack_packet = (uint8_t*)receive(true,false,ack_wait,true);
                 if(ack_packet != NULL){
                     if (ack_packet[4] & _RH_FLAGS_ACK){
                         //Check id:
