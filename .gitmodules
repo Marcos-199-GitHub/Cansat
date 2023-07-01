@@ -4,3 +4,6 @@
 [submodule "Assets/Raspberry/todo/groveBMM150"]
 	path = Assets/Raspberry/todo/groveBMM150
 	url = https://github.com/Seeed-Studio/Grove_3_Axis_Compass_V2.0_BMM150
+[submodule "Assets/Graficas Python/Calibracion de los IMU/KalmanFilter"]
+	path = Assets/Graficas Python/Calibracion de los IMU/KalmanFilter
+	url = https://github.com/TKJElectronics/KalmanFilter
