@@ -11,7 +11,7 @@
 
 
 
-#use spi (MASTER, SPI1, ENABLE=PIN_A5, BAUD=8000, MODE=0, BITS=8, STREAM=SPI_1)
+#use spi (MASTER, SPI1, ENABLE=PIN_A5, BAUD=1000000, MODE=0, BITS=8, STREAM=SPI_1)
 
 #byte porta = 0xf80 // Identificador para el puerto A. 
 #byte portb = 0xf81 // Identificador para el puerto B. 
@@ -95,24 +95,25 @@ enable_interrupts(GLOBAL);
    sleep_ms(1000);
    while (!checkId()){
    usb_task();
-   println((char*)"Id incorrecto");
+   println((char*)"Id incorrecto", 2);
    }
    setOutput(INDICATOR_LED,1);
    
    init(synch,ResetPin);
-   println((char*)"INIT DONE");
+   println((char*)"INIT DONE", 3);
 //!   readAllRegs();
 //!   while(1){}
    while(TRUE)
    {
    char* packet = receive(1,0,0,0);
    if (!(packet == NULL || packet[0] == 0)){
-    for (int i=0;i<packet[0];i++){
-      print((char*)packet[i+1]);
+    println ((char*)"Packet",2);
+    for (uint16_t i=0;i<packet[0]-1;i++){
+      printch(packet[i+1],1);
       }
-  println((char*)"");
+  //println((char*)"",0);
    }
-   else println((char*) "Esperando");
+   else println((char*) "Esperando",2);
   //radio.readAllRegs();
   free(packet);
    //println(globalSec,DEC);
@@ -126,7 +127,7 @@ enable_interrupts(GLOBAL);
 //!   println((char*)"HOLA USB");
 //!   println(134,HEX);
 //!   println(47,BIN);
-   delay_ms(100);
+   delay_ms(10);
       //TODO: User Code
    }
 

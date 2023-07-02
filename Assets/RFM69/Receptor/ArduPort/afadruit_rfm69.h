@@ -53,8 +53,8 @@ uint8_t get(struct _RegisterBits obj){
         return ((regVal & obj.mask) >> obj.offset);
     }
 uint8_t _debug_(struct _RegisterBits obj){
-      print ((char*)"Mask: ");
-      println(obj.mask,BIN);
+      print ((char*)"Mask: ",3);
+      println(obj.mask,BIN,3);
       return obj.mask; 
 }
 
@@ -173,7 +173,7 @@ void readAllRegs()
 {
   uint8_t regVal;
   
-  println((char*)"Address - HEX - BIN");
+  println((char*)"Address - HEX - BIN",2);
   for (uint8_t regAddr = 1; regAddr <= 0x4F; regAddr++)
   {
     /*
@@ -182,11 +182,11 @@ void readAllRegs()
     regVal = SPI.transfer(0);
     spiEnd();*/
     regVal = spi_read_u8(regAddr);
-    print(regAddr, HEX);
-    print((char*)" - ");
-    print(regVal,HEX);
-    print((char*)" - ");
-    println(regVal,BIN);
+    print(regAddr, HEX,2);
+    print((char*)" - ",2);
+    print(regVal,HEX,2);
+    print((char*)" - ",2);
+    println(regVal,BIN,2);
   }
   spiEnd();
 }    
@@ -194,7 +194,7 @@ void readAllRegs()
 bool checkId(){
 uint8_t version;
 version = spi_read_u8(_REG_VERSION);
-print(version);
+print(version,3);
 return version==0x24;
 }
 
@@ -202,7 +202,7 @@ return version==0x24;
 
 void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _high_power=true,uint32_t baudrate = 2000000,uint8_t* encrypt = NULL){
     uint8_t version=0;
-    println((char*)"Initial conf starts");
+    println((char*)"Initial conf starts",3);
     //Serial.println("HOLA 2");
     _tx_power = 13;
     _reset_pin = resetPin;
@@ -212,16 +212,16 @@ void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _hig
     
     version = spi_read_u8(_REG_VERSION);
     if (version != 0x24){
-        println((char*)"Error: ID del RFM incorrecta");
+        println((char*)"Error: ID del RFM incorrecta",1);
         while(1){
-        println((char*)"ID Loop");
+        println((char*)"ID Loop",2);
         usb_task();
         }
         //exit(-1);
     }
-    print((char*)"Idle");
+    print((char*)"Idle",3);
     idle();
-    println((char*)"Ready");
+    println((char*)"Ready",2);
     //Chip setup
     //Set FIFO TX condition to not empty and the default FIFO threshold to 15.
     spi_write_u8(_REG_FIFO_THRESH, 0b10001111);
@@ -232,11 +232,11 @@ void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _hig
     spi_write_u8(_REG_TEST_PA2, _TEST_PA2_NORMAL);
     //set sync word
     //IMPORTANTE: Recuerda alocar el espacio para que no se sobreescriba
-    print((char*)"Freq");
+    print((char*)"Freq",3);
     sync_word_set( _sync_word); 
     preamble_length_set(_preamble_length);
     frequency_mhz_set(); 
-    println((char*)"Ready");
+    println((char*)"Ready",3);
     //TODO: set encryption key
     //encryption_key = encrypt;
     //encryption_key_set(encrypt);
@@ -332,7 +332,7 @@ void init(uint8_t* _sync_word, int resetPin,uint8_t _preamble_length=4,bool _hig
     set(0b10,dio_1_mapping);
     //En modo rx, da informacion acerca del RSSI (Recieved Signal Strength Indicator)
     set(0b01,dio_3_mapping);
-    print((char*)"Initial configuration end\n");
+    print((char*)"Initial configuration end\n",2);
 }
 void reset(){
     setOutput(_reset_pin,1);
@@ -419,11 +419,11 @@ void operation_mode_set(uint8_t val){
       delay_ms(100);
       n+=100;
       usb_task();
-      println((char*)"OP Loop 1");
+      println((char*)"OP Loop 1",3);
         if (n >= 3000){
                  
-            print ((char*)"Operation Mode couldnt be set\n");
-            println(spi_read_u8(0x27),BIN);
+            print ((char*)"Operation Mode couldnt be set\n",2);
+            println(spi_read_u8(0x27),BIN,2);
             while (1){ 
             usb_task();
             }
@@ -445,12 +445,12 @@ void operation_mode_set(uint8_t val){
     usb_task();
     delay_ms(100);
     n+=100;
-    println((char*)"OP Loop 2");
-    println(spi_read_u8(_REG_OP_MODE),BIN)  ;  
-    println(n,DEC);
+    println((char*)"OP Loop 2",2);
+    println(spi_read_u8(_REG_OP_MODE),BIN,2)  ;  
+    println(n,DEC,2);
         if (n >= 3000){
-            print ((char*)"Timeout on Operation Mode Set\n");
-            println(spi_read_u8(_REG_OP_MODE),BIN)  ;      
+            print ((char*)"Timeout on Operation Mode Set\n",2);
+            println(spi_read_u8(_REG_OP_MODE),BIN,2)  ;     
             while (1){
             usb_task();
             
@@ -583,7 +583,7 @@ int8_t tx_power_get(){
     if (!pa0 && pa1 && pa2 && high_power)
         //# 5 to 20 dBm range
         return -11 + current_output_power;
-    print((char*)"Tx power power amps state unknown!");
+    print((char*)"Tx power power amps state unknown!",2);
     while (1){
     usb_task();
     }
@@ -725,8 +725,8 @@ bool send(uint8_t* data,uint8_t len, bool keep_listening = false, uint16_t _dest
        
     // # Write payload to transmit fifo
     spi_write_from(_REG_FIFO, payload,5+len);
-    print((char*)"Payload: ");
-    println(payload+5);
+    print((char*)"Payload: ",2);
+    println(payload+5,2);
     // Serial.println((char)spi_read_u8(_REG_FIFO));              
 
     free(payload);
@@ -810,9 +810,9 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
     bool timed_out = false;
     int start = 0;
     int i=0;
-    uint16_t n;
+    uint16_t n=0;
     uint8_t fifo_length;
-    uint8_t* packet= NULL;
+    char* packet= NULL;
     char fifo_len_str [4];
     if (timeout == 0)timeout = receive_timeout;
     if (timeout!=0){
@@ -826,7 +826,7 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
         n+=100;
             //delay(20);
             if (n >= (1000*xmit_timeout)){
-                println((char*)"Timed out");
+                println((char*)"Timed out",2);
                 timed_out = true;
                 }
         }
@@ -838,9 +838,9 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
      
     if (!timed_out){
         fifo_length = spi_read_u8(_REG_FIFO);
-        print((char*)"FIFO LEN: ");
+        print((char*)"FIFO LEN: ",2);
         sprintf(fifo_len_str,"%d",fifo_length);
-        println(fifo_len_str);
+        println(fifo_len_str,2);
         //  # Handle if the received packet is too small to include the 4 byte
         // # RadioHead header and at least one byte of data --reject this packet and ignore it.
         if (fifo_length > 0){

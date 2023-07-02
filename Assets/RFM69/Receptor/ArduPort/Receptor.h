@@ -40,6 +40,14 @@ uint16_t globalMs;
 uint8_t globalSec;
 uint16_t globalMin;
 
+/*Para la cantidad de mensajes que se quieran leer:
+un debug level de 0 no contiene mensajes
+un debug level de 1 son solo los datos recibidos
+un debug level de 2 contiene errores
+un debug level de 3 contiene mas informacion util
+*/
+int debugLevel = 1;
+
 
 
 
