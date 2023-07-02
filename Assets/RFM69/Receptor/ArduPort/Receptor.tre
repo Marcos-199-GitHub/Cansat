@@ -1,5 +1,5 @@
 ÀÄReceptor
-   ÃÄMAIN  0/1526  Ram=34
+   ÃÄMAIN  0/1596  Ram=36
    ³  ÃÄ@cinit1  (Inline)  Ram=0
    ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
    ³  ³  ÃÄ_RegisterBits_  0/62  Ram=7
@@ -61,7 +61,7 @@
    ³  ³           ÀÄ*
    ³  ÃÄsleep_ms  0/8  Ram=1
    ³  ³  ÀÄ@delay_ms1  0/42  Ram=1
-   ³  ÃÄcheckId  0/82  Ram=5
+   ³  ÃÄcheckId  0/54  Ram=1
    ³  ³  ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³  ÀÄspi_read_into  0/82  Ram=7
    ³  ³  ³     ÃÄspiBegin  0/14  Ram=0
@@ -71,44 +71,43 @@
    ³  ³  ³     ÀÄspiEnd  0/16  Ram=0
    ³  ³  ³        ÀÄsetOutput  0/52  Ram=2
    ³  ³  ³           ÀÄ*
-   ³  ³  ÃÄ@ITOF  0/54  Ram=2
-   ³  ³  ÀÄprint  0/56  Ram=15
-   ³  ³     ÃÄ@PRINTF_L32D_1365FPFPF  0/430  Ram=13
-   ³  ³     ³  ÃÄ@MULFF  0/246  Ram=11
-   ³  ³     ³  ÃÄ@FTOSD  0/68  Ram=5
-   ³  ³     ³  ÃÄ@DIV3232  0/148  Ram=13
+   ³  ³  ÀÄprint  0/230  Ram=20
+   ³  ³     ÃÄ@SPRINTF  0/30  Ram=1
+   ³  ³     ÃÄ@SPRINTF  0/30  Ram=1
+   ³  ³     ÃÄ@PRINTF_X_1368  0/72  Ram=2
    ³  ³     ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³     ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³     ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³     ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³     ³  ÀÄ@DIV3232  0/148  Ram=13
-   ³  ³     ÀÄusbPrint  0/20  Ram=2
+   ³  ³     ³  ÀÄ@SPRINTF  0/30  Ram=1
+   ³  ³     ÃÄ@PRINTF_LD_1368  0/256  Ram=9
+   ³  ³     ³  ÀÄ@SPRINTF  0/30  Ram=1
+   ³  ³     ÃÄ@PRINTF_LU_1368  0/200  Ram=9
+   ³  ³     ³  ÀÄ@SPRINTF  0/30  Ram=1
+   ³  ³     ÀÄusbPrint  0/30  Ram=3
    ³  ³        ÃÄusb_task  0/54  Ram=1
    ³  ³        ³  ÀÄ*
    ³  ³        ÃÄusb_enumerated  0/6  Ram=0
    ³  ³        ÀÄ@PSTRINGR_744  0/38  Ram=2
-   ³  ³           ÀÄusb_cdc_putc  0/64  Ram=1
+   ³  ³           ÀÄusb_cdc_putc  0/60  Ram=1
    ³  ³              ÃÄusb_tbe  0/86  Ram=4
    ³  ³              ³  ÀÄ*
    ³  ³              ÃÄusb_cdc_flush_tx_buffer  0/114  Ram=4
    ³  ³              ³  ÀÄ*
    ³  ³              ÀÄusb_cdc_putc_fast  0/10  Ram=1
-   ³  ³                 ÀÄ_usb_cdc_putc_fast_noflush  0/78  Ram=4
+   ³  ³                 ÀÄ_usb_cdc_putc_fast_noflush  0/76  Ram=4
    ³  ³                    ÀÄusb_cdc_flush_tx_buffer  0/114  Ram=4
    ³  ³                       ÀÄ*
    ³  ÃÄusb_task  0/54  Ram=1
    ³  ³  ÀÄ*
-   ³  ÃÄ@const1688  0/30  Ram=0
-   ³  ÃÄprintln  0/32  Ram=8
-   ³  ³  ÃÄusbPrint  0/20  Ram=2
+   ³  ÃÄ@const1712  0/30  Ram=0
+   ³  ÃÄprintln  0/40  Ram=5
+   ³  ³  ÃÄusbPrint  0/30  Ram=3
    ³  ³  ³  ÀÄ*
-   ³  ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ÀÄusbPrint  0/30  Ram=3
    ³  ³     ÀÄ*
    ³  ÃÄsetOutput  0/52  Ram=2
    ³  ³  ÀÄ*
-   ³  ÃÄinit  0/996  Ram=41
-   ³  ³  ÃÄ@const1601  0/36  Ram=0
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ÃÄinit  0/1030  Ram=41
+   ³  ³  ÃÄ@const1627  0/36  Ram=0
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄreset  0/50  Ram=0
    ³  ³  ³  ÃÄsetOutput  0/52  Ram=2
@@ -121,16 +120,16 @@
    ³  ³  ³     ÀÄ*
    ³  ³  ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@const1603  0/46  Ram=0
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ÃÄ@const1629  0/46  Ram=0
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@const1604  0/24  Ram=0
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ÃÄ@const1630  0/24  Ram=0
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄusb_task  0/54  Ram=1
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄprint  0/12  Ram=2
-   ³  ³  ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ÃÄprint  0/16  Ram=3
+   ³  ³  ³  ÀÄusbPrint  0/30  Ram=3
    ³  ³  ³     ÀÄ*
    ³  ³  ÃÄidle  0/22  Ram=0
    ³  ³  ³  ÃÄset_boost  0/46  Ram=1
@@ -142,35 +141,25 @@
    ³  ³  ³  ³  ³        ÀÄ*
    ³  ³  ³  ³  ÀÄspi_write_u8  0/30  Ram=2
    ³  ³  ³  ³     ÀÄ*
-   ³  ³  ³  ÀÄoperation_mode_set  0/504  Ram=66
+   ³  ³  ³  ÀÄoperation_mode_set  0/522  Ram=66
    ³  ³  ³     ÃÄget  0/40  Ram=5
    ³  ³  ³     ³  ÀÄspi_read_u8  0/26  Ram=1
    ³  ³  ³     ³     ÀÄ*
    ³  ³  ³     ÃÄ@delay_ms1  0/42  Ram=1
    ³  ³  ³     ÃÄusb_task  0/54  Ram=1
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄ@const1611  0/26  Ram=0
-   ³  ³  ³     ÃÄprintln  0/32  Ram=8
+   ³  ³  ³     ÃÄ@const1637  0/26  Ram=0
+   ³  ³  ³     ÃÄprintln  0/40  Ram=5
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄ@const1613  0/48  Ram=0
-   ³  ³  ³     ÃÄprint  0/12  Ram=2
+   ³  ³  ³     ÃÄ@const1639  0/48  Ram=0
+   ³  ³  ³     ÃÄprint  0/16  Ram=3
    ³  ³  ³     ³  ÀÄ*
    ³  ³  ³     ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄprintln  0/38  Ram=8
-   ³  ³  ³     ³  ÃÄprint  0/228  Ram=19
-   ³  ³  ³     ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ³     ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ³     ³  ³  ÃÄ@PRINTF_X_1365  0/72  Ram=2
-   ³  ³  ³     ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ³     ³  ³  ³  ÀÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ³     ³  ³  ÃÄ@PRINTF_LD_1365  0/256  Ram=9
-   ³  ³  ³     ³  ³  ³  ÀÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ³     ³  ³  ÃÄ@PRINTF_LU_1365  0/200  Ram=9
-   ³  ³  ³     ³  ³  ³  ÀÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ³     ³  ³  ÀÄusbPrint  0/20  Ram=2
-   ³  ³  ³     ³  ³     ÀÄ*
-   ³  ³  ³     ³  ÀÄusbPrint  0/20  Ram=2
+   ³  ³  ³     ÃÄprintln  0/46  Ram=5
+   ³  ³  ³     ³  ÃÄprint  0/230  Ram=20
+   ³  ³  ³     ³  ³  ÀÄ*
+   ³  ³  ³     ³  ÀÄusbPrint  0/30  Ram=3
    ³  ³  ³     ³     ÀÄ*
    ³  ³  ³     ÃÄusb_task  0/54  Ram=1
    ³  ³  ³     ³  ÀÄ*
@@ -183,25 +172,25 @@
    ³  ³  ³     ÃÄusb_task  0/54  Ram=1
    ³  ³  ³     ³  ÀÄ*
    ³  ³  ³     ÃÄ@delay_ms1  0/42  Ram=1
-   ³  ³  ³     ÃÄ@const1614  0/26  Ram=0
-   ³  ³  ³     ÃÄprintln  0/32  Ram=8
+   ³  ³  ³     ÃÄ@const1640  0/26  Ram=0
+   ³  ³  ³     ÃÄprintln  0/40  Ram=5
    ³  ³  ³     ³  ÀÄ*
    ³  ³  ³     ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄprintln  0/38  Ram=8
+   ³  ³  ³     ÃÄprintln  0/46  Ram=5
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄprintln  0/38  Ram=8
+   ³  ³  ³     ÃÄprintln  0/46  Ram=5
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄ@const1616  0/48  Ram=0
-   ³  ³  ³     ÃÄprint  0/12  Ram=2
+   ³  ³  ³     ÃÄ@const1642  0/48  Ram=0
+   ³  ³  ³     ÃÄprint  0/16  Ram=3
    ³  ³  ³     ³  ÀÄ*
    ³  ³  ³     ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³     ³  ÀÄ*
-   ³  ³  ³     ÃÄprintln  0/38  Ram=8
+   ³  ³  ³     ÃÄprintln  0/46  Ram=5
    ³  ³  ³     ³  ÀÄ*
    ³  ³  ³     ÀÄusb_task  0/54  Ram=1
    ³  ³  ³        ÀÄ*
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄspi_write_u8  0/30  Ram=2
    ³  ³  ³  ÀÄ*
@@ -211,19 +200,19 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄspi_write_u8  0/30  Ram=2
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄprint  0/12  Ram=2
+   ³  ³  ÃÄprint  0/16  Ram=3
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄsync_word_set  0/134  Ram=5
-   ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ³  ÀÄspi_write_u8  0/30  Ram=2
    ³  ³  ³  ³     ÀÄ*
    ³  ³  ³  ÃÄspi_write_from  0/70  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÀÄset  0/56  Ram=6
+   ³  ³  ³  ÀÄset  0/54  Ram=6
    ³  ³  ³     ÀÄ*
    ³  ³  ÃÄpreamble_length_set  0/42  Ram=4
    ³  ³  ³  ÃÄspi_write_u8  0/30  Ram=2
@@ -237,7 +226,7 @@
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÀÄspi_write_u8  0/30  Ram=2
    ³  ³  ³     ÀÄ*
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄbitrate_set  0/162  Ram=13
    ³  ³  ³  ÃÄ@DIVFF  0/350  Ram=14
@@ -255,32 +244,32 @@
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÀÄspi_write_u8  0/30  Ram=2
    ³  ³  ³     ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄtx_power_set  0/180  Ram=5
-   ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÀÄset  0/56  Ram=6
+   ³  ³  ³  ÀÄset  0/54  Ram=6
    ³  ³  ³     ÀÄ*
    ³  ³  ÃÄspi_write_u8  0/30  Ram=2
    ³  ³  ³  ÀÄ*
@@ -294,29 +283,29 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄspi_write_u8  0/30  Ram=2
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@const1609  0/44  Ram=0
-   ³  ³  ÀÄprint  0/12  Ram=2
+   ³  ³  ÃÄ@const1635  0/44  Ram=0
+   ³  ³  ÀÄprint  0/16  Ram=3
    ³  ³     ÀÄ*
-   ³  ÃÄ@const1690  0/26  Ram=0
-   ³  ÃÄprintln  0/32  Ram=8
+   ³  ÃÄ@const1714  0/26  Ram=0
+   ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ÀÄ*
-   ³  ÃÄreceive  0/1140  Ram=45
+   ³  ÃÄreceive  0/1158  Ram=45
    ³  ³  ÃÄ@FLT  0/122  Ram=10
    ³  ³  ÃÄ@FLT  0/122  Ram=10
    ³  ³  ÃÄlisten  0/50  Ram=0
    ³  ³  ³  ÃÄset_boost  0/46  Ram=1
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÀÄoperation_mode_set  0/504  Ram=66
+   ³  ³  ³  ÀÄoperation_mode_set  0/522  Ram=66
    ³  ³  ³     ÀÄ*
-   ³  ³  ÃÄtimeSec  0/272  Ram=8
+   ³  ³  ÃÄtimeSec  0/264  Ram=8
    ³  ³  ³  ÃÄ@MUL1616  0/34  Ram=5
    ³  ³  ³  ÃÄ@ITOF  0/54  Ram=2
    ³  ³  ³  ÃÄ@ITOF  0/54  Ram=2
@@ -334,10 +323,10 @@
    ³  ³  ÃÄ@MULFF  0/246  Ram=11
    ³  ³  ÃÄ@ITOF  0/54  Ram=2
    ³  ³  ÃÄ@FLT  0/122  Ram=10
-   ³  ³  ÃÄ@const1671  0/26  Ram=0
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ÃÄ@const1695  0/26  Ram=0
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄrssi_get  0/100  Ram=1
+   ³  ³  ÃÄrssi_get  0/98  Ram=1
    ³  ³  ³  ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄ@ITOF  0/54  Ram=2
@@ -346,17 +335,17 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄspi_read_u8  0/26  Ram=1
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@const1673  0/28  Ram=0
-   ³  ³  ÃÄprint  0/12  Ram=2
+   ³  ³  ÃÄ@const1697  0/28  Ram=0
+   ³  ³  ÃÄprint  0/16  Ram=3
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄ@PRINTF_D_1365  0/198  Ram=6
+   ³  ³  ÃÄ@PRINTF_D_1368  0/198  Ram=6
    ³  ³  ³  ÃÄ@DIV88  0/44  Ram=3
    ³  ³  ³  ÃÄ@DIV88  0/44  Ram=3
    ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
    ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
    ³  ³  ³  ÃÄ@SPRINTF  0/30  Ram=1
    ³  ³  ³  ÀÄ@SPRINTF  0/30  Ram=1
-   ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ÀÄ*
    ³  ³  ÃÄmalloc  0/322  Ram=12
    ³  ³  ³  ÃÄcreate_node  0/60  Ram=8
@@ -375,35 +364,35 @@
    ³  ³  ÃÄ@SFTOI  0/60  Ram=4
    ³  ³  ÃÄsleep_ms  0/8  Ram=1
    ³  ³  ³  ÀÄ*
-   ³  ³  ÃÄsend  0/614  Ram=40
+   ³  ³  ÃÄsend  0/624  Ram=40
    ³  ³  ³  ÃÄidle  0/22  Ram=0
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄmalloc  0/322  Ram=12
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄspi_write_from  0/70  Ram=6
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄ@const1654  0/26  Ram=0
-   ³  ³  ³  ÃÄprint  0/12  Ram=2
+   ³  ³  ³  ÃÄ@const1678  0/26  Ram=0
+   ³  ³  ³  ÃÄprint  0/16  Ram=3
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄprintln  0/32  Ram=8
+   ³  ³  ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄfree  0/122  Ram=8
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄtransmit  0/50  Ram=0
    ³  ³  ³  ³  ÃÄset_boost  0/46  Ram=1
    ³  ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ³  ÃÄset  0/56  Ram=6
+   ³  ³  ³  ³  ÃÄset  0/54  Ram=6
    ³  ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ³  ÀÄoperation_mode_set  0/504  Ram=66
+   ³  ³  ³  ³  ÀÄoperation_mode_set  0/522  Ram=66
    ³  ³  ³  ³     ÀÄ*
-   ³  ³  ³  ÃÄtimeSec  0/272  Ram=8
+   ³  ³  ³  ÃÄtimeSec  0/264  Ram=8
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄpacket_sent  0/36  Ram=1
    ³  ³  ³  ³  ÀÄspi_read_u8  0/26  Ram=1
    ³  ³  ³  ³     ÀÄ*
    ³  ³  ³  ÃÄusb_task  0/54  Ram=1
    ³  ³  ³  ³  ÀÄ*
-   ³  ³  ³  ÃÄtimeSec  0/272  Ram=8
+   ³  ³  ³  ÃÄtimeSec  0/264  Ram=8
    ³  ³  ³  ³  ÀÄ*
    ³  ³  ³  ÃÄ@ADDFF  0/632  Ram=16
    ³  ³  ³  ÃÄ@FLT  0/122  Ram=10
@@ -417,12 +406,18 @@
    ³  ³  ³  ÀÄ*
    ³  ³  ÀÄidle  0/22  Ram=0
    ³  ³     ÀÄ*
-   ³  ÃÄprint  0/12  Ram=2
+   ³  ÃÄ@const1717  0/24  Ram=0
+   ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ÀÄ*
-   ³  ÃÄprintln  0/32  Ram=8
-   ³  ³  ÀÄ*
-   ³  ÃÄ@const1695  0/26  Ram=0
-   ³  ÃÄprintln  0/32  Ram=8
+   ³  ÃÄprintch  0/14  Ram=2
+   ³  ³  ÀÄusbPrint  0/34  Ram=2
+   ³  ³     ÃÄusb_task  0/54  Ram=1
+   ³  ³     ³  ÀÄ*
+   ³  ³     ÃÄusb_enumerated  0/6  Ram=0
+   ³  ³     ÀÄusb_cdc_putc  0/60  Ram=1
+   ³  ³        ÀÄ*
+   ³  ÃÄ@const1719  0/26  Ram=0
+   ³  ÃÄprintln  0/40  Ram=5
    ³  ³  ÀÄ*
    ³  ÃÄfree  0/122  Ram=8
    ³  ³  ÀÄ*

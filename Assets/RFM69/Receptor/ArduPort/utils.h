@@ -4,12 +4,20 @@ uint8_t _BUFFER[4];
 void setOutput(int pin, int value){
     output_bit(pin,value);
 }
-void usbPrint(char* str){
+void usbPrint(char* str, int debug = 0){
       usb_task();  //Verifica la comunicación USB
-      if(usb_enumerated()) {
+      if(usb_enumerated() && debug <= debugLevel) {
+      
          printf(usb_cdc_putc,str); 
       }
 }
+void usbPrint(char str, int debug = 0){
+      usb_task();  //Verifica la comunicación USB
+      if(usb_enumerated() && debug <= debugLevel) {
+         printf(usb_cdc_putc,"%c",str); 
+      }
+}
+
 
 void spiBegin(){
 //SPI.beginTransaction(SPISettings(SPIBAUD, MSBFIRST, SPI_MODE0));
@@ -21,12 +29,16 @@ setOutput(SSPin, 1);
 //SPI.endTransaction();
 }
 
-void print(char* str){
+void print(char* str, int debug = 0){
     //Serial.print(str);
-    usbPrint(str);
+    usbPrint(str, debug);
 }
 
-void print(int16 str, int format){
+void printch(char str, int debug = 0){
+   usbPrint(str, debug);
+
+}
+void print(int16 str, int format, int debug = 0){
     char converted[11];
     int i;
     if (format == HEX) sprintf(converted,"0x%02X",str);
@@ -45,28 +57,29 @@ void print(int16 str, int format){
     else if (format == UDEC){
       sprintf(converted,"%Lu",str);
     }
-    usbPrint(converted);
+    usbPrint(converted, debug);
     //Serial.print(str,format);
 }
-void println(char* str){
-    usbPrint(str);
-    usbPrint((char*)"\n");
+void println(char* str, int debug = 0){
+    usbPrint(str, debug);
+    usbPrint((char*)"\n", debug);
     //Serial.println(str);
 }
-void println(int str, int format){
-    print(str,format);
-    usbPrint((char*)"\n");
+void println(int str, int format, int debug = 0){
+    print(str,format, debug);
+    usbPrint((char*)"\n", debug);
     //Serial.println(str,format);
 }
-void print(float str){
+void print(float str, int debug = 0){
  char converted[11];
  sprintf(converted,"%03f",str);
- usbPrint(converted);
+ usbPrint(converted, debug);
 }
-void println(float str){
-    print(str);
-    usbPrint((char*)"\n");
+void println(float str, int debug = 0){
+    print(str, debug);
+    usbPrint((char*)"\n", debug);
 }
+
 float timeSec(){
    float t;
    t = (float)(60*globalMin);
