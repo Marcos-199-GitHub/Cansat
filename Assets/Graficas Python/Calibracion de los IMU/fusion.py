@@ -1,5 +1,8 @@
 import numpy as np
 import math
+import calibracion
+import serial
+import time
 #Fuentes:
 
 # 1.- Data Fusion with 9 Degrees of Freedom Inertial Measurement Unit To Determine Object’s Orientation
@@ -11,6 +14,8 @@ import math
 
 # 2.- https://vanhunteradams.com/Pico/ReactionWheel/Complementary_Filters.html
 
+RAD2DEG = 180/math.pi
+DEG2RAD = math.pi/180
 class Fusion:
     def __init__(self) -> None:
         self.roll = 0
@@ -37,22 +42,33 @@ class Fusion:
         self.KFilterRoll = Kalman()
         self.KFilterPitch = Kalman()
         self.KFAngle = np.zeros((3,1))
+        self.degrees = True
         
     #Obtiene los valores de roll y pitch mediante los valores de aceleracion (ya deberian estar calibrados)
     def Accelerometer(self,A:np.ndarray):
         # roll = atan(ay/az)
-        self.roll = math.atan2(A[1,0], A[2,0])
+        self.roll = math.atan2(-A[1,0], A[2,0])
         # pitch = atan(-ax/sqrt(ay**2+az**2))
         # math.hypot is hypotenuse
-        self.pitch = math.atan2(-A[0,0],math.hypot(A[1,0],A[2,0]))
+        ##self.pitch = math.atan2(-A[0,0],math.hypot(A[1,0],A[2,0]))
+        self.pitch = math.asin(A[0,0]/math.hypot(A[1,0],A[2,0],A[0,0]))
+        if (self.degrees):
+            self.pitch *= RAD2DEG
+            self.roll *= RAD2DEG
     def Magnetometer(self,M:np.ndarray,pitch,roll):
         Mx = M[0,0]*math.cos(pitch) + M[2,0]*math.sin(pitch)
         My = M[0,0]*math.sin(pitch)*math.sin(roll)+M[1,0]*math.cos(roll)-M[2,0]*math.sin(roll)*math.cos(pitch)
         self.yaw = math.atan2(My,Mx)
+        if (self.degrees):
+            self.yaw *= RAD2DEG
     def Gyroscope(self,G:np.ndarray,delta):
         self.Groll = G[0,0]*delta
         self.Gpitch = G[1,0]*delta
         self.Gyaw = G[2,0]*delta
+        if (not self.degrees):
+            self.Gpitch *= DEG2RAD
+            self.Groll *= DEG2RAD
+            self.Gyaw *= DEG2RAD
 
     def ComplementaryFilter(self):
         #Para el filtro complementario se utiliza para fusionar los sensores mediante una suma ponderada
@@ -151,3 +167,40 @@ class Kalman:
         self.P[1,1] -= K[1,0] * P01_temp
 
         return self.angle
+    
+
+def filter():
+    mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+    MPU = calibracion.MPU(mpu)
+    F = Fusion()
+    KYaw = Kalman()
+    KPitch = Kalman()
+    KRoll = Kalman()
+
+    #Actualizar datos
+    MPU.update()
+    #Convertirlos a yaw, pitch, roll
+    F.Accelerometer(MPU.acceleration)
+    # F.Gyroscope(MPU.angularVelocity)
+    #Inicializar el filtro Kalman con el pitch y roll del acelerometro
+    KPitch.setAngle(F.pitch)
+    KRoll.setAngle(F.roll)
+    tStart = time.time();
+    while True:
+        #Actualizar datos
+        MPU.update()
+        #Convertirlos a yaw, pitch, roll
+        F.Accelerometer(MPU.acceleration)
+        # F.Gyroscope(MPU.angularVelocity)
+        tStop = time.time()
+        tElapse = tStop - tStart;
+        tStart = time.time();
+        temp = tElapse
+        KPitch.getAngle(F.pitch,MPU.angularVelocity[2,0],temp)
+        KRoll.getAngle(F.roll,MPU.angularVelocity[0,0],temp)
+
+        print (f"A_pitch: {F.pitch:.2f}, A_Roll: {F.roll:.2f}....Pitch: {KPitch.angle:.2f}, Roll: {KRoll.angle:.2f}, dt: {temp:.4f}")
+
+if __name__ == "__main__":
+    filter()
+

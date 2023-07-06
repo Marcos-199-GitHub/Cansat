@@ -14,7 +14,6 @@ LATITUDE = 19.833
 # Wie = 15 deg/h =  0.0041666666666 deg/s
 Wie = 0.00416666 # deg/s
 EARTH_ROTATION = np.array([[math.cos(LATITUDE*DEG2RAD)],[0],[math.sin(LATITUDE*DEG2RAD)]]) * Wie
-mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 ACC_ORIENTATION_SAVE_FILE = "calibration_data/Acc_orientation.npy"
 GYRO_ORIENTATION_SAVE_FILE = "calibration_data/Gyro_orientation.npy"
 GYRO_ORIENTATION_FORCE_SAVE_FILE = "calibration_data/Gyro_orientation_force.npy"
@@ -27,7 +26,7 @@ class MPU:
         self.all_data = ""
         self.started = False
         self.ended = False
-        self.accFactor = -GRAVITY[2][0]
+        self.accFactor = GRAVITY[2][0]
         self.wFactor = math.pi/180
         self.accFactorRaw = 0
         self.wFactorRaw = 0
@@ -55,13 +54,13 @@ class MPU:
     def update(self):
         self.ended = False
         while not self.ended:
-            while (mpu.in_waiting==0):
+            while (self.mpu.in_waiting==0):
                 # buff = mpu.read_all()
                 # mpu.flushInput()
                 # mpu.flushOutput()
                 continue
-            for j in range (0,mpu.in_waiting):
-                raw = chr(mpu.read(1)[0])
+            for j in range (0,self.mpu.in_waiting):
+                raw = chr(self.mpu.read(1)[0])
 
                 if not self.started and raw != "^":
                     continue
@@ -118,8 +117,7 @@ class MPU:
         self.angularVelocity = self._angularVelocityDeg * self.wFactor 
         # self._accelerationG *= 0
         # self._angularVelocityDeg *= 0
-        
-D = MPU(mpu)
+
 
 
 #Fuentes:
@@ -443,7 +441,9 @@ def RutinaDeCalibracion(sensor: MPU,stillTime, saveOrientation = True):
     
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":   
+    mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+    D = MPU(mpu)
     RutinaDeCalibracion(D,5,True)
 
     #Prueba del acelerometro

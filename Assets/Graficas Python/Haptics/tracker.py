@@ -59,7 +59,7 @@ class Motion:
 # R = Motion.rotationMatrix(np.array([[0],[0],[0]]),np.array([[1,0,0],[0,1,0],[0,0,1]]),0.1)
 # A = Motion.acceleration(np.array([[2.0],[3.0],[0.0]]),R,GRAVITY)
 
-mpu = serial.Serial(baudrate=38400,port="COM3",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+mpu = serial.Serial(baudrate=38400,port="COM4",bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
 
 
 # Ultima calibracion
@@ -214,7 +214,7 @@ ur.camera.fov = 300
 
 samples = np.zeros((6,100))
 # data = np.zeros((10000,4))
-mpu.write(0xb1)
+#mpu.write(0xb1)
 
 for i in range (0,100):
     D.update()
