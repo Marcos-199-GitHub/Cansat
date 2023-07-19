@@ -69,8 +69,8 @@ def update():
     start = end
     F.Accelerometer(D.acceleration)
     # F.Gyroscope(MPU.angularVelocity)
-    KPitch.getAngle(F.pitch,D.angularVelocity[1,0],delta)
-    KRoll.getAngle(F.roll,D.angularVelocity[0,0],delta)
+    KPitch.getAngle(F.pitch,D._angularVelocityDeg[1,0],delta)
+    KRoll.getAngle(F.roll,D._angularVelocityDeg[0,0],delta)
     player.rotation_x = KPitch.angle
     player.rotation_y = KRoll.angle
     # player.rotation_x = F.pitch

@@ -23,6 +23,15 @@ import os
 import camara
 
 
+#Fusion de los sensores de movimiento
+import sys
+sys.path.append('../../Graficas Python/Calibracion de los IMU')
+import fusion
+import numpy as np
+
+
+
+
 SHT30_ADDRESS = 0x44
 INIT_TIME = time.time()
 PHOTO_CMD = "streamer -d /dev/video0 -s 320x240 -o "
@@ -96,6 +105,43 @@ prev_packet = None
 #Serial
 bus = serial.Serial('/dev/serial0',baudrate=9600)
 
+
+def bmm_update():
+    x , y, z = dev_bmm150.read_mag_data()
+    heading_rads = math.atan2(y,z)
+    heading_deg = math.degrees(heading_rads)
+    return x,y,z,heading_deg
+
+def camera_update():
+    if not btnA.value:
+        display.fill(0)
+        display.text("tomando foto",0,15,1)
+        display.show()
+        return camara.capture()
+    return ""
+
+
+#Fusion 9DOF
+
+F = fusion.Fusion()
+KYaw = fusion.Kalman()
+KPitch = fusion.Kalman()
+KRoll = fusion.Kalman()
+mm = bmm_update()
+#Por como esta acomodado el magnetometro en el cansat, esta es la orientacion adecuada
+MM = np.array([[mm[1]],[mm[2]],[mm[0]]])
+
+#Actualizar datos
+mpu.update()
+#Convertirlos a yaw, pitch, roll
+F.Accelerometer(mpu.acceleration)
+F.Magnetometer(MM,F.pitch,F.roll)
+# F.Gyroscope(MPU.angularVelocity)
+#Inicializar el filtro Kalman con el pitch y roll del acelerometro
+KPitch.setAngle(F.pitch)
+KRoll.setAngle(F.roll)
+start = time.time();
+
 #Formato:
 #{"T1":"temp bmp","P":"press","A":"altitude","T":"tiempo","h": "humedad relativa", "T2":"Temperatura del sht", "Ax": "AccX","Ay": "AccY","Az": "AccZ","Wx":"GyroX" ....}
 
@@ -116,26 +162,16 @@ diccionario = {
     "Mx":"0", #MagnetX uT
     "My":"0", #MagnetY uT
     "Mz":"0", #MagnetZ uT
-    "head":"0" #Magnet Heading °
+    "head":"0", #Magnet Heading °
+    "Yaw":"0",
+    "Pitch":"0",
+    "Roll":"0",
 
 
 }
 f = open("data.log","a")
 bus.write(bytes(b"Serial Correct\n"))
 
-def bmm_update():
-    x , y, z = dev_bmm150.read_mag_data()
-    heading_rads = math.atan2(x,y)
-    heading_deg = math.degrees(heading_rads)
-    return x,y,z,heading_deg
-
-def camera_update():
-    if not btnA.value:
-        display.fill(0)
-        display.text("tomando foto",0,15,1)
-        display.show()
-        return camara.capture()
-    return ""
 n=0
 total_kb=0
 while True:
@@ -158,6 +194,28 @@ while True:
             time.sleep(1)
             
             
+
+    end = time.time()
+    delta = end-start
+    start = end
+    mm = bmm_update()
+    MM = np.array([[mm[1]],[mm[2]],[mm[0]]])
+    F.Accelerometer(mpu.acceleration)
+
+    # F.Gyroscope(MPU.angularVelocity)
+    KPitch.getAngle(F.pitch,mpu._angularVelocityDeg[1,0],delta)
+    KRoll.getAngle(F.roll,mpu._angularVelocityDeg[0,0],delta)
+
+
+    F.Magnetometer(MM,KPitch.angle,KRoll.angle)
+
+
+    KYaw.getAngle(F.yaw,MM,delta)
+    # player.rotation_x = F.pitch
+    # player.rotation_y = F.roll
+    print (f"A_pitch: {F.pitch:.2f}, A_Roll: {F.roll:.2f}....Pitch: {KPitch.angle:.2f}, Roll: {KRoll.angle:.2f}, dt: {delta:.4f}")
+
+
 
     diccionario["T1"] = f"{bmp280.temperature}"
     diccionario["T2"] = f"{sht30.temperature[0]}"
@@ -182,6 +240,11 @@ while True:
     diccionario["Mz"] = f"{magnet[2]}"
 
     diccionario["head"] = f"{magnet[3]}"
+
+    diccionario["Yaw"] = f"{KYaw.angle}"
+    diccionario["Pitch"] = f"{KPitch.angle}"
+    diccionario["Roll"] = f"{KRoll.angle}"
+
     
     utf = f"{diccionario}\n"
     bus.write(utf.encode())
