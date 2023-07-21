@@ -1,0 +1,56 @@
+﻿Componentes
+CanSat
+Sensor de humedad relativa: SHT-30
+Magnetometro: BMM150
+Sensor barométrico: BMP280
+Unidad de medición inercial (acelerómetro y giroscopio) : MPU 6050
+CPU: Raspberry Pi Zero W
+Adafruit LoRa Radio Bonnet with OLED – RFM69W (de este son dos)
+Camara para Raspberry Pi
+Cable para la camara
+Analog to digital converter MCP3204 (Falta)
+Módulo GPS NEO6MV2 (Falta)
+
+
+Cable a tierra
+PIC18F4550
+Logic Level Converter 
+Regulador 7803
+4 Leds
+Cristal de 20MHz
+Un conector USB-B hembra
+
+
+
+Datos a recibir:
+Camra: o
+Video 
+
+SHT-30: o
+Humedad relativa: 0-100%
+Temperatura: -40 a 125°C
+
+BMM150: o
+Orientacion z: -180 a 180°
+
+BMP280: o
+Presion: 300-1100hPa
+
+MPU 6050: o
+Orientacion x,y: -180 a 180°
+
+GPS NEO6MV2: o
+Altura: 0-1000m
+Posicion latitud y longitud en grados: 0-180°
+Velocidad en x, y, z: -100 a 100m/s
+Numero de satelites: 0-10
+Calidad de la señal: 0-10
+
+Sensor de vibracion: o
+Vibracion: 0-100Db  
+
+Sensor de bateria: o
+Porcentaje de bateria: 0-100%
+
+Señal de radio: o
+Intensidad de la señal: 0-100%
