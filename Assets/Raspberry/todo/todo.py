@@ -133,8 +133,12 @@ MM = np.array([[mm[1]],[mm[2]],[mm[0]]])
 
 #Actualizar datos
 mpu.update()
+
+ACC = np.array([[mpu.accel[0]],[mpu.accel[1]],[mpu.accel[2]]])
+GG = np.array ([[mpu.gyro[0]],[mpu.gyro[1]],[mpu.gyro[2]]])
+
 #Convertirlos a yaw, pitch, roll
-F.Accelerometer(mpu.acceleration)
+F.Accelerometer(ACC)
 F.Magnetometer(MM,F.pitch,F.roll)
 # F.Gyroscope(MPU.angularVelocity)
 #Inicializar el filtro Kalman con el pitch y roll del acelerometro
@@ -200,11 +204,13 @@ while True:
     start = end
     mm = bmm_update()
     MM = np.array([[mm[1]],[mm[2]],[mm[0]]])
-    F.Accelerometer(mpu.acceleration)
+    ACC = np.array([[mpu.accel[0]],[mpu.accel[1]],[mpu.accel[2]]])
+    GG = np.array ([[mpu.gyro[0]],[mpu.gyro[1]],[mpu.gyro[2]]])
+    F.Accelerometer(ACC)
 
     # F.Gyroscope(MPU.angularVelocity)
-    KPitch.getAngle(F.pitch,mpu._angularVelocityDeg[1,0],delta)
-    KRoll.getAngle(F.roll,mpu._angularVelocityDeg[0,0],delta)
+    KPitch.getAngle(F.pitch,GG[1,0],delta)
+    KRoll.getAngle(F.roll,GG[0,0],delta)
 
 
     F.Magnetometer(MM,KPitch.angle,KRoll.angle)
@@ -246,7 +252,7 @@ while True:
     diccionario["Roll"] = f"{KRoll.angle}"
 
     
-    utf = f"{diccionario}\n"
+    utf = f"{diccionario}\n\r"
     bus.write(utf.encode())
     size_kb = len(utf)/1024
     total_kb += size_kb
@@ -256,6 +262,7 @@ while True:
     while (c < len(utf)):
         rfm69.send(rf_data[c:c+59])
         c+=59
+    rfm69.send(bytes([10,13]))
     print(f"Enviados {size_kb} kilobytes de datos por RF y Serial")
 
     print(utf)
