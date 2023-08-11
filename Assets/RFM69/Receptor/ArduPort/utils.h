@@ -1,8 +1,12 @@
 //Global buffer for SPI commands
 uint8_t _BUFFER[4];
+uint8_t readBytes;
 
 void setOutput(int pin, int value){
     output_bit(pin,value);
+}
+int digitalRead(int pin){
+   return input(pin);
 }
 void usbPrint(char* str, int debug = 0){
       usb_task();  //Verifica la comunicación USB
@@ -19,13 +23,17 @@ void usbPrint(char str, int debug = 0){
 }
 
 
+
+
 void spiBegin(){
 //SPI.beginTransaction(SPISettings(SPIBAUD, MSBFIRST, SPI_MODE0));
 setOutput(SSPin, 0);
+using_spi = true;
 
 }
 void spiEnd(){
-setOutput(SSPin, 1);    
+setOutput(SSPin, 1); 
+using_spi = false;
 //SPI.endTransaction();
 }
 
@@ -88,16 +96,17 @@ float timeSec(){
    //println(t);
    return t;
 }
+//Retorna cuantos bytes se leyeron
 void spi_read_into(uint8_t address,uint8_t* array, uint8_t length){
-    int i=0;
+    readBytes =0;
     //Select
     spiBegin();
     _BUFFER[0] = address & 0x7F; //Strip MSB byte to read
     //Write address
     spi_write(_BUFFER[0]);
     delay_us(100);  // Tiempo para que el esclavo responda
-    for (i=0;i<length;i++)
-        array[i] = spi_read(0xFF);
+    for (readBytes=0;readBytes<length;readBytes++)
+        array[readBytes] = spi_read(0xFF);
     spiEnd();
 
 }

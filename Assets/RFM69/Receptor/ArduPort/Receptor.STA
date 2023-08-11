@@ -1,45 +1,47 @@
 
-ROM used:   16330/32768 (50%)
-            16330/32768 (50%) including unused fragments
+ROM used:   17760/32768 (54%)
+            17760/32768 (54%) including unused fragments
 
             1.8 Average locations per line
-            10.5 Average locations per statement
+            9.9 Average locations per statement
 
-RAM used:   695/2048 (34%) at main() level
-            915/2048 (45%) worst case
+RAM used:   735/2048 (36%) at main() level
+            973/2048 (48%) worst case
 
-Stack used: 18 worst case (11 in main + 7 for interrupts)
+Stack used: 24 worst case (13 in main + 11 for interrupts)
 Stack size: 31
 
 Lines Stmts  %   Files
 ----- ----- ---  -----
-  163    22   1  Receptor.c
-   58     0   0  Receptor.h
+  394   139   8  Receptor.c
+   70     0   0  Receptor.h
   877     0   0  C:\Program Files (x86)\PICC\Devices\18LF4550.h
-  878   143   9  C:\Program Files (x86)\PICC\Drivers\usb_cdc.h
+  878   143   8  C:\Program Files (x86)\PICC\Drivers\usb_cdc.h
   228     0   0  C:\Program Files (x86)\PICC\Drivers\pic18_usb.h
   328     0   0  C:\Program Files (x86)\PICC\Drivers\usb_hw_layer.h
   300     0   0  C:\Program Files (x86)\PICC\Drivers\usb_desc_cdc.h
    39     0   0  C:\Program Files (x86)\PICC\Drivers\stdbool.h
  1105     0   0  C:\Program Files (x86)\PICC\Drivers\usb.h
- 1193   234  15  C:\Program Files (x86)\PICC\Drivers\usb.c
+ 1193   234  13  C:\Program Files (x86)\PICC\Drivers\usb.c
   195     0   0  C:\Program Files (x86)\PICC\Drivers\stdint.h
- 1518   310  20  C:\Program Files (x86)\PICC\Drivers\pic18_usb.c
-  435   170  11  C:\Program Files (x86)\PICC\Drivers\string.h
+ 1518   310  17  C:\Program Files (x86)\PICC\Drivers\pic18_usb.c
+  435   170   9  C:\Program Files (x86)\PICC\Drivers\string.h
    32     0   0  C:\Program Files (x86)\PICC\Drivers\stddef.h
-   28   114   7  C:\Program Files (x86)\PICC\Drivers\ctype.h
-  417   156  10  C:\Program Files (x86)\PICC\Drivers\stdlibm.h
+   28   114   6  C:\Program Files (x86)\PICC\Drivers\ctype.h
+  417   156   9  C:\Program Files (x86)\PICC\Drivers\stdlibm.h
    76    13   1  C:\Program Files (x86)\PICC\Drivers\memmgmt.c
-   64     0   0  adafruit_rfm69_registers.h
-  127    61   4  utils.h
-  890   338  22  afadruit_rfm69.h
+   65     0   0  adafruit_rfm69_registers.h
+  136    65   4  utils.h
+  954   388  22  afadruit_rfm69.h
+  274    62   3  plain_rfm.h
+  300     0   0  barerfm69_const.h
 ----- -----
- 8951  1561 Total
+ 9842  1794 Total
 
 Page ROM  %  RAM    Vol Diff  Functions:
 ---- --- --- ---    --- ----  ----------
 0     42   0    1             @delay_ms1
-0     40   0    1             @delay_us1
+0     38   0    1             @delay_us1
 0     32   0    0             @const853
 0     32   0    0             @const856
 0     48   0    0             @const859
@@ -52,10 +54,10 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0     34   0    5             @MUL1616
 0     86   0    4    139  4.3  usb_tbe
 0     42   0    1    172  3.4  usb_detach
-0     46   0    0    236  2.3  usb_attach
+0     32   0    0    236  2.3  usb_attach
 0      6   0    0     16  1.0  usb_init_cs
-0     54   0    1    426  5.0  usb_task
-0     14   0    0     61  2.5  usb_init
+0     42   0    1    426  5.0  usb_task
+0     26   0    0     61  2.5  usb_init
 0    332   1   10    976  5.9  usb_flush_in
 0    158   0   10    344  6.1  usb_put_packet
 0    256   1    9    914  5.0  usb_flush_out
@@ -64,7 +66,7 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0    122   0    6    329  4.7  usb_unstall_ep
 0    118   0    5    373  6.0  usb_endpoint_stalled
 0     26   0    1     94  2.7  usb_set_address
-0    492   2   12   1785 11.3  usb_set_configured
+0    494   1   12   1785 11.3  usb_set_configured
 0    112   0    5    199  3.2  usb_disable_endpoint
 0     30   0    1     99  3.0  usb_disable_endpoints
 0      4   0    0     61  4.0  usb_clear_trn
@@ -100,9 +102,9 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0    114   0    4    318  5.2  usb_cdc_flush_tx_buffer
 0     64   0    4    280  2.3  usb_cdc_init
 0     18   0    0     59  2.3  usb_cdc_get_discard
-0     76   0    4    292  4.6  _usb_cdc_putc_fast_noflush
-0     10   0    1     38  1.7  usb_cdc_putc_fast
-0     60   0    1    125  3.7  usb_cdc_putc
+0     62   0    4    292  4.6  _usb_cdc_putc_fast_noflush
+0      8   0    1     38  1.7  usb_cdc_putc_fast
+0     34   0    1    125  3.7  usb_cdc_putc
 0     60   0    8    150  3.6  create_node
 0     24   0    6     60  3.1  update_node
 0    134   0    8    180  4.5  insert_node_after
@@ -112,93 +114,100 @@ Page ROM  %  RAM    Vol Diff  Functions:
 0    122   0    8    385  6.3  free
 0     52   0    2     45  2.0  setOutput
 0     66   0    6             @WRITEBITA
-0     30   0    3    127  3.9  usbPrint
+0     50   0    1     29  1.6  digitalRead
+0     56   0    5             @READBITA
+0     42   0    3    127  3.9  usbPrint
 0     30   0    1             @SPRINTF
-0     38   0    2             @PSTRINGR_744
-0     34   0    2    133  3.3  usbPrint
-0     14   0    0     25  1.2  spiBegin
-0     16   0    0     25  1.2  spiEnd
+0     50   0    2             @PSTRINGR_744
+0     26   0    2    133  3.3  usbPrint
+0     16   0    0     43  1.8  spiBegin
+0     18   0    0     43  1.8  spiEnd
 0     16   0    3     64  2.4  print
-0     14   0    2     59  2.0  printch
+0     12   0    2     59  2.0  printch
 0    230   1   20    782  7.9  print
-0     72   0    2             @PRINTF_X_1368
-0    256   1    9             @PRINTF_LD_1368
-0    200   1    9             @PRINTF_LU_1368
+0     72   0    2             @PRINTF_X_1382
+0    256   1    9             @PRINTF_LD_1382
+0    198   1    9             @PRINTF_LU_1382
 0     40   0    5    108  2.6  println
 0     46   0    5    129  2.8  println
 0    246   1   11             @MULFF
+0     68   0    5             @FTOSD
+0    202   1   13             @DIV3232
+0    440   1   13             @PRINTF_L32D_1382FPFPF
 0     60   0    4             @SFTOI
 0    264   1    8    149  3.8  timeSec
 0     54   0    2             @ITOF
-0    632   2   16    973  8.6  @ADDFF
-0     82   0    7    324  5.1  spi_read_into
-0     70   0    6    243  4.8  spi_write_from
-0     26   0    1     69  2.2  spi_read_u8
+0    632   2   16             @ADDFF
+0     82   0    6    316  5.1  spi_read_into
+0     94   0    6    243  4.8  spi_write_from
+0     38   0    1     69  2.2  spi_read_u8
 0     30   0    2    116  3.0  spi_write_u8
 0      8   0    1     24  1.2  sleep_ms
 0     54   0    6    222  4.8  set
 0     40   0    5    122  3.5  get
 0     62   0    7    414  5.7  _RegisterBits_
 0     54   0    1     93  2.9  checkId
-0   1030   3   41   2558  5.1  init
-0     36   0    0             @const1627
-0     46   0    0             @const1629
-0     24   0    0             @const1630
-0     44   0    0     88  1.7  @const1635
-0     50   0    0     88  1.7  reset
+0   1042   3   41   2558  5.1  init
+0     36   0    0   2536 11.1  @const1641
+0     46   0    0   2536 11.1  @const1643
+0     24   0    0   2536 11.1  @const1644
+0     44   0    0             @const1649
+0     74   0    0     88  1.7  reset
 0     46   0    1     92  2.5  set_boost
 0     22   0    0     32  1.0  idle
 0     50   0    0     59  1.6  listen
 0     50   0    0     59  1.6  transmit
-0    522   2   66   1126  6.9  operation_mode_set
-0     26   0    0             @const1637
-0     48   0    0             @const1639
-0     26   0    0             @const1640
-0     48   0    0    262  5.0  @const1642
-0    134   0    5    284  5.8  sync_word_set
+0    580   2   66   1126  6.9  operation_mode_set
+0     26   0    0             @const1651
+0     48   0    0             @const1653
+0     26   0    0             @const1654
+0     48   0    0             @const1656
+0    138   0    5    284  5.8  sync_word_set
 0     42   0    4     98  2.5  preamble_length_set
-0    350   1   14    285  4.5  @DIVFF
+0    350   1   14             @DIVFF
 0     58   0    3    187  2.1  frequency_mhz_set
 0    180   1    5    712  5.3  tx_power_set
-0     98   0    1     55  2.2  rssi_get
+0    110   0    4     68  2.3  rssi_get
 0    162   0   13    170  3.8  bitrate_set
 0    162   0   13    172  3.6  frequency_deviation_set
 0     36   0    1     44  1.7  packet_sent
 0     42   0    2     69  2.5  payload_ready
-0    624   2   40   1702  9.3  send
-0     26   0    0             @const1678
+0    684   2   40   1702  9.3  send
+0     26   0    0             @const1692
 0    122   0   10             @FLT
-0   1158   4   45   3024 13.8  receive
-0     26   0    0             @const1695
-0     28   0    0             @const1697
-0     44   0    3             @DIV88
-0    198   1    6             @PRINTF_D_1368
-0      4   0    0      5  1.0  RDA_isr
-0   1596   5   36   1068  9.1  MAIN
-0     30   0    0             @const1712
-0     26   0    0             @const1714
-0     24   0    0             @const1717
-0     26   0    0             @const1719
+0   1348   4   54   3229 13.9  receive
+0     26   0    0             @const1709
+0     36   0    0             @const1711
+0     28   0    0             @const1714
+0      4   0    0      6  0.5  RDA_isr
+0    114   0    2    335  5.1  poll2
+0    182   1    4    301  5.1  onReady
+0     62   0    0    138  2.2  DIO_INT
+0     30   0    0   1507  7.5  @const1790
+0     26   0    0             @const1792
+0   1690   5   36    991  9.1  MAIN
+0     24   0    0             @const1813
+0     26   0    0   2536 11.1  @const1815
  Inline         0             @cinit1
 
 Program metrics:
-    Functions               104
-    Statements              1561
-    Comments                6533
-    Volume (V)              81832
-    Difficulty (D)          457.3
-    Effort to implement (E) 37422996
-    Time to implement (T)   577 hours, 31 minutes
-    Est Delivered Bugs (B)  37
-    Cyclomatic Complexity   180
-    Maintainability (MI)    78
+    Functions               109
+    Statements              1794
+    Comments                6772
+    Volume (V)              101856
+    Difficulty (D)          508.7
+    Effort to implement (E) 51818795
+    Time to implement (T)   799 hours, 40 minutes
+    Est Delivered Bugs (B)  46
+    Cyclomatic Complexity   209
+    Maintainability (MI)    72
 
  Segment     Used  Free
 -----------  ----  ----
 00000-00002     4  0  
 00004-00006     4  0  
-00008-000AC   166  0  
-000AE-07FFE  16156  16438  
+00008-000B8   178  0  
+000BA-07FFE  17574  15008  
 
 
 

@@ -1,0 +1,16 @@
+[defines]
+buildcount=1
+
+[PROJECT]
+Processor_Text=PIC18LF4550
+
+[ExtraIncludes]
+Count=1
+1=receptor=i:\cansat\cansat\assets\rfm69\receptor\arduport\plain_rfm.h
+
+[Opened Files]
+1=Receptor.h
+t1=1
+2=Receptor.c
+t2=1
+Count=2

@@ -8,9 +8,14 @@
 
 #use delay(clock=48MHz,crystal=20MHz,USB_FULL)
 #use FIXED_IO( E_outputs=PIN_E0 )
-#use FIXED_IO( A_outputs=PIN_A4 )
+//#use FIXED_IO( A_outputs=PIN_A4 )
+//#use FIXED_IO( B_inputs=PIN_B2 )
+
 #define RF_RESET   PIN_E0
-#define INDICATOR_LED PIN_A4
+#define DIO_0 PIN_B3
+#define DIO_2 PIN_B4
+#define DIO_1 PIN_A4
+#define BUTTON_3 PIN_D4
 
 
 //#define USB_CABLE_IS_ATTACHED()  input(PIN_B2)
@@ -32,6 +37,7 @@
 #define USB_CDC_DATA_LOCAL_SIZE  128
 
 
+
 static void RDA_isr(void);
 
 #include <usb_cdc.h>
@@ -39,7 +45,16 @@ static void RDA_isr(void);
 uint16_t globalMs;
 uint8_t globalSec;
 uint16_t globalMin;
+uint8_t fifoNotEmpty = 0;
+uint8_t maxRecievedSize = 255;
+//DIO0
+uint8_t payloadReady = 0;
+uint8_t fifoThresh = 0;
 
+uint8_t packet_length = 64;
+bool using_spi = false;
+uint8_t button3_last_state = 0;
+char str[15];
 /*Para la cantidad de mensajes que se quieran leer:
 un debug level de 0 no contiene mensajes
 un debug level de 1 son solo los datos recibidos
@@ -47,9 +62,6 @@ un debug level de 2 contiene errores
 un debug level de 3 contiene mas informacion util
 */
 int debugLevel = 1;
-
-
-
 
 
 

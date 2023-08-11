@@ -74,40 +74,6 @@ struct _RegisterBits _RegisterBits_(uint8_t _address, uint8_t _offset,uint8_t bi
         return ret;
  }
  
-/*
-class _RegisterBits{
-    public:
-    uint8_t address;
-    uint8_t mask;
-    uint8_t offset;
-    _RegisterBits(uint8_t _address, uint8_t _offset,uint8_t bits = 1){
-        uint8_t i=0;
-        mask=0;
-        //TODO: check offset to be [0,7] and bits [1,8]
-        address = _address;
-        for (i=0;i<bits;i++){
-            mask<<=1;
-            mask|=1;
-        }
-        mask <<= _offset;
-        offset = _offset;
-        }
-    void set(uint8_t val){
-        uint8_t regVal = spi_read_u8(address);
-        regVal &= ~mask;
-        regVal |= (val & 0xFF) << offset;
-        spi_write_u8(address,regVal);
-    }
-    uint8_t get(){
-        uint8_t regVal = spi_read_u8(address);
-        return ((regVal & mask) >> offset);
-    }
-   
-  
-    }
-};
-*/
-
     
 //Configuraciones que solo utilizan ciertos bits   
 struct _RegisterBits data_mode = _RegisterBits_(_REG_DATA_MOD, 5, 2);
@@ -142,6 +108,8 @@ struct _RegisterBits dio_4_mapping = _RegisterBits_(_REG_DIO_MAPPING1+1, 6, 2);
 struct _RegisterBits dio_5_mapping = _RegisterBits_(_REG_DIO_MAPPING1+1, 4, 2);
 
 //Extras
+#define _REG_PAYLOAD_LENGTH 0x38
+struct _RegisterBits payload_length = _RegisterBits_(_REG_PAYLOAD_LENGTH, 0, 8);
 int8_t _tx_power;
 int8_t tx_power;
 bool high_power;
@@ -633,7 +601,7 @@ float rssi_get(){
     // receipt of the last packet.
     // """
     // # Read RSSI register and convert to value using formula in datasheet.
-    rssi = -spi_read_u8(_REG_RSSI_VALUE) / 2.0;
+    rssi = -((float)spi_read_u8(_REG_RSSI_VALUE)) / 2.0;
     return rssi;
 }
 float bitrate_get(){
@@ -811,7 +779,8 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
     int start = 0;
     int i=0;
     uint16_t n=0;
-    uint8_t fifo_length;
+    uint16_t fifo_length;
+    //IMPORTANTE: Segun el compilador CCS, el maximo de este array es aproximadamente 350 bytes, lo que llena la RAM al 98%
     char* packet= NULL;
     char fifo_len_str [4];
     if (timeout == 0)timeout = receive_timeout;
@@ -822,25 +791,29 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
         start = timeSec();
         while (!timed_out && !payload_ready()){
         usb_task();
-        delay_ms(100);
-        n+=100;
+        delay_ms(1);
+        n+=1;
             //delay(20);
             if (n >= (1000*xmit_timeout)){
-                println((char*)"Timed out",2);
+                println((char*)"Timed out",3);
                 timed_out = true;
                 }
         }
     }
    
     last_rssi = rssi_get();
+    print((char*)"\nSignal Strength: ",2);
+    sprintf(str,"%f",last_rssi);
+    println(str,2);
     // Enter idle mode to stop receiving other packets.
     idle();
      
     if (!timed_out){
         fifo_length = spi_read_u8(_REG_FIFO);
-        print((char*)"FIFO LEN: ",2);
-        sprintf(fifo_len_str,"%d",fifo_length);
-        println(fifo_len_str,2);
+        //fifo_length = packet_length;
+        print((char*)"FIFO LEN: ",3);
+        sprintf(fifo_len_str,"%lu",fifo_length);
+        println(fifo_len_str,3);
         //  # Handle if the received packet is too small to include the 4 byte
         // # RadioHead header and at least one byte of data --reject this packet and ignore it.
         if (fifo_length > 0){
@@ -882,8 +855,99 @@ char* receive(bool keep_listening=true,bool with_ack = false, float timeout = 0,
             }
         }
     }
-    
-    if (keep_listening)listen();        
+    if (keep_listening)listen();
     else idle();
     return (char*)packet;
+}
+
+//IMPORTANTE: La funcion es igual a la de adafruit, excepto porque retorna un array donde el primer valor es la longitud del array
+void receiveFast(bool keep_listening=true,bool with_ack = false, float timeout = 0,bool with_header = false){
+    // Wait to receive a packet from the receiver. If a packet is found the payload bytes
+    // are returned, otherwise None is returned (which indicates the timeout elapsed with no
+    // reception).
+    // If keep_listening is True (the default) the chip will immediately enter listening mode
+    // after reception of a packet, otherwise it will fall back to idle mode and ignore any
+    // future reception.
+    // All packets must have a 4 byte header for compatibilty with the
+    // RadioHead library.
+    // The header consists of 4 bytes (To,From,ID,Flags). The default setting will  strip
+    // the header before returning the packet to the caller.
+    // If with_header is True then the 4 byte header will be returned with the packet.
+    // The payload then begins at packet[4].
+    // If with_ack is True, send an ACK after receipt (Reliable Datagram mode)
+    // """
+    bool timed_out = false;
+    bool doneReading = false;
+    uint8_t i=0;
+    uint16_t n=0;
+
+    uint8_t B;
+    //IMPORTANTE: Segun el compilador CCS, el maximo de este array es aproximadamente 350 bytes, lo que llena la RAM al 98%
+    // char* packet= NULL;
+    if (timeout == 0)timeout = receive_timeout;
+    if (timeout!=0){
+        //readAllRegs();
+        //while(1){}
+        listen();
+        
+        while (!timed_out && !digitalRead(DIO_2) /*&& !payload_ready()*/){
+        usb_task();
+        delay_ms(100);
+        n+=100;
+            //delay(20);
+            if (n >= (1000*xmit_timeout)){
+                println((char*)"Timed out",2);
+                timed_out = true;
+                }
+        }
+    }
+   
+    last_rssi = rssi_get();
+    // Enter idle mode to stop receiving other packets.
+    // idle();
+    if(!timed_out){
+         //Comenzar a leer 
+         spiBegin();
+         //Write address
+         spi_write(_REG_FIFO & 0x7F); //Strip MSB byte to read
+         delay_us(100);  // Tiempo para que el esclavo responda
+         
+         while(!doneReading){
+            //Start reading bytes from the FIFO when FifoNotEmpty or FifoThreshold becomes set.
+            if (digitalRead(DIO_2) && !digitalRead(DIO_0)){//FIFO not empty and payload not ready
+               B = spi_read(0xFF);
+               printch(B,1);
+            }
+            //Suspend reading from the FIFO if FifoNotEmpty clears before all bytes of the message have been read
+            else if (!digitalRead(DIO_2) && !digitalRead(DIO_0)){//FIFO empty and payload not ready
+               spiEnd();
+               //Comenzar a leer 
+               spiBegin();
+               //Write address
+               spi_write(_REG_FIFO & 0x7F); //Strip MSB byte to read
+               delay_us(100);  // Tiempo para que el esclavo responda
+            }
+            //Continue to step 1 until PayloadReady or CrcOk fires
+            else if (digitalRead(DIO_0)){//PayloadReady
+               doneReading = true;
+               
+               //Read all remaining bytes from the FIFO either in Rx or Sleep/Standby mode
+               
+               spiEnd();
+               //Comenzar a leer 
+               spiBegin();
+               //Write address
+               spi_write(_REG_FIFO & 0x7F); //Strip MSB byte to read
+               delay_us(100);  // Tiempo para que el esclavo responda
+               while (!digitalRead(DIO_2)) {//FIFO Not Empty
+                  B = spi_read(0xFF);
+                  printch(B,1);
+               }
+               spiEnd();
+
+            }
+         }
+    }
+    if (keep_listening)listen();
+    else idle();
 }

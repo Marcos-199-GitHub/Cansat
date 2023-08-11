@@ -17,7 +17,7 @@ Type=4
 forcecoff=0
 
 [ProjectLog]
-Days=13
+Days=17
 D1=21-05-2023
 D1_L=12
 D1_L1=[54507]Project Opened.
@@ -31,7 +31,7 @@ D1_L8=[74562]Started Editing.
 D1_L9=[75388]Stopped Editing.
 D1_L10=[81117]Started Editing.
 D1_L11=[81483]Stopped Editing.
-TotalEdit=204
+TotalEdit=480
 TotalDebug=0
 D1_E=70
 D1_D=0
@@ -139,7 +139,7 @@ D12_L9=[78592]Stopped Editing.
 D13=01-07-2023
 D13_E=41
 D13_D=0
-D13_L=18
+D13_L=22
 D13_L1=[312]Project Closed.
 D13_L2=[36896]Project Opened.
 D13_L3=[37178]Started Editing.
@@ -158,36 +158,126 @@ D13_L15=[62666]Started Editing.
 D13_L16=[64956]Stopped Editing.
 D13_L17=[66515]Started Editing.
 D13_L18=[67248]Stopped Editing.
+D13_L19=[69684]Started Editing.
+D13_L20=[70034]Stopped Editing.
+D13_L21=[83132]Started Editing.
+D13_L22=[83688]Stopped Editing.
+D14=02-07-2023
+D14_L=13
+D14_L1=[801]Started Editing.
+D14_L2=[2394]Stopped Editing.
+D14_E=142
+D14_D=0
+D14_L3=[2394]Project Closed.
+D14_L4=[35036]Project Opened.
+D14_L5=[35132]Started Editing.
+D14_L6=[35615]Stopped Editing.
+D14_L7=[37998]Started Editing.
+D14_L8=[40794]Stopped Editing.
+D14_L9=[47787]Started Editing.
+D14_L10=[49515]Stopped Editing.
+D14_L11=[49744]Started Editing.
+D14_L12=[50049]Stopped Editing.
+D14_L13=[61314]Project Closed.
+D15=01-08-2023
+D15_L=4
+D15_L1=[50065]Project Opened.
+D15_L2=[50104]Started Editing.
+D15_L3=[50408]Stopped Editing.
+D15_E=1
+D15_D=0
+D15_L4=[71675]Project Closed.
+D16=10-08-2023
+D16_L=28
+D16_L1=[66556]Project Opened.
+D16_L2=[70628]Started Editing.
+D16_L3=[70851]Stopped Editing.
+D16_E=4
+D16_D=0
+D16_L4=[70851]Project Closed.
+D16_L5=[70911]Project Opened.
+D16_L6=[70928]Project Closed.
+D16_L7=[71079]Project Opened.
+D16_L8=[71128]Started Editing.
+D16_L9=[72483]Stopped Editing.
+D16_L10=[72625]Started Editing.
+D16_L11=[74931]Stopped Editing.
+D16_L12=[75746]Started Editing.
+D16_L13=[76063]Stopped Editing.
+D16_L14=[78079]Started Editing.
+D16_L15=[78394]Stopped Editing.
+D16_L16=[80380]Started Editing.
+D16_L17=[81202]Stopped Editing.
+D16_L18=[81263]Started Editing.
+D16_L19=[81768]Stopped Editing.
+D16_L20=[81815]Started Editing.
+D16_L21=[82490]Stopped Editing.
+D16_L22=[82519]Started Editing.
+D16_L23=[82827]Stopped Editing.
+D16_L24=[84096]Started Editing.
+D16_L25=[84459]Stopped Editing.
+D16_L26=[84479]Started Editing.
+D16_L27=[85299]Stopped Editing.
+D16_L28=[86380]Started Editing.
+D17=11-08-2023
+D17_L=19
+D17_L1=[425]Stopped Editing.
+D17_L2=[836]Started Editing.
+D17_L3=[2648]Stopped Editing.
+D17_L4=[2717]Started Editing.
+D17_L5=[3328]Stopped Editing.
+D17_L6=[3687]Started Editing.
+D17_L7=[4963]Stopped Editing.
+D17_E=129
+D17_D=0
+D17_L8=[5948]Project Closed.
+D17_L9=[36363]Project Opened.
+D17_L10=[36416]Started Editing.
+D17_L11=[36728]Stopped Editing.
+D17_L12=[38120]Started Editing.
+D17_L13=[38678]Stopped Editing.
+D17_L14=[39392]Started Editing.
+D17_L15=[40301]Stopped Editing.
+D17_L16=[40464]Started Editing.
+D17_L17=[41228]Stopped Editing.
+D17_L18=[41286]Started Editing.
+D17_L19=[43960]Stopped Editing.
 
 [ExtraIncludes]
-Count=3
-1=receptor=i:\cansat\nueva carpeta\rfm69\receptor\arduport\utils.h
-2=receptor=i:\cansat\nueva carpeta\rfm69\receptor\arduport\adafruit_rfm69_registers.h
-3=receptor=i:\cansat\nueva carpeta\rfm69\receptor\arduport\afadruit_rfm69.h
+Count=2
+1=receptor=i:\cansat\cansat\assets\rfm69\receptor\arduport\plain_rfm.h
+2=receptor=i:\cansat\cansat\assets\rfm69\receptor\arduport\barerfm69_const.h
+3=receptor=i:\cansat\nueva carpeta\rfm69\receptor\arduport\plainrfm.h
+4=receptor=i:\cansat\nueva carpeta\rfm69\receptor\arduport\plainrfm.h
+5=receptor=i:\cansat\nueva carpeta\rfm69\receptor\arduport\plainrfm.h
 
 [Opened Files]
 1=Receptor.c
-t1=99
+t1=225
 2=Receptor.h
-t2=38
-3=utils.h
-t3=5
+t2=225
+3=plain_rfm.h
+t3=234
 4=afadruit_rfm69.h
-t4=813
-Count=4
-5=C:\Program Files (x86)\PICC\Devices\18LF4550.h
-t5=1
-6=afadruit_rfm69.h
-t6=509
-7=afadruit_rfm69.h
-t7=197
-8=afadruit_rfm69.h
-t8=193
+t4=807
+Count=6
+5=utils.h
+t5=87
+6=adafruit_rfm69_registers.h
+t6=1
+7=barerfm69_const.h
+t7=1
+8=C:\Program Files (x86)\PICC\Drivers\usb_hw_layer.h
+t8=1
+9=C:\Program Files (x86)\PICC\Drivers\usb_desc_cdc.h
+t9=187
+10=O:\Repositorio\Cansat\Assets\RFM69\Receptor\ArduPort\plainRFM.h
+t10=1
 [Receptor.c]
 Type=4
 
 [defines]
-buildcount=69
+buildcount=134
 [Units]
 Count=1
 1=Receptor (main)
