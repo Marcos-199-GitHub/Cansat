@@ -31,7 +31,7 @@ import numpy as np
 
 
 
-DELAY = 0.075
+DELAY = 0.001
 SHT30_ADDRESS = 0x44
 INIT_TIME = time.time()
 PHOTO_CMD = "streamer -d /dev/video0 -s 320x240 -o "
@@ -268,18 +268,18 @@ while True:
     while (c < len(utf)):
         rfm69.send(rf_data[c:c+59])
         end = time.time()
-        print (f"Enviados 60 bytes en {(end-start):.2f} sec, ({(60/(end-start)):.2f}) kbs")
+        #print (f"Enviados 60 bytes en {(end-start):.2f} sec, ({(60/(end-start)):.2f}) kbps")
         start = end
         c+=58
         time.sleep(DELAY)
     # rfm69.send(bytes([10,13]))
     end = time.time()
-    print(f"Enviados {size_kb} kilobytes de datos por RF y Serial en {(end-start):.3f} sec")
+    print(f"Enviados {size_kb} kilobytes de datos por RF y Serial en {(end-start):.3f} sec, {((size_kb)/(end-start)):.3f} kbps")
 
     print(utf)
     display.fill(0)
     display.text(f"{n} paquetes enviados",0,0,1)
-    display.text(f" ({total_kb}) kb",0,10,1)
+    display.text(f" ({total_kb:.2f}) kb",0,10,1)
 
     display.show()
     f.write(utf)
