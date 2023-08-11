@@ -68,3 +68,4 @@ UserSettings/Layouts/default-2021.dwlt
 
 /Assets/RFM69/Receptor/ArduPort/__history/*
 Assets/Graficas Python/Calibracion de los IMU/graficas.py
+*.meta
