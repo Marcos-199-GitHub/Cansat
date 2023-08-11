@@ -7,7 +7,7 @@ import time
 import json
 
 
-cerialconleche = serial.Serial('COM3', 9600)  
+cerialconleche = serial.Serial('COM8', 9600)  
 
 #diccionario = {'p': 0, 'h': 0, 't' : 0, 'hdehumildad': 0, '.': 0}
 Presion = np.array([])
@@ -32,6 +32,10 @@ diccionario = {
     "Wx":"0", #GyroX °/s
     "Wy":"0", #GyroY °/s
     "Wz":"0", #GyroZ °/s
+    "head": "0",
+    "Yaw": "0",
+    "Pitch":"0",
+    "Roll": "0",
 
 }
 def crear_esfera(x,y,z):
@@ -52,6 +56,7 @@ while True :
         try:
             line = str(line)[2:-3]
             line = line.replace("'",'"')
+            print (line)
             diccionario = json.loads(line)
         except:
             #print (cerialconagua)
