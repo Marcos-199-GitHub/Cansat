@@ -7,3 +7,6 @@
 [submodule "Assets/Graficas Python/Calibracion de los IMU/KalmanFilter"]
 	path = Assets/Graficas Python/Calibracion de los IMU/KalmanFilter
 	url = https://github.com/TKJElectronics/KalmanFilter
+[submodule "Assets/RFM69/Receptor/ArduPort/plainRFM69"]
+	path = Assets/RFM69/Receptor/ArduPort/plainRFM69
+	url = https://github.com/iwanders/plainRFM69
