@@ -31,7 +31,7 @@ import numpy as np
 
 
 
-
+DELAY = 0.075
 SHT30_ADDRESS = 0x44
 INIT_TIME = time.time()
 PHOTO_CMD = "streamer -d /dev/video0 -s 320x240 -o "
@@ -95,6 +95,9 @@ CS = DigitalInOut(board.CE1)
 RESET = DigitalInOut(board.D25)
 spi = busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO)
 rfm69 = adafruit_rfm69.RFM69(spi, CS, RESET, 433.0,sync_word=bytes([0xAA,0x2D,0xD4]))
+# Potencia de la señal en dbm, el valor maximo para un RFM69HCW es de 20, con mayor consumo, para un RFM69 es 17
+rfm69._tx_power = 17
+rfm69.tx_power = 17
 prev_packet = None
 # Optionally set an encryption key (16 byte AES key). MUST match both
 # on the transmitter and receiver (or be set to None to disable/the default).
@@ -170,6 +173,7 @@ diccionario = {
     "Yaw":"0",
     "Pitch":"0",
     "Roll":"0",
+    "Dt":"0"
 
 
 }
@@ -216,40 +220,41 @@ while True:
     F.Magnetometer(MM,KPitch.angle,KRoll.angle)
 
 
-    KYaw.getAngle(F.yaw,MM,delta)
+    KYaw.getAngle(F.yaw,GG[2,0],delta)
     # player.rotation_x = F.pitch
     # player.rotation_y = F.roll
     print (f"A_pitch: {F.pitch:.2f}, A_Roll: {F.roll:.2f}....Pitch: {KPitch.angle:.2f}, Roll: {KRoll.angle:.2f}, dt: {delta:.4f}")
 
 
 
-    diccionario["T1"] = f"{bmp280.temperature}"
-    diccionario["T2"] = f"{sht30.temperature[0]}"
-    diccionario["T3"] = f"{mpu.tempC}"
+    diccionario["T1"] = f"{bmp280.temperature:.2f}"
+    diccionario["T2"] = f"{sht30.temperature[0]:.2f}"
+    diccionario["T3"] = f"{mpu.tempC:.2f}"
 
-    diccionario["T"] = f"{time.time()-INIT_TIME}"
+    diccionario["T"] = f"{(time.time()-INIT_TIME):.3f}"
 
-    diccionario["A"] = f"{bmp280.altitude}"
-    diccionario["P"] = f"{bmp280.pressure}"
-    diccionario["H"] = f"{sht30.relative_humidity[0]}"
+    diccionario["A"] = f"{bmp280.altitude:.2f}"
+    diccionario["P"] = f"{bmp280.pressure:.2f}"
+    diccionario["H"] = f"{sht30.relative_humidity[0]:.2f}"
 
-    diccionario["Ax"] = f"{mpu.accel[0]}"
-    diccionario["Ay"] = f"{mpu.accel[1]}"
-    diccionario["Az"] = f"{mpu.accel[2]}"
+    diccionario["Ax"] = f"{mpu.accel[0]:.2f}"
+    diccionario["Ay"] = f"{mpu.accel[1]:.2f}"
+    diccionario["Az"] = f"{mpu.accel[2]:.2f}"
 
-    diccionario["Wx"] = f"{mpu.gyro[0]}"
-    diccionario["Wy"] = f"{mpu.gyro[1]}"
-    diccionario["Wz"] = f"{mpu.gyro[2]}"
+    diccionario["Wx"] = f"{mpu.gyro[0]:.3f}"
+    diccionario["Wy"] = f"{mpu.gyro[1]:.3f}"
+    diccionario["Wz"] = f"{mpu.gyro[2]:.3f}"
 
-    diccionario["Mx"] = f"{magnet[0]}"
-    diccionario["My"] = f"{magnet[1]}"
-    diccionario["Mz"] = f"{magnet[2]}"
+    diccionario["Mx"] = f"{magnet[0]:.3f}"
+    diccionario["My"] = f"{magnet[1]:.3f}"
+    diccionario["Mz"] = f"{magnet[2]:.3f}"
 
-    diccionario["head"] = f"{magnet[3]}"
+    diccionario["head"] = f"{magnet[3]:.3f}"
 
-    diccionario["Yaw"] = f"{KYaw.angle}"
-    diccionario["Pitch"] = f"{KPitch.angle}"
-    diccionario["Roll"] = f"{KRoll.angle}"
+    diccionario["Yaw"] = f"{KYaw.angle:.2f}"
+    diccionario["Pitch"] = f"{KPitch.angle:.2f}"
+    diccionario["Roll"] = f"{KRoll.angle:.2f}"
+    diccionario["Dt"] = f"{(1000*(delta)):.1f}"
 
     
     utf = f"{diccionario}\n\r"
@@ -259,11 +264,17 @@ while True:
 
     rf_data = bytes(utf,"utf-8")
     c = 0
+    start = time.time()
     while (c < len(utf)):
         rfm69.send(rf_data[c:c+59])
-        c+=59
-    rfm69.send(bytes([10,13]))
-    print(f"Enviados {size_kb} kilobytes de datos por RF y Serial")
+        end = time.time()
+        print (f"Enviados 60 bytes en {(end-start):.2f} sec, ({(60/(end-start)):.2f}) kbs")
+        start = end
+        c+=58
+        time.sleep(DELAY)
+    # rfm69.send(bytes([10,13]))
+    end = time.time()
+    print(f"Enviados {size_kb} kilobytes de datos por RF y Serial en {(end-start):.3f} sec")
 
     print(utf)
     display.fill(0)
