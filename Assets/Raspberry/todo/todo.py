@@ -1,3 +1,4 @@
+
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
@@ -29,13 +30,18 @@ sys.path.append('../../Graficas Python/Calibracion de los IMU')
 import fusion
 import numpy as np
 
+#GPS
+from pynmeagps import NMEAReader
+from ast import parse
 
+#Colores
+from colorama import Fore, Back, Style
 
-DELAY = 0.001
+DELAY = 0.00
 SHT30_ADDRESS = 0x44
 INIT_TIME = time.time()
 PHOTO_CMD = "streamer -d /dev/video0 -s 320x240 -o "
-
+FORMATO = 1 #0 para json, 1 para tamaño optimizado
 # Create sensor object, communicating over the board's default I2C bus
 i2c = board.I2C()  # uses board.SCL and board.SDA
 # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
@@ -98,6 +104,7 @@ rfm69 = adafruit_rfm69.RFM69(spi, CS, RESET, 433.0,sync_word=bytes([0xAA,0x2D,0x
 # Potencia de la señal en dbm, el valor maximo para un RFM69HCW es de 20, con mayor consumo, para un RFM69 es 17
 rfm69._tx_power = 17
 rfm69.tx_power = 17
+#rfm69.bitrate = 300000
 prev_packet = None
 # Optionally set an encryption key (16 byte AES key). MUST match both
 # on the transmitter and receiver (or be set to None to disable/the default).
@@ -106,7 +113,8 @@ prev_packet = None
 
 
 #Serial
-bus = serial.Serial('/dev/serial0',baudrate=9600)
+#GPS
+gps = serial.Serial('/dev/serial0',baudrate=9600)
 
 
 def bmm_update():
@@ -153,7 +161,7 @@ start = time.time();
 #{"T1":"temp bmp","P":"press","A":"altitude","T":"tiempo","h": "humedad relativa", "T2":"Temperatura del sht", "Ax": "AccX","Ay": "AccY","Az": "AccZ","Wx":"GyroX" ....}
 
 diccionario = {
-    "T1":"0", # temp bmp °C
+    #"T1":"0", # temp bmp °C
     "T2":"0", # temp sht °C
     "T3":"0", # temp mpu °C
     "P":"0", # Press hPa
@@ -169,25 +177,52 @@ diccionario = {
     "Mx":"0", #MagnetX uT
     "My":"0", #MagnetY uT
     "Mz":"0", #MagnetZ uT
-    "head":"0", #Magnet Heading °
-    "Yaw":"0",
-    "Pitch":"0",
-    "Roll":"0",
-    "Dt":"0"
-
+    "He":"0", #Magnet Heading °
+    "Y":"0", #Yaw
+    "P":"0", #Pitch 
+    "R":"0", #Roll
+    "Dt":"0", #Delta T del filtro
+    "Lt":"0", #Latitud
+    "Lg":"0", #Longitud
+    "Di":"NW", #Indica la direccion para la latitud y longitud respectivamente
+    "Km":"0", #Velocidad respecto al suelo
+    "DP":"0", #Dilucion de precision del GPS
 
 }
 f = open("data.log","a")
-bus.write(bytes(b"Serial Correct\n"))
 
 n=0
 total_kb=0
+nmr = NMEAReader(gps)
+
+globalStart = time.time()
 while True:
     n+=1
+    s=time.time()
     mpu.update()
     camera_update()
     magnet = bmm_update()
     foto = camera_update()
+    mm = bmm_update()
+    e = time.time()
+    gps_dict = {}
+#    print (gps.readline())
+    (gps_raw_data, gps_parsed_data) = nmr.read()
+    if (str(gps_raw_data).find("$GPRMC") > 0):
+        gps_dict = gps_parsed_data.__dict__
+        print(f"{Fore.CYAN}{gps_dict}{Style.RESET_ALL}")
+        #print(gps_parsed_data.__dict__["alt"])
+    if (str(gps_raw_data).find("$GPVTG") > 0):
+        gps_dict = gps_parsed_data.__dict__
+        print(f"{Fore.CYAN}{gps_dict}{Style.RESET_ALL}")
+        #print(parsed_data.__dict__["alt"])
+    if (str(gps_raw_data).find("$GPGSA") > 0):
+        gps_dict = gps_parsed_data.__dict__
+        print(f"{Fore.CYAN}{gps_dict}{Style.RESET_ALL}")
+        #print(parsed_data.__dict__["alt"])
+    print (f"\n{Fore.RED}{(e-s):.2f} s en actualizar sensores y gps{Style.RESET_ALL}")
+    s = e
+
     if (foto != ""):
         try:
             #foto = camera_update()
@@ -206,7 +241,7 @@ while True:
     end = time.time()
     delta = end-start
     start = end
-    mm = bmm_update()
+
     MM = np.array([[mm[1]],[mm[2]],[mm[0]]])
     ACC = np.array([[mpu.accel[0]],[mpu.accel[1]],[mpu.accel[2]]])
     GG = np.array ([[mpu.gyro[0]],[mpu.gyro[1]],[mpu.gyro[2]]])
@@ -221,20 +256,23 @@ while True:
 
 
     KYaw.getAngle(F.yaw,GG[2,0],delta)
-    # player.rotation_x = F.pitch
-    # player.rotation_y = F.roll
     print (f"A_pitch: {F.pitch:.2f}, A_Roll: {F.roll:.2f}....Pitch: {KPitch.angle:.2f}, Roll: {KRoll.angle:.2f}, dt: {delta:.4f}")
 
-
-
-    diccionario["T1"] = f"{bmp280.temperature:.2f}"
+    
+    e = time.time()
+    print (f"{Fore.RED}{(e-s):.2f} s en actualizar angulos{Style.RESET_ALL}")
+    s = e
+    #Nota: tomar medidas del bmp toma mucho tiempo
+    pressure = bmp280.pressure
+    altitude = 44330 * (1.0 - math.pow(pressure / bmp280.sea_level_pressure, 0.1903))
+    ##diccionario["T1"] = f"{bmp280.temperature:.2f}"
     diccionario["T2"] = f"{sht30.temperature[0]:.2f}"
     diccionario["T3"] = f"{mpu.tempC:.2f}"
 
     diccionario["T"] = f"{(time.time()-INIT_TIME):.3f}"
 
-    diccionario["A"] = f"{bmp280.altitude:.2f}"
-    diccionario["P"] = f"{bmp280.pressure:.2f}"
+    diccionario["A"] = f"{altitude:.2f}"
+    diccionario["P"] = f"{pressure:.2f}"
     diccionario["H"] = f"{sht30.relative_humidity[0]:.2f}"
 
     diccionario["Ax"] = f"{mpu.accel[0]:.2f}"
@@ -249,75 +287,93 @@ while True:
     diccionario["My"] = f"{magnet[1]:.3f}"
     diccionario["Mz"] = f"{magnet[2]:.3f}"
 
-    diccionario["head"] = f"{magnet[3]:.3f}"
+    diccionario["He"] = f"{magnet[3]:.3f}"
 
-    diccionario["Yaw"] = f"{KYaw.angle:.2f}"
-    diccionario["Pitch"] = f"{KPitch.angle:.2f}"
-    diccionario["Roll"] = f"{KRoll.angle:.2f}"
+    diccionario["Y"] = f"{KYaw.angle:.2f}"
+    diccionario["P"] = f"{KPitch.angle:.2f}"
+    diccionario["R"] = f"{KRoll.angle:.2f}"
+
     diccionario["Dt"] = f"{(1000*(delta)):.1f}"
 
-    
-    utf = f"{diccionario}\n\r"
-    bus.write(utf.encode())
+    try:
+        diccionario["Lt"] = f"{(gps_dict['lat']):.3f}"
+        diccionario["Lg"] = f"{(gps_dict['lon']):.3f}"
+        diccionario["Di"] = f"{gps_dict['NS']}{gps_dict['EW']}"
+    except:
+        pass
+    try:
+        diccionario["Km"] = f"{(gps_dict['sogk']):.2f}"
+    except:
+        pass
+
+    try:
+        diccionario["DP"] = f"{(gps_dict['PDOP']):.2f}"
+    except:
+        pass
+        
+
+    e = time.time()
+
+    print(f"{Fore.RED}{(e-s):.3f} s en actualizar el diccionario{Style.RESET_ALL}")
+    s = e
+    utf = ""
+    if FORMATO == 0:
+        utf = f"{diccionario}\n\r"
+    elif FORMATO == 1:
+        ut = f"{float(diccionario['T2'])},{float(diccionario['T3'])},{float(diccionario['T'])},"
+        ut+= f"{float(diccionario['A'])},{float(diccionario['P'])},{float(diccionario['H'])},"
+        ut+= f"{float(diccionario['Ax'])},{float(diccionario['Ay'])},{float(diccionario['Az'])},"
+        ut+= f"{float(diccionario['Wx'])},{float(diccionario['Wy'])},{float(diccionario['Wz'])},"
+        ut+= f"{float(diccionario['Mx'])},{float(diccionario['My'])},{float(diccionario['Mz'])},"
+        ut+= f"{float(diccionario['He'])},{float(diccionario['Y'])},{float(diccionario['P'])},"
+        ut+= f"{float(diccionario['R'])},{float(diccionario['Dt'])},{float(diccionario['Lt'])},"
+        ut+= f"{float(diccionario['Lg'])},{diccionario['Di']},{float(diccionario['Km'])},{float(diccionario['DP'])}"
+
+        utf = "{" + ut + "}\n\r"
+
+
+
+
+#        ut+= f"{float(diccionario['P'])}}"
+        print (ut)
     size_kb = len(utf)/1024
     total_kb += size_kb
 
     rf_data = bytes(utf,"utf-8")
     c = 0
-    start = time.time()
-    while (c < len(utf)):
+
+    e = time.time()
+
+    print(f"{Fore.RED}{(e-s):.2f} s en convertir a bytes{Style.RESET_ALL}")
+
+    s = e
+    len_utf = len(utf)
+    while (c < len_utf):
+        ss  = time.time()
         rfm69.send(rf_data[c:c+59])
-        end = time.time()
-        #print (f"Enviados 60 bytes en {(end-start):.2f} sec, ({(60/(end-start)):.2f}) kbps")
-        start = end
+        #e = time.time()
+        #print (f"Enviados 60 bytes en {(1000*(e-ss)):.1f} ms, ({((60/1024)/(e-ss)):.2f}) Kb/s")
+        #s = e
         c+=58
-        time.sleep(DELAY)
+        #time.sleep(DELAY)
     # rfm69.send(bytes([10,13]))
-    end = time.time()
-    print(f"Enviados {size_kb} kilobytes de datos por RF y Serial en {(end-start):.3f} sec, {((size_kb)/(end-start)):.3f} kbps")
+    e = time.time()
+    d = e-s
+    print(f"{Fore.RED}{(e-s):.3f} s en enviar por RF{Style.RESET_ALL}")
 
-    print(utf)
-    display.fill(0)
-    display.text(f"{n} paquetes enviados",0,0,1)
-    display.text(f" ({total_kb:.2f}) kb",0,10,1)
+    print(f"{Style.BRIGHT}Enviados {size_kb:.3f} Kb de datos por RF en {(d):.3f} s, {((size_kb)/(d)):.3f} Kb/s{Style.RESET_ALL}")
+    s = e
+    print(f"{Fore.GREEN}{utf}{Style.RESET_ALL}",end = "")
+    #display.fill(0)
+    #display.text(f"{n} paquetes ({total_kb:.2f}Kb)",0,0,1)
+    #display.text(f"",0,10,1)
+    #display.text(f"{((size_kb)/(d)):.0f}Kb/s,{(total_kb/(time.time()-globalStart)):.2f} Kb/s avg",0,10,1)
 
-    display.show()
+    #display.show()
+    e = time.time()
+    print(f"{Fore.RED}{(e-s):.2f} s en el display{Style.RESET_ALL}")
+    s = e
     f.write(utf)
-
-
-    # print("\nTemperature: %0.1f C" % bmp280.temperature)
-    # print("Pressure: %0.1f hPa" % bmp280.pressure)
-    # print("Altitude = %0.2f meters" % bmp280.altitude)
-
-
-
-
-
-# # i2c = board.STEMMA_I2C()  # For using the built-in STEMMA QT connector on a microcontroller
-# sensor = adafruit_sht31d.SHT31D(i2c)
-
-# print("\033[1mSensor\033[0m = SHT31-D")
-# print("\033[1mSerial Number\033[0m = ", sensor.serial_number, "\n")
-# sensor.frequency = adafruit_sht31d.FREQUENCY_1
-# sensor.mode = adafruit_sht31d.MODE_PERIODIC
-# while True:
-#     for i in range(3):
-#         print("Please wait...", end="\r")
-#         if i == 2:
-#             sensor.heater = True
-#         if i == 1:
-#             time.sleep(4)
-#             print("\033[91mCache half full.\033[0m")
-#         else:
-#             time.sleep(8)
-#         if sensor.heater:
-#             print("\033[1mHeater:\033[0m On    ")
-#             sensor.heater = False
-#         print("\033[1mTemperature:\033[0m ", sensor.temperature)
-#         if not sensor.heater:
-#             print("\033[1mHeater:\033[0m Off")
-#         print("\033[1mHumidity:\033[0m ", sensor.relative_humidity, "\n")
-
-#     time.sleep(2)
-# sensor.mode = adafruit_sht31d.MODE_SINGLE
+    e = time.time()
+    print(f"{Fore.RED}{(e-s):.2f} s en actualizar el archivo log{Style.RESET_ALL}")
 
