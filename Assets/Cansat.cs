@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Drawing;
 using System.IO;
 using System.IO.Ports;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using UnityEditor.VersionControl;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Cansat : MonoBehaviour{
 
@@ -23,10 +26,21 @@ public class Cansat : MonoBehaviour{
     public static bool rotar = false;
 
     private static float tiempo;
+    public string puerto = "COM5";
+    public int baud = 57600;
+
+    private static int imgLength = 0;
+    private static bool isImage = false;
+    private static Texture2D receivedImageTexture;
+    public Image imagen;
+    public static byte[] imageBytes;
+    public static bool imageUpdated = false;
+
 
     private void Start(){
+        receivedImageTexture = new Texture2D(10, 10);
         reader                  = new StreamReader( PATH );
-        _serialPort             = new SerialPort( "COM5", 57600 );
+        _serialPort             = new SerialPort( puerto, baud );
         _serialPort.ReadTimeout = 500;
         readThread.Start();
     }
@@ -38,6 +52,17 @@ public class Cansat : MonoBehaviour{
             rotar = false;
         }
         //transform.position += mpu6050.getDeltaPosition();
+
+        if (imageUpdated)
+        {
+            imageUpdated = false;
+            DataRecived.updateImage();
+            Sprite sprite = Sprite.Create(
+                receivedImageTexture, new Rect(0, 0, receivedImageTexture.width, receivedImageTexture.height), Vector2.one * 0.5f
+            );
+
+            imagen.sprite = sprite;
+        }
     }
 
     private void OnDisable(){
@@ -85,13 +110,77 @@ public class Cansat : MonoBehaviour{
         return message;
     }
 
+    public static byte[] getDataImg(int method = 0)
+    {
+
+        byte[] imageData = new byte[imgLength];
+            if (method == 0)
+            {             //Serial
+            if (!_serialPort.IsOpen)
+            { //comprobamos que el puerto esta abierto
+                Debug.Log("Serial is closed");
+                try
+                {
+                    Debug.Log("Tratando de abrir puerto serial");
+                    _serialPort.Open();
+                    Debug.Log("Listo");
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("Error");
+                    Debug.Log(e);
+                }
+
+            }
+            else
+            {
+                Debug.Log("Leyendo");
+                try
+                {
+                    int x = 0;
+                    int maxIter = 1000;
+                    int iter;
+                    for (int i=0;i<imgLength;i++)
+                    {
+                        iter = 0;
+
+                        do { 
+                            x = _serialPort.ReadByte();
+                            iter++;
+                            if (iter >= maxIter) Debug.LogError("Excedido el tiempo de espera para el serial !!");
+                        }
+                        while (x == -1);
+
+                        imageData[i] = (byte)x;
+
+                    }
+                    Debug.Log(String.Format("Buffer de {0} bytes leido",imageData.Length));
+                    Debug.Log(BitConverter.ToString(imageData));
+
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                }
+            }
+        }
+        return imageData;
+        
+    }
     private static float tprevious; //s
 
     public static void Read(){
         Debug.Log( "Thread de lectura iniciado" );
         while( true ){
             try{
-                dataRecived.updateData( getDataString() );
+                if (!isImage) dataRecived.updateData(getDataString());
+                //else dataRecived.updateImage(getDataImg());
+                else { 
+                    imageBytes = getDataImg();
+                    imageUpdated = true;
+                    Debug.Log("Recibida una imagen");
+                    isImage = false;
+                }
                 rotar = true;
             }
             catch( TimeoutException ){
@@ -109,8 +198,22 @@ public class Cansat : MonoBehaviour{
         public  float   Humidity;
         public  Vector3 Acc       = new Vector3();
         public  Vector3 Gyro      = new Vector3();
+        //Nuevos
+        public  Vector3 Magnet    = new Vector3();
+        public float Heading = 0f;
+        public float Yaw = 0f;
+        public float Pitch = 0f;
+        public float Roll = 0f;
+        public float CansatDt = 0f;
+        public float Latitud = 0f;
+        public float Longitud = 0f;
+        public float Speed = 0f;
+        public float PDOP = 0f;
+
         private float   PrevTime  = 0.0f;
         public  float   DeltaTime = 0.05f;
+
+        public string rawMessage = "";
 
         private void restart(){
             T[0]     = 0;
@@ -122,7 +225,17 @@ public class Cansat : MonoBehaviour{
             Humidity = 0;
             Acc      = new Vector3();
             Gyro     = new Vector3();
-        }
+            Magnet   = new Vector3();
+            Heading  = 0f;
+            Yaw      = 0f;
+            Pitch    = 0f;
+            Roll     = 0f;
+            CansatDt = 0f;
+            Latitud  = 0f;
+            Longitud = 0f;
+            Speed    = 0f;
+            PDOP     = 0f;
+    }
 
         public void updateData( string message ){
             //Debug.Log( message );
@@ -132,64 +245,112 @@ public class Cansat : MonoBehaviour{
                 restart();
                 return;
             }
+            rawMessage = message;
+            message = message.Substring( 1, message.Length - 2 ).Replace( " ", "" );//Quitar las llaves y salto de linea
+            string[] data = message.Split( ',' ); 
 
-            message = message.Substring( 1, message.Length - 3 ).Replace( " ", "" );//Quitar las llaves y salto de linea
-            string[] data = message.Split( ',' ); //" 'T1': '123215'", " 'T2': '126843'"
+            //Estaba mejor la otra implementacion, porque ocupa menos ancho de banda y asi recibe mensajes mas rapido
+            //Sorry :')
+            //Formato: 
 
-            for( int i = 0; i < data.Length; i++ ){
-                string[] current = data[i].Split( ':' );                             //"'T1'", "'123215'"
-                string   key     = current[0].Substring( 1, current[0].Length - 2 ); //Quitar las comillas
-                string   val     = current[1].Substring( 1, current[1].Length - 2 ); //Quitar las comillas
-                //Debug.Log( current[0] + ":" +current[1] + " -> "+key + ":" + val );
-                float valor = float.Parse( val );
+            /*
+             {T2,T3,T,A,P,H,Ax,Ay,Az,Wx,Wy,Wz,Mx,My,Mz,He,Y,P,R,Dt,Lt,Lg,Km,DP,Im}
 
-                switch( key ){
-                    //Keys: T1, T2, T3, P, A, T, H, Ax, Ay, Az, Wx, Wy, Wz,
-                    case "1":
-                        T[0] = valor;
-                        break;
-                    case "T2":
-                        T[1] = valor;
-                        break;
-                    case "T3":
-                        T[2] = valor;
-                        break;
-                    case "P":
-                        Pressure = valor;
-                        break;
-                    case "A":
-                        Altitude = valor;
-                        break;
-                    case "T":
-                        PrevTime  = Time;
-                        Time      = valor;
-                        DeltaTime = Time - PrevTime;
-                        break;
-                    case "H":
-                        Humidity = valor;
-                        break;
-                    case "Ax":
-                        Acc.x = valor;
-                        break;
-                    case "Ay":
-                        Acc.y = valor;
-                        break;
-                    case "Az":
-                        Acc.z = valor;
-                        break;
-                    case "Wx":
-                        Gyro.x = valor;
-                        break;
-                    case "Wy":
-                        Gyro.y = valor;
-                        break;
-                    case "Wz":
-                        Gyro.z = valor;
-                        break;
-                }
+            0,T2 temperatura del sht °C
+            1,T3 temperatura del mpu °C
+            2,P Presion hPa
+            3,A Altitud m
+            4,T Tiempo (en segundos con respecto al EPOCH )s
+            5,H Humedad relativa %
+            6,Ax AccelX m/s2
+            7,Ay AccelY m/s2
+            8,Az AccelZ m/s2
+            9,Wx GyroX °/s
+            10,Wy GyroY °/s
+            11,Wz GyroZ °/s
+            12,Mx MagnetX uT
+            13,My MagnetY uT
+            14,Mz MagnetZ uT
+            15,He Direccion a la que apunta la brujula °
+            16,Y  Yaw °
+            17,P  Pitch °
+            18,R  Roll °
+            19,Dt Delta T del filtro s
+            20,Lt Latitud °
+            21,Lg Longitud °
+            22,Km Velocidad respecto al suelo Km/h
+            23,DP Dilucion de precision del GPS
+            24,Im Si el proximo mensaje va a ser una imagen, su valor es el tamaño en bytes, si no, es 0
+             
+             */
+
+
+            //T[0] = 0;
+
+            float _x, _y, _z;
+            int b = 0;
+
+            try
+            {
+                float.TryParse(data[0], out T[1]);
+                float.TryParse(data[1], out T[2]);
+                float.TryParse(data[2], out Time);
+                float.TryParse(data[3], out Pressure);
+                float.TryParse(data[4], out Humidity);
+                float.TryParse(data[5], out Heading);
+
+                float.TryParse(data[6], out _x);
+                float.TryParse(data[7], out _y);
+                float.TryParse(data[8], out _z);
+                Acc = new Vector3(_x, _y, _z);
+                float.TryParse(data[9], out _x);
+                float.TryParse(data[10], out _y);
+                float.TryParse(data[11], out _z);
+                Gyro = new Vector3(_x, _y, _z);
+                float.TryParse(data[12], out _x);
+                float.TryParse(data[13], out _y);
+                float.TryParse(data[14], out _z);
+                Magnet = new Vector3(_x, _y, _z);
+
+
+                float.TryParse(data[16], out Yaw);
+                float.TryParse(data[17], out Pitch);
+                float.TryParse(data[18], out Roll);
+                float.TryParse(data[19], out CansatDt);
+                float.TryParse(data[20], out Latitud);
+                float.TryParse(data[21], out Longitud);
+                float.TryParse(data[22], out Speed);
+                float.TryParse(data[23], out PDOP);
+
+                int.TryParse(data[24], out b);
             }
+            catch (Exception e)
+            {
+                Debug.Log("Dato perdido, error leyendo");
+            }
+
+            if (b > 0)
+            {
+                Debug.Log(rawMessage);
+                Debug.Log(String.Format("Imagen de {0} bytes", b));
+                isImage = true;
+                imgLength = b;
+            }
+
+
         }
 
+        public static void updateImage()
+        {
+            //Convertir de JPG a textura normal
+            //System.Drawing.Image x = (Bitmap)((new ImageConverter()).ConvertFrom(imageBytes));
+            //receivedImageTexture = new Texture2D()
+            //ImageConversion.LoadImage(receivedImageTexture, imageBytes);
+            string imageName = String.Format("{0}.jpeg",System.DateTime.Now.Ticks);
+            File.WriteAllBytes(imageName, imageBytes);
+            receivedImageTexture.LoadRawTextureData(imageBytes);
+            receivedImageTexture.Apply();
+        }
         public Vector3 getDeltaAngle(){
             return new Vector3(
                 Gyro.x * DeltaTime,
@@ -202,7 +363,7 @@ public class Cansat : MonoBehaviour{
     public class MPU6050{
         public  Vector3 Acc;           //m/s^2
         public  Vector3 Gyro;          //grad/s
-        private int     acc_index = 7; //Indice del json donde empiezan los datos
+        private int     acc_index = 6; //Indice del json donde empiezan los datos
         public  float   last_time = 0.0f;
 
         public void update( string message ){
@@ -219,27 +380,9 @@ public class Cansat : MonoBehaviour{
                 return;
             }
 
-            string[] keys = new[]{ "Ax", "Ay", "Az", "Wx", "Wy", "Wz" };
-            for( int i = 0; i < 6; i++ ){
-                //"Ax":"5.2178231"
-                string val = data[i + acc_index].Split( ':' )[1];
-
-                //'5.2136789'
-                //Quitar la comillas
-                val = val.Substring( 2, val.Length - 3 );
-                //Debug.Log(val);
-                data[i + acc_index] = val;
-            }
-
-            //El indice 5 es el del tiempo
-            string val2 = data[5].Split( ':' )[1];
-            //'5.2136789'
-            //Quitar la comillas
-            val2      = val2.Substring( 2, val2.Length - 3 );
-            last_time = float.Parse( val2 );
-
+            //El indice 4 es el del tiempo
+            last_time = float.Parse(data[2] );
             Acc = new Vector3( float.Parse( data[acc_index] ), float.Parse( data[acc_index + 1] ), float.Parse( data[acc_index + 2] ) );
-
             Gyro = new Vector3(
                 float.Parse( data[acc_index + 3] ), float.Parse( data[acc_index + 4] ), float.Parse( data[acc_index + 5] )
             );
@@ -264,8 +407,8 @@ public class Cansat : MonoBehaviour{
 
         public void update( string message ){
             string[] data = message.Split( ',' );
-            Temp     = float.Parse( data[6] );
-            Pressure = float.Parse( data[7] );
+            Temp     = float.Parse( data[0] );
+            Pressure = float.Parse( data[3] );
         }
     }
 
