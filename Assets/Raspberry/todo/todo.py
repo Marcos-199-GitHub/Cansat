@@ -20,8 +20,10 @@ import busio
 import subprocess
 
 from digitalio import DigitalInOut, Direction, Pull
+
 import os
 import camara
+import compressor
 
 
 #Fusion de los sensores de movimiento
@@ -110,6 +112,11 @@ prev_packet = None
 # on the transmitter and receiver (or be set to None to disable/the default).
 # rfm69.encryption_key = b'\x01\x02\x03\x04\x05\x06\x07\x08\x01\x02\x03\x04\x05\x06\x07\x08'
 
+#Camara
+try:
+    camara.initCamera()
+except:
+    print("Error iniciando camara")
 
 
 #Serial
@@ -128,8 +135,14 @@ def camera_update():
         display.fill(0)
         display.text("tomando foto",0,15,1)
         display.show()
-        return camara.capture()
-    return ""
+        capture = camara.capture()
+        try:
+            compressed = compressor.compress_img_bytes(capture,1,30,Gray = True)
+            return compressed
+        except:
+            print ("Error comprimiendo")
+            return capture
+    return bytes(0)
 
 
 #Fusion 9DOF
@@ -157,10 +170,20 @@ KPitch.setAngle(F.pitch)
 KRoll.setAngle(F.roll)
 start = time.time();
 
-#Formato:
-#{"T1":"temp bmp","P":"press","A":"altitude","T":"tiempo","h": "humedad relativa", "T2":"Temperatura del sht", "Ax": "AccX","Ay": "AccY","Az": "AccZ","Wx":"GyroX" ....}
 
-diccionario = {
+f = open("data.log","a")
+
+n=0
+total_kb=0
+nmr = NMEAReader(gps)
+
+globalStart = time.time()
+while True:
+
+    #Formato:
+    #{"T1":"temp bmp","P":"press","A":"altitude","T":"tiempo","h": "humedad relativa", "T2":"Temperatura del sht", "Ax": "AccX","Ay": "AccY","Az": "AccZ","Wx":"GyroX" ....}
+
+    diccionario = {
     #"T1":"0", # temp bmp °C
     "T2":"0", # temp sht °C
     "T3":"0", # temp mpu °C
@@ -184,23 +207,18 @@ diccionario = {
     "Dt":"0", #Delta T del filtro
     "Lt":"0", #Latitud
     "Lg":"0", #Longitud
-    "Di":"NW", #Indica la direccion para la latitud y longitud respectivamente
+    "Di":"NW", #Indica la direccion para la latitud y longitud respectivamente (No es necesario si se utilizan signos)
     "Km":"0", #Velocidad respecto al suelo
     "DP":"0", #Dilucion de precision del GPS
+    "Im":"0", #Si el proximo mensaje va a ser una imagen, su valor es el tamaño en bytes, si no, es 0
 
-}
-f = open("data.log","a")
+    }
 
-n=0
-total_kb=0
-nmr = NMEAReader(gps)
 
-globalStart = time.time()
-while True:
     n+=1
     s=time.time()
     mpu.update()
-    camera_update()
+    #camera_update()
     magnet = bmm_update()
     foto = camera_update()
     mm = bmm_update()
@@ -222,22 +240,6 @@ while True:
         #print(parsed_data.__dict__["alt"])
     print (f"\n{Fore.RED}{(e-s):.2f} s en actualizar sensores y gps{Style.RESET_ALL}")
     s = e
-
-    if (foto != ""):
-        try:
-            #foto = camera_update()
-            #raw = open(foto,"rb").readall()
-            print (f"ahi te van {len(foto)} B de datos")
-            print (foto)
-        except:
-            print("PHOTO SEND ERROR")
-            display.fill(0)
-            display.text("Photo ERROR",0,15,1)
-            display.show()
-            time.sleep(1)
-            
-            
-
     end = time.time()
     delta = end-start
     start = end
@@ -296,8 +298,8 @@ while True:
     diccionario["Dt"] = f"{(1000*(delta)):.1f}"
 
     try:
-        diccionario["Lt"] = f"{(gps_dict['lat']):.3f}"
-        diccionario["Lg"] = f"{(gps_dict['lon']):.3f}"
+        diccionario["Lt"] = f"{(gps_dict['lat']):.6f}"
+        diccionario["Lg"] = f"{(gps_dict['lon']):.6f}"
         diccionario["Di"] = f"{gps_dict['NS']}{gps_dict['EW']}"
     except:
         pass
@@ -311,10 +313,13 @@ while True:
     except:
         pass
         
-
+    if (len(foto) > 0):
+        diccionario['Im'] = len(foto)
     e = time.time()
 
     print(f"{Fore.RED}{(e-s):.3f} s en actualizar el diccionario{Style.RESET_ALL}")
+
+
     s = e
     utf = ""
     if FORMATO == 0:
@@ -327,13 +332,10 @@ while True:
         ut+= f"{float(diccionario['Mx'])},{float(diccionario['My'])},{float(diccionario['Mz'])},"
         ut+= f"{float(diccionario['He'])},{float(diccionario['Y'])},{float(diccionario['P'])},"
         ut+= f"{float(diccionario['R'])},{float(diccionario['Dt'])},{float(diccionario['Lt'])},"
-        ut+= f"{float(diccionario['Lg'])},{diccionario['Di']},{float(diccionario['Km'])},{float(diccionario['DP'])}"
+        ut+= f"{float(diccionario['Lg'])},{float(diccionario['Km'])},{float(diccionario['DP'])},"
+        ut+= f"{int(diccionario['Im'])}"
 
         utf = "{" + ut + "}\n\r"
-
-
-
-
 #        ut+= f"{float(diccionario['P'])}}"
         print (ut)
     size_kb = len(utf)/1024
@@ -360,6 +362,24 @@ while True:
     e = time.time()
     d = e-s
     print(f"{Fore.RED}{(e-s):.3f} s en enviar por RF{Style.RESET_ALL}")
+    
+    if (len(foto)>0):
+        #aqui se va a enviar la imagen
+        s = e
+        c = 0
+        while (c < (len(foto))):
+            rfm69.send(foto[c:c+59])
+            #e = time.time()
+            #print (f"Enviados 60 bytes en {(1000*(e-ss)):.1f} ms, ({((60/1024)/(e-ss)):.2f}) Kb/s")
+            #s = e
+            c+=58
+            #time.sleep(DELAY)
+        e = time.time()
+        print(f"{Fore.RED}{(e-s):.3f} s en enviar {Back.GREEN}imagen por RF{Style.RESET_ALL}")
+        #print(f"{foto}")
+        #input("Enter para continuar")
+
+        
 
     print(f"{Style.BRIGHT}Enviados {size_kb:.3f} Kb de datos por RF en {(d):.3f} s, {((size_kb)/(d)):.3f} Kb/s{Style.RESET_ALL}")
     s = e
@@ -376,4 +396,5 @@ while True:
     f.write(utf)
     e = time.time()
     print(f"{Fore.RED}{(e-s):.2f} s en actualizar el archivo log{Style.RESET_ALL}")
+    #time.sleep (1)
 

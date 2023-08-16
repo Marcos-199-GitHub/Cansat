@@ -1,6 +1,7 @@
 from time import sleep
 from picamera import PiCamera
 from io import BytesIO
+from PIL import Image
 
 camera = None
 def initCamera():
@@ -26,9 +27,13 @@ def capture():
     camera.capture(stream, format='jpeg',resize=(320, 240))
     # "Rewind" the stream to the beginning so we can read its content
     stream.seek(0)
-    content = stream.read()
-    #content = stream.getvalue()
-    byte_size = stream.tell()
+    img = Image.open(stream)
+    #img.show()
+
+    #content = Image.tobytes()
+    #content = stream.read()
+    content = stream.getvalue()
+    #byte_size = stream.tell()
     #info = f"Ahi te van {byte_size} B de datos:\n\r{content}"
     stream.close()
     return content
