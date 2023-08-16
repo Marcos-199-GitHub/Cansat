@@ -1,4 +1,5 @@
 from PIL import Image
+from io import BytesIO
 import os
 
 def get_size_format(b, factor=1024, suffix="B"):
@@ -66,8 +67,9 @@ def compress_img(image_name, new_size_ratio=0.9, quality=90, width=None, height=
 
 def compress_img_bytes(raw, new_size_ratio=0.9, quality=90, width=None, height=None, to_jpg=True,lowBits = 0,Gray=False,name = "photo.jpeg"):
     ret = bytes(0)
+    bio = BytesIO()
     # load the image to memory
-    img = Image.open(raw)
+    img = Image.open(BytesIO(raw))
     # print the original image shape
     print("[*] Image shape:", img.size)
     # get the original image size in bytes
@@ -87,7 +89,7 @@ def compress_img_bytes(raw, new_size_ratio=0.9, quality=90, width=None, height=N
     if (Gray):
         img = img.convert("L")
     if (lowBits > 0 and not Gray):
-        img = img.convert("P", palette=Image.ADAPTIVE, colors=8)
+        img = img.convert("P", palette=Image.BICUBIC, colors=8)
     # split the filename and extension
     filename, ext = os.path.splitext(name)
     # make new filename appending _compressed to the original file name
@@ -99,17 +101,18 @@ def compress_img_bytes(raw, new_size_ratio=0.9, quality=90, width=None, height=N
         new_filename = f"{filename}_compressed{ext}"
     try:
         # save the image with the corresponding quality and optimize set to True
-        img.save(ret,quality =quality,optimize = True)
+        img.save(bio,quality =quality,optimize = True,format = "jpeg")
 
         img.save(new_filename, quality=quality, optimize=True)
     except OSError:
         # convert the image to RGB mode first
         img = img.convert("RGB")
         # save the image with the corresponding quality and optimize set to True
-        img.save(ret,quality =quality,optimize = True)
+        img.save(bio,quality =quality,optimize = True, format = "jpeg")
         img.save(new_filename, quality=quality, optimize=True)
 
     print("[+] New file saved:", new_filename)
+    ret = bio.getvalue()
     # get the new image size in bytes
     new_image_size = len(ret)
     # print the new size in a good format

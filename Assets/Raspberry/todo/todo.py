@@ -137,7 +137,7 @@ def camera_update():
         display.show()
         capture = camara.capture()
         try:
-            compressed = compressor.compress_img_bytes(capture,1,30,Gray = True)
+            compressed = compressor.compress_img_bytes(capture,1,30,Gray = False,lowBits = 1)
             return compressed
         except:
             print ("Error comprimiendo")
@@ -380,7 +380,8 @@ while True:
         #input("Enter para continuar")
 
         
-
+    size_kb += len(foto)/1024
+    d += (e-s)
     print(f"{Style.BRIGHT}Enviados {size_kb:.3f} Kb de datos por RF en {(d):.3f} s, {((size_kb)/(d)):.3f} Kb/s{Style.RESET_ALL}")
     s = e
     print(f"{Fore.GREEN}{utf}{Style.RESET_ALL}",end = "")
@@ -396,5 +397,5 @@ while True:
     f.write(utf)
     e = time.time()
     print(f"{Fore.RED}{(e-s):.2f} s en actualizar el archivo log{Style.RESET_ALL}")
-    #time.sleep (1)
+    time.sleep (1)
 

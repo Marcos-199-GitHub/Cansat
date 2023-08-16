@@ -2,13 +2,14 @@ from time import sleep
 from picamera import PiCamera
 from io import BytesIO
 from PIL import Image
+import time
 
 camera = None
-def initCamera():
+def initCamera(iso = 800):
     global camera
     camera = PiCamera(resolution=(1280, 720), framerate=30)
     # Set ISO to the desired value
-    camera.iso = 100
+    camera.iso = iso
     # Wait for the automatic gain control to settle
     sleep(2)
     # Now fix the values
@@ -28,6 +29,7 @@ def capture():
     # "Rewind" the stream to the beginning so we can read its content
     stream.seek(0)
     img = Image.open(stream)
+    img.save(f"{int(time.time())}.jpeg")
     #img.show()
 
     #content = Image.tobytes()
