@@ -160,12 +160,12 @@ def angles_update(accel, gyro, magnet, delta):
     print (f"A_pitch: {F.pitch:.2f}, A_Roll: {F.roll:.2f}....Pitch: {KPitch.angle:.2f}, Roll: {KRoll.angle:.2f}, dt: {delta:.4f}")
     return KYaw.angle,KPitch.angle,KRoll.angle
 
-start = time.time();
 
 
 #Archivo de log
 f = open("data.log","a")
 
+start = time.time();
 n=0
 total_kb=0
 globalStart = time.time()
@@ -204,6 +204,7 @@ diccionario = {
 
 
 def lcd_update():
+    global n, total_kb, globalStart, speed
     last_n = n
     while True:
         if (last_n!=n):
@@ -217,7 +218,7 @@ def lcd_update():
 
 
 def main():
-    global speed
+    global n, total_kb, globalStart, speed, diccionario, start, f, end
     while True:
         n+=1 
         utf = ""
@@ -287,9 +288,8 @@ def main():
         except:
             pass
             
-        if (len(foto) > 0):
-            diccionario['Im'] = len(foto)
-        
+        diccionario['Im'] = len(foto)
+
         e = time.time()
         print(f"{Fore.RED}{(e-s):.3f} s en actualizar el diccionario{Style.RESET_ALL}")
         s = e
@@ -343,17 +343,28 @@ def main():
         speed = size_kb/d
         print(f"{Style.BRIGHT}Enviados {size_kb:.3f} Kb de datos por RF en {(d):.3f} s, {((size_kb)/(d)):.3f} Kb/s{Style.RESET_ALL}")
         print(f"{Fore.GREEN}{utf}{Style.RESET_ALL}",end = "")
+        s = e
+        display.fill(0)
+        display.text(f"{n} paquetes ({total_kb:.2f}Kb)",0,0,1)
+        display.text(f"",0,10,1)
+        display.text(f"{speed:.0f}Kb/s,{(total_kb/(time.time()-globalStart)):.2f} Kb/s avg",0,10,1)
+        display.show()
+        e = time.time()
+        print(f"{Fore.RED}{(e-s):.2f} s en actualizar el lcd{Style.RESET_ALL}")
+        
+
 
         s = e
         f.write(utf)
         e = time.time()
         print(f"{Fore.RED}{(e-s):.2f} s en actualizar el archivo log{Style.RESET_ALL}")
-        time.sleep (1)
+        #time.sleep (1)
 
 
 if __name__ == "__main__":
-    mainThread = Thread(target=main)
-    lcdThread =  Thread(target=lcd_update)
-    mainThread.start()
-    lcdThread.start()
+    #mainThread = Thread(target=main)
+    #lcdThread =  Thread(target=lcd_update)
+    #mainThread.start()
+    #lcdThread.start()
+    main()
     
