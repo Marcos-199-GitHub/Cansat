@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/MenuInicial.unity
     guid: 535698f50932e4a4da369386c9b15f20
   - enabled: 1
-    path: Assets/Scenes/Modulos.unity
+    path: Assets/Scenes/Animacion.unity
     guid: 25eb60b1c7f16b3498ea6621df2b8205
   - enabled: 1
     path: Assets/Scenes/Estacion.unity
