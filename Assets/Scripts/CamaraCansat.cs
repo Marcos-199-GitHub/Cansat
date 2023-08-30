@@ -58,7 +58,7 @@ public class CamaraCansat : MonoBehaviour{
     }
 
     private bool LoadImageToUI(){
-        byte[] imageData = System.IO.File.ReadAllBytes( "Assets/Imagenes/imagen_serial.bin" );
+        byte[] imageData = System.IO.File.ReadAllBytes( "Assets/Imagenes/imagen_serial.jpg" );
         receivedImageTexture = new Texture2D( 2, 2 );
         return receivedImageTexture.LoadImage( imageData );
     }

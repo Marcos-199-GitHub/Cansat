@@ -78,7 +78,8 @@ public class Comunicacion : MonoBehaviour{
                 int    bytesRead = serialPort.Read(buffer, 0, buffer.Length);
         
                 if (bytesRead > 0){
-                    File.WriteAllBytes("Assets/Imagenes/imagen_serial.bin", buffer.Take(bytesRead).ToArray());
+                    File.WriteAllBytes("Assets/Imagenes/imagen_serial.jpg", buffer.Take(bytesRead).ToArray());
+                    //File.WriteAllBytes("Assets/Imagenes/imagen_serial.jpg", buffer);
                 }
             }
             
