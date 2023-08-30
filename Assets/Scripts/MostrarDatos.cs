@@ -28,7 +28,7 @@ public class MostrarDatos : MonoBehaviour{
 
     private void Update(){
         humedad.text                              = comunicacion.DatosRecibidos.humedad + "%";
-        temperatura.text                          = comunicacion.DatosRecibidos.temperatura + " °C";
+        temperatura.text                          = comunicacion.DatosRecibidos.temperaturaSht + " °C";
         presion.text                              = comunicacion.DatosRecibidos.presion + " hPa";
         vibracion.text                            = comunicacion.DatosRecibidos.vibracion + " dB";
         latitud.text                              = "Latitud: " + comunicacion.DatosRecibidos.latitud + "°";
