@@ -23,7 +23,7 @@ public class Comunicacion : MonoBehaviour{
             Debug.Log( "Listo" );
         }
         catch( Exception e ){
-            Debug.LogError( e );
+            Debug.Log( e );
         }
     }
 

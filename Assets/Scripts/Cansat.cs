@@ -256,8 +256,8 @@ public class Cansat : MonoBehaviour{
             /*
              {T2,T3,T,A,P,H,Ax,Ay,Az,Wx,Wy,Wz,Mx,My,Mz,He,Y,P,R,Dt,Lt,Lg,Km,DP,Im}
 
-            0,T2 temperatura del sht °C
-            1,T3 temperatura del mpu °C
+            0,T2 temperatura del sht Â°C
+            1,T3 temperatura del mpu Â°C
             2,P Presion hPa
             3,A Altitud m
             4,T Tiempo (en segundos con respecto al EPOCH )s
@@ -265,22 +265,22 @@ public class Cansat : MonoBehaviour{
             6,Ax AccelX m/s2
             7,Ay AccelY m/s2
             8,Az AccelZ m/s2
-            9,Wx GyroX °/s
-            10,Wy GyroY °/s
-            11,Wz GyroZ °/s
+            9,Wx GyroX Â°/s
+            10,Wy GyroY Â°/s
+            11,Wz GyroZ Â°/s
             12,Mx MagnetX uT
             13,My MagnetY uT
             14,Mz MagnetZ uT
-            15,He Direccion a la que apunta la brujula °
-            16,Y  Yaw °
-            17,P  Pitch °
-            18,R  Roll °
+            15,He Direccion a la que apunta la brujula Â°
+            16,Y  Yaw Â°
+            17,P  Pitch Â°
+            18,R  Roll Â°
             19,Dt Delta T del filtro s
-            20,Lt Latitud °
-            21,Lg Longitud °
+            20,Lt Latitud Â°
+            21,Lg Longitud Â°
             22,Km Velocidad respecto al suelo Km/h
             23,DP Dilucion de precision del GPS
-            24,Im Si el proximo mensaje va a ser una imagen, su valor es el tamaño en bytes, si no, es 0
+            24,Im Si el proximo mensaje va a ser una imagen, su valor es el tamaÃ±o en bytes, si no, es 0
              
              */
 
