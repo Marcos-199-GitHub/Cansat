@@ -25,20 +25,19 @@ public class Cansat : MonoBehaviour{
 
     public static bool rotar = false;
 
-    private static float tiempo;
-    public string puerto = "COM5";
-    public int baud = 57600;
+    private static float  tiempo;
+    public         string puerto = "COM5";
+    public         int    baud   = 57600;
 
-    private static int imgLength = 0;
-    private static bool isImage = false;
+    private static int       imgLength = 0;
+    private static bool      isImage   = false;
     private static Texture2D receivedImageTexture;
-    public Image imagen;
-    public static byte[] imageBytes;
-    public static bool imageUpdated = false;
-
+    public         Image     imagen;
+    public static  byte[]    imageBytes;
+    public static  bool      imageUpdated = false;
 
     private void Start(){
-        receivedImageTexture = new Texture2D(10, 10);
+        receivedImageTexture    = new Texture2D( 10, 10 );
         reader                  = new StreamReader( PATH );
         _serialPort             = new SerialPort( puerto, baud );
         _serialPort.ReadTimeout = 500;
@@ -53,12 +52,11 @@ public class Cansat : MonoBehaviour{
         }
         //transform.position += mpu6050.getDeltaPosition();
 
-        if (imageUpdated)
-        {
+        if( imageUpdated ){
             imageUpdated = false;
             DataRecived.updateImage();
             Sprite sprite = Sprite.Create(
-                receivedImageTexture, new Rect(0, 0, receivedImageTexture.width, receivedImageTexture.height), Vector2.one * 0.5f
+                receivedImageTexture, new Rect( 0, 0, receivedImageTexture.width, receivedImageTexture.height ), Vector2.one * 0.5f
             );
 
             imagen.sprite = sprite;
@@ -104,114 +102,102 @@ public class Cansat : MonoBehaviour{
             Debug.Log( id );
         }
 
-        
-
         //Debug.Log( message );
         return message;
     }
 
-    public static byte[] getDataImg(int method = 0)
-    {
-
+    public static byte[] getDataImg( int method = 0 ){
         byte[] imageData = new byte[imgLength];
-            if (method == 0)
-            {             //Serial
-            if (!_serialPort.IsOpen)
-            { //comprobamos que el puerto esta abierto
-                Debug.Log("Serial is closed");
-                try
-                {
-                    Debug.Log("Tratando de abrir puerto serial");
+        if( method == 0 ){             //Serial
+            if( !_serialPort.IsOpen ){ //comprobamos que el puerto esta abierto
+                Debug.Log( "Serial is closed" );
+                try{
+                    Debug.Log( "Tratando de abrir puerto serial" );
                     _serialPort.Open();
-                    Debug.Log("Listo");
+                    Debug.Log( "Listo" );
                 }
-                catch (Exception e)
-                {
-                    Debug.Log("Error");
-                    Debug.Log(e);
+                catch( Exception e ){
+                    Debug.Log( "Error" );
+                    Debug.Log( e );
                 }
-
             }
-            else
-            {
-                Debug.Log("Leyendo");
-                try
-                {
-                    int x = 0;
+            else{
+                Debug.Log( "Leyendo" );
+                try{
+                    int x       = 0;
                     int maxIter = 1000;
                     int iter;
-                    for (int i=0;i<imgLength;i++)
-                    {
+                    for( int i = 0; i < imgLength; i++ ){
                         iter = 0;
 
-                        do { 
+                        do{
                             x = _serialPort.ReadByte();
                             iter++;
-                            if (iter >= maxIter) Debug.LogError("Excedido el tiempo de espera para el serial !!");
-                        }
-                        while (x == -1);
+                            if( iter >= maxIter ) Debug.LogError( "Excedido el tiempo de espera para el serial !!" );
+                        } while( x == -1 );
 
                         imageData[i] = (byte)x;
-
                     }
-                    Debug.Log(String.Format("Buffer de {0} bytes leido",imageData.Length));
-                    Debug.Log(BitConverter.ToString(imageData));
 
+                    Debug.Log( String.Format( "Buffer de {0} bytes leido", imageData.Length ) );
+                    Debug.Log( BitConverter.ToString( imageData ) );
                 }
-                catch (Exception e)
-                {
-                    Debug.LogException(e);
+                catch( Exception e ){
+                    Debug.LogException( e );
                 }
             }
         }
+
         return imageData;
-        
     }
+
     private static float tprevious; //s
 
     public static void Read(){
         Debug.Log( "Thread de lectura iniciado" );
         while( true ){
             try{
-                if (!isImage) dataRecived.updateData(getDataString());
+                if( !isImage ) dataRecived.updateData( getDataString() );
                 //else dataRecived.updateImage(getDataImg());
-                else { 
-                    imageBytes = getDataImg();
+                else{
+                    imageBytes   = getDataImg();
                     imageUpdated = true;
-                    Debug.Log("Recibida una imagen");
+                    Debug.Log( "Recibida una imagen" );
                     isImage = false;
                 }
+
                 rotar = true;
             }
             catch( TimeoutException ){
             }
         }
-        
     }
 
     public class DataRecived{
 
-        public  float[] T = new float[3];
-        public  float   Pressure;
-        public  float   Altitude;
-        public  float   Time;
-        public  float   Humidity;
-        public  Vector3 Acc       = new Vector3();
-        public  Vector3 Gyro      = new Vector3();
-        //Nuevos
-        public  Vector3 Magnet    = new Vector3();
-        public float Heading = 0f;
-        public float Yaw = 0f;
-        public float Pitch = 0f;
-        public float Roll = 0f;
-        public float CansatDt = 0f;
-        public float Latitud = 0f;
-        public float Longitud = 0f;
-        public float Speed = 0f;
-        public float PDOP = 0f;
+        public float[] T = new float[3];
+        public float   Pressure;
+        public float   Altitude;
+        public float   Time;
+        public float   Humidity;
+        public Vector3 Acc = new Vector3();
 
-        private float   PrevTime  = 0.0f;
-        public  float   DeltaTime = 0.05f;
+        public Vector3 Gyro = new Vector3();
+
+        //Nuevos
+        public Vector3 Magnet   = new Vector3();
+        public float   Heading  = 0f;
+        public float   Yaw      = 0f;
+        public float   Pitch    = 0f;
+        public float   Roll     = 0f;
+        public float   CansatDt = 0f;
+        public float   Latitud  = 0f;
+        public float   Longitud = 0f;
+        public float   Speed    = 0f;
+        public float   PDOP     = 0f;
+
+        private float PrevTime  = 0.0f;
+        public  float DeltaTime = 0.05f;
 
         public string rawMessage = "";
 
@@ -235,7 +221,7 @@ public class Cansat : MonoBehaviour{
             Longitud = 0f;
             Speed    = 0f;
             PDOP     = 0f;
-    }
+        }
 
         public void updateData( string message ){
             //Debug.Log( message );
@@ -245,9 +231,10 @@ public class Cansat : MonoBehaviour{
                 restart();
                 return;
             }
+
             rawMessage = message;
-            message = message.Substring( 1, message.Length - 2 ).Replace( " ", "" );//Quitar las llaves y salto de linea
-            string[] data = message.Split( ',' ); 
+            message    = message.Substring( 1, message.Length - 2 ).Replace( " ", "" ); //Quitar las llaves y salto de linea
+            string[] data = message.Split( ',' );
 
             //Estaba mejor la otra implementacion, porque ocupa menos ancho de banda y asi recibe mensajes mas rapido
             //Sorry :')
@@ -281,76 +268,69 @@ public class Cansat : MonoBehaviour{
             22,Km Velocidad respecto al suelo Km/h
             23,DP Dilucion de precision del GPS
             24,Im Si el proximo mensaje va a ser una imagen, su valor es el tamaño en bytes, si no, es 0
-             
-             */
 
+             */
 
             //T[0] = 0;
 
             float _x, _y, _z;
-            int b = 0;
+            int   b = 0;
 
-            try
-            {
-                float.TryParse(data[0], out T[1]);
-                float.TryParse(data[1], out T[2]);
-                float.TryParse(data[2], out Time);
-                float.TryParse(data[3], out Pressure);
-                float.TryParse(data[4], out Humidity);
-                float.TryParse(data[5], out Heading);
+            try{
+                float.TryParse( data[0], out T[1] );
+                float.TryParse( data[1], out T[2] );
+                float.TryParse( data[2], out Time );
+                float.TryParse( data[3], out Pressure );
+                float.TryParse( data[4], out Humidity );
+                float.TryParse( data[5], out Heading );
 
-                float.TryParse(data[6], out _x);
-                float.TryParse(data[7], out _y);
-                float.TryParse(data[8], out _z);
-                Acc = new Vector3(_x, _y, _z);
-                float.TryParse(data[9], out _x);
-                float.TryParse(data[10], out _y);
-                float.TryParse(data[11], out _z);
-                Gyro = new Vector3(_x, _y, _z);
-                float.TryParse(data[12], out _x);
-                float.TryParse(data[13], out _y);
-                float.TryParse(data[14], out _z);
-                Magnet = new Vector3(_x, _y, _z);
+                float.TryParse( data[6], out _x );
+                float.TryParse( data[7], out _y );
+                float.TryParse( data[8], out _z );
+                Acc = new Vector3( _x, _y, _z );
+                float.TryParse( data[9],  out _x );
+                float.TryParse( data[10], out _y );
+                float.TryParse( data[11], out _z );
+                Gyro = new Vector3( _x, _y, _z );
+                float.TryParse( data[12], out _x );
+                float.TryParse( data[13], out _y );
+                float.TryParse( data[14], out _z );
+                Magnet = new Vector3( _x, _y, _z );
 
+                float.TryParse( data[16], out Yaw );
+                float.TryParse( data[17], out Pitch );
+                float.TryParse( data[18], out Roll );
+                float.TryParse( data[19], out CansatDt );
+                float.TryParse( data[20], out Latitud );
+                float.TryParse( data[21], out Longitud );
+                float.TryParse( data[22], out Speed );
+                float.TryParse( data[23], out PDOP );
 
-                float.TryParse(data[16], out Yaw);
-                float.TryParse(data[17], out Pitch);
-                float.TryParse(data[18], out Roll);
-                float.TryParse(data[19], out CansatDt);
-                float.TryParse(data[20], out Latitud);
-                float.TryParse(data[21], out Longitud);
-                float.TryParse(data[22], out Speed);
-                float.TryParse(data[23], out PDOP);
-
-                int.TryParse(data[24], out b);
+                int.TryParse( data[24], out b );
             }
-            catch (Exception e)
-            {
-                Debug.Log("Dato perdido, error leyendo");
+            catch( Exception e ){
+                Debug.Log( "Dato perdido, error leyendo" );
             }
 
-            if (b > 0)
-            {
-                Debug.Log(rawMessage);
-                Debug.Log(String.Format("Imagen de {0} bytes", b));
-                isImage = true;
+            if( b > 0 ){
+                Debug.Log( rawMessage );
+                Debug.Log( String.Format( "Imagen de {0} bytes", b ) );
+                isImage   = true;
                 imgLength = b;
             }
-
-
         }
 
-        public static void updateImage()
-        {
+        public static void updateImage(){
             //Convertir de JPG a textura normal
             //System.Drawing.Image x = (Bitmap)((new ImageConverter()).ConvertFrom(imageBytes));
             //receivedImageTexture = new Texture2D()
             //ImageConversion.LoadImage(receivedImageTexture, imageBytes);
-            string imageName = String.Format("{0}.jpeg",System.DateTime.Now.Ticks);
-            File.WriteAllBytes(imageName, imageBytes);
-            receivedImageTexture.LoadRawTextureData(imageBytes);
+            string imageName = String.Format( "{0}.jpeg", System.DateTime.Now.Ticks );
+            File.WriteAllBytes( imageName, imageBytes );
+            receivedImageTexture.LoadRawTextureData( imageBytes );
             receivedImageTexture.Apply();
         }
+
         public Vector3 getDeltaAngle(){
             return new Vector3(
                 Gyro.x * DeltaTime,
@@ -381,7 +361,7 @@ public class Cansat : MonoBehaviour{
             }
 
             //El indice 4 es el del tiempo
-            last_time = float.Parse(data[2] );
+            last_time = float.Parse( data[2] );
             Acc = new Vector3( float.Parse( data[acc_index] ), float.Parse( data[acc_index + 1] ), float.Parse( data[acc_index + 2] ) );
             Gyro = new Vector3(
                 float.Parse( data[acc_index + 3] ), float.Parse( data[acc_index + 4] ), float.Parse( data[acc_index + 5] )

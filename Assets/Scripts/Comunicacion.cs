@@ -13,6 +13,10 @@ public class Comunicacion : MonoBehaviour{
     SerialPort   serialPort;
     public Datos DatosRecibidos = new Datos();
 
+    public static bool  NuevaImagen = false;
+    public static bool  NuevosDatos = false;
+    public static Datos DatosActuales;
+
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
         serialPort             = new SerialPort( "COM6", 9600 );
@@ -92,7 +96,10 @@ public class Comunicacion : MonoBehaviour{
 
             Debug.Log( buffer.ToString() );
             DatosRecibidos.tamañoImagen = 0;
+            NuevaImagen                 = true;
         }
+
+        DatosActuales = DatosRecibidos;
     }
 }
 

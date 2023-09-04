@@ -23,6 +23,23 @@ public class CamaraCansat : MonoBehaviour{
         serialPort.Open();
     }
 
+    private void Update(){
+        if( Comunicacion.NuevaImagen == false ){
+            return;
+        }
+
+        if( !LoadImageToUI() ){
+            return;
+        }
+
+        Sprite sprite = Sprite.Create(
+            receivedImageTexture, new Rect( 0, 0, receivedImageTexture.width, receivedImageTexture.height ), Vector2.one * 0.5f
+        );
+
+        imagen.sprite            = sprite;
+        Comunicacion.NuevaImagen = false;
+    }
+
     private void OnDestroy(){
         if( !por_serial ){
             return;
@@ -32,7 +49,7 @@ public class CamaraCansat : MonoBehaviour{
             serialPort.Close();
         }
     }
-
+    /*
     private void Update(){
         if( por_serial ? !RecieveImageToUI() : !LoadImageToUI() ){
             return;
@@ -43,7 +60,7 @@ public class CamaraCansat : MonoBehaviour{
         );
 
         imagen.sprite = sprite;
-    }
+    }*/
 
     private bool RecieveImageToUI(){
         if( serialPort.IsOpen && serialPort.BytesToRead > 0 ){

@@ -37,10 +37,7 @@ public class Graficador : MonoBehaviour{
         generarGrid();
     }
 
-    private void Update(){
-        float tiempo = Time.time * 1f;
-        agregarPunto( new Vector2( tiempo, UnityEngine.Random.Range( 0, 100 ) ) );
-    }
+    
 
     public void generarGrid(){
         tamañoGraficaInicial = FondoGrafica.sizeDelta;
