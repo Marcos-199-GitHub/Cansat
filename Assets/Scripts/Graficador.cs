@@ -37,8 +37,6 @@ public class Graficador : MonoBehaviour{
         generarGrid();
     }
 
-    
-
     public void generarGrid(){
         tamañoGraficaInicial = FondoGrafica.sizeDelta;
 
@@ -69,7 +67,7 @@ public class Graficador : MonoBehaviour{
                 i * separacionGrid.x, texto.GetComponent< RectTransform >().anchoredPosition.y
             );
 
-            texto.GetComponent< TextMeshProUGUI >().text = Math.Round( anchoTemporal * i / Intervalos.x, 2 ).ToString();
+            texto.GetComponent< TextMeshProUGUI >().text = i == 0 ? "  0" : Math.Round( anchoTemporal * i / Intervalos.x, 2 ).ToString();
         }
 
         ultimaPosicionDeGridX = tamañoGraficaInicial.x;
@@ -81,7 +79,7 @@ public class Graficador : MonoBehaviour{
             );
 
             texto.GetComponent< TextMeshProUGUI >().text =
-                Math.Round( ValorMinimoY + ( ValorMinimoY - ValorMinimoY ) * i / Intervalos.y, 2 ).ToString();
+                Math.Round( ValorMinimoY + ( ValorMaximoY - ValorMinimoY ) * i / Intervalos.y, 2 ).ToString();
         }
 
         cantidadGridX = GridX.childCount;
