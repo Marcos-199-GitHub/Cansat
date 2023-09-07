@@ -28,6 +28,7 @@ public class CamaraCansat : MonoBehaviour{
             return;
         }
 
+        Comunicacion.NuevaImagen = false;
         if( !LoadImageToUI() ){
             return;
         }
@@ -36,8 +37,7 @@ public class CamaraCansat : MonoBehaviour{
             receivedImageTexture, new Rect( 0, 0, receivedImageTexture.width, receivedImageTexture.height ), Vector2.one * 0.5f
         );
 
-        imagen.sprite            = sprite;
-        Comunicacion.NuevaImagen = false;
+        imagen.sprite = sprite;
     }
 
     private void OnDestroy(){

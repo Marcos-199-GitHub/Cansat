@@ -2524,6 +2524,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6371996374205207915, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7198237922931975291, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_Value
       value: 1
@@ -4016,6 +4020,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6371996374205207915, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7198237922931975291, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_Value
       value: 1
@@ -4954,6 +4962,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6371996374205207915, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7198237922931975291, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_Value
       value: 1
@@ -5883,6 +5895,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6371996374205207915, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7198237922931975291, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_Value
       value: 1
@@ -6453,6 +6469,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6371996374205207915, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7198237922931975291, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_Value
       value: 1
@@ -6945,7 +6965,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 57526679}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.15947372
+  m_Size: 0.15947373
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

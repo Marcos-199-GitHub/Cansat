@@ -84,6 +84,7 @@ public class Comunicacion : MonoBehaviour{
             float.TryParse( data[23], out DatosRecibidos.dilucionGps );
 
             int.TryParse( data[24], out DatosRecibidos.tamañoImagen );
+            NuevosDatos = true;
         }
         else{
             byte[] buffer    = new byte[DatosRecibidos.tamañoImagen];
