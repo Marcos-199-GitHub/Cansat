@@ -16,6 +16,8 @@ public class ManejadorGraficas : MonoBehaviour{
             return;
         }
 
+        Debug.Log( "graficando" );
+        Debug.Log( Comunicacion.DatosActuales.temperaturaSht );
         Grafica2.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.temperaturaSht ) );
         Grafica3.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.humedad ) );
         Grafica4.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.presion ) );
