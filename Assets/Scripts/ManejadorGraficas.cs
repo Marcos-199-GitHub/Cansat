@@ -8,21 +8,32 @@ public class ManejadorGraficas : MonoBehaviour{
     public Graficador Grafica3;
     public Graficador Grafica4;
     public Graficador Grafica5;
+    public Graficador Grafica6;
+    public Graficador Grafica7;
+    public Graficador Grafica8;
+    public Graficador Grafica9;
+    public Graficador Grafica10;
 
     private void Update(){
-        float tiempo = 2000 + Time.time * 1f;
-        Grafica1.agregarPunto( new Vector2( tiempo, 1 + Random.Range( 0, 3 ) ) );
+        float tiempo = Time.time * 1f;
+        Grafica1.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
+        Grafica6.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
+        Grafica7.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
+        Grafica8.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
+        Grafica9.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
+        Grafica10.agregarPunto( new Vector2( tiempo, 1 + Random.Range( 0, 40 ) ) );
         if( Comunicacion.NuevosDatos == false ){
             return;
         }
 
         Debug.Log( "graficando" );
-        Debug.Log( Comunicacion.DatosActuales.timestamp );
+        float timestamp = Comunicacion.DatosActuales.timestamp - Comunicacion.DatosIniciales.timestamp;
+        Debug.Log( timestamp );
         Debug.Log( Comunicacion.DatosActuales.temperaturaSht );
-        Grafica2.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.temperaturaSht ) );
-        Grafica3.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.humedad ) );
-        Grafica4.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.presion ) );
-        Grafica5.agregarPunto( new Vector2( Comunicacion.DatosActuales.timestamp, Comunicacion.DatosActuales.altura ) );
+        Grafica2.agregarPunto( new Vector2( timestamp, Comunicacion.DatosActuales.temperaturaSht ) );
+        Grafica3.agregarPunto( new Vector2( timestamp, Comunicacion.DatosActuales.humedad ) );
+        Grafica4.agregarPunto( new Vector2( timestamp, Comunicacion.DatosActuales.presion ) );
+        Grafica5.agregarPunto( new Vector2( timestamp, Comunicacion.DatosActuales.altura ) );
         Comunicacion.NuevosDatos = false;
     }
 }

@@ -33,6 +33,8 @@ public class Graficador : MonoBehaviour{
     private float ultimaPosicionDeGridX;
     private int   cantidadGridX;
 
+    private List< GameObject > objetos = new List< GameObject >();
+
     private void Start(){
         generarGrid();
     }
@@ -91,13 +93,17 @@ public class Graficador : MonoBehaviour{
     public void agregarPunto( Vector2 newPunto ){
         listaPuntos.Add( newPunto );
         //float y_max = ( from punto_ in listaPuntos select punto_.y ).Max();
-        Vector2 punto = ( newPunto ) * tamañoGraficaInicial / new Vector2( anchoTemporal, ValorMaximoY - ValorMinimoY );
+        Vector2 punto = ( newPunto - new Vector2( 0, ValorMinimoY ) ) * tamañoGraficaInicial /
+            new Vector2( anchoTemporal, ValorMaximoY - ValorMinimoY );
 
-        crearCirculo( punto );
+        objetos.Add( crearCirculo( punto ) );
         if( listaPuntos.Count > 1 ){
-            crearLinea(
-                ( listaPuntos[^2] ) * tamañoGraficaInicial / new Vector2( anchoTemporal, ValorMaximoY - ValorMinimoY ),
-                punto
+            objetos.Add(
+                crearLinea(
+                    ( listaPuntos[^2] - new Vector2( 0, ValorMinimoY ) ) * tamañoGraficaInicial /
+                    new Vector2( anchoTemporal, ValorMaximoY - ValorMinimoY ),
+                    punto
+                )
             );
         }
 
@@ -107,6 +113,7 @@ public class Graficador : MonoBehaviour{
 
         //Debug.Log( punto.x - ultimaPosicionDeGridX );
         //Debug.Log( separacionGrid.x );
+        int contador = 0;
         while( punto.x - ultimaPosicionDeGridX >= 0 ){
             ultimaPosicionDeGridX += separacionGrid.x;
             GameObject texto = Instantiate( TextoX, GridX );
@@ -115,7 +122,19 @@ public class Graficador : MonoBehaviour{
                 ultimaPosicionDeGridX, texto.GetComponent< RectTransform >().anchoredPosition.y
             );
 
-            texto.GetComponent< TextMeshProUGUI >().text = Math.Round( anchoTemporal * ++cantidadGridX / Intervalos.x, 2 ).ToString();
+            texto.GetComponent< TextMeshProUGUI >().text =
+                Math.Round( anchoTemporal * ( cantidadGridX++ - 1 ) / Intervalos.x, 2 ).ToString();
+
+            if( contador++ > 10 ){
+                break;
+            }
+
+            objetos.Add( texto );
+        }
+
+        while( objetos.Count > 500 ){
+            Destroy( objetos[0] );
+            objetos.RemoveAt( 0 );
         }
     }
 

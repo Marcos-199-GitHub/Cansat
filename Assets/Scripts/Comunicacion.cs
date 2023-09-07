@@ -16,6 +16,7 @@ public class Comunicacion : MonoBehaviour{
     public static bool  NuevaImagen = false;
     public static bool  NuevosDatos = false;
     public static Datos DatosActuales;
+    public static Datos DatosIniciales = null;
 
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
@@ -85,6 +86,9 @@ public class Comunicacion : MonoBehaviour{
 
             int.TryParse( data[24], out DatosRecibidos.tamañoImagen );
             NuevosDatos = true;
+            if( DatosIniciales == null ){
+                DatosIniciales = DatosRecibidos;
+            }
         }
         else{
             byte[] buffer    = new byte[DatosRecibidos.tamañoImagen];
