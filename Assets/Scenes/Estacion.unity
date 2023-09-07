@@ -4970,6 +4970,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grafica 1 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3928653488766818784, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: ValorMaximoY
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928653488766818784, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: ValorMinimoY
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5125820267620368230, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_text
       value: temperaturaSht
@@ -5906,6 +5914,14 @@ PrefabInstance:
     - target: {fileID: 2995288732957496095, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_Name
       value: Grafica 1 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928653488766818784, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: ValorMaximoY
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3928653488766818784, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
+      propertyPath: ValorMinimoY
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5125820267620368230, guid: 588e28bdd51d82d4b9a708e98b771a3a, type: 3}
       propertyPath: m_text
