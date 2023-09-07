@@ -245,9 +245,9 @@ public class Cansat : MonoBehaviour{
 
             0,T2 temperatura del sht °C
             1,T3 temperatura del mpu °C
-            2,P Presion hPa
+            2,T Tiempo (en segundos con respecto al EPOCH )s
             3,A Altitud m
-            4,T Tiempo (en segundos con respecto al EPOCH )s
+            4,P Presion hPa
             5,H Humedad relativa %
             6,Ax AccelX m/s2
             7,Ay AccelY m/s2

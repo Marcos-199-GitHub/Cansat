@@ -51,9 +51,9 @@ public class Comunicacion : MonoBehaviour{
             float.TryParse( data[0], out DatosRecibidos.temperaturaSht );
             float.TryParse( data[1], out DatosRecibidos.temperaturaMpu );
 
-            float.TryParse( data[2], out DatosRecibidos.presion );
+            float.TryParse( data[2], out DatosRecibidos.timestamp );
             float.TryParse( data[3], out DatosRecibidos.altura );
-            float.TryParse( data[4], out DatosRecibidos.timestamp );
+            float.TryParse( data[4], out DatosRecibidos.presion );
             float.TryParse( data[5], out DatosRecibidos.humedad );
 
             float.TryParse( data[6], out DatosRecibidos.Aceleracion.x );
