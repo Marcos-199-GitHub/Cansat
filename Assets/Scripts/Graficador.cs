@@ -90,13 +90,13 @@ public class Graficador : MonoBehaviour{
 
     public void agregarPunto( Vector2 newPunto ){
         listaPuntos.Add( newPunto );
-        float   y_max = ( from punto_ in listaPuntos select punto_.y ).Max();
-        Vector2 punto = ( newPunto ) * tamañoGraficaInicial / new Vector2( anchoTemporal, y_max );
+        //float y_max = ( from punto_ in listaPuntos select punto_.y ).Max();
+        Vector2 punto = ( newPunto ) * tamañoGraficaInicial / new Vector2( anchoTemporal, ValorMaximoY - ValorMinimoY );
 
         crearCirculo( punto );
         if( listaPuntos.Count > 1 ){
             crearLinea(
-                ( listaPuntos[^2] ) * tamañoGraficaInicial / new Vector2( anchoTemporal, y_max ),
+                ( listaPuntos[^2] ) * tamañoGraficaInicial / new Vector2( anchoTemporal, ValorMaximoY - ValorMinimoY ),
                 punto
             );
         }
@@ -107,7 +107,7 @@ public class Graficador : MonoBehaviour{
 
         //Debug.Log( punto.x - ultimaPosicionDeGridX );
         //Debug.Log( separacionGrid.x );
-        if( punto.x - ultimaPosicionDeGridX >= 0 ){
+        while( punto.x - ultimaPosicionDeGridX >= 0 ){
             ultimaPosicionDeGridX += separacionGrid.x;
             GameObject texto = Instantiate( TextoX, GridX );
             texto.SetActive( true );

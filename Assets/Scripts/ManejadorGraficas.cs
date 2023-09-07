@@ -10,8 +10,8 @@ public class ManejadorGraficas : MonoBehaviour{
     public Graficador Grafica5;
 
     private void Update(){
-        float tiempo = Time.time * 1f;
-        Grafica1.agregarPunto( new Vector2( tiempo, Random.Range( 0, 100 ) ) );
+        float tiempo = 2000 + Time.time * 1f;
+        Grafica1.agregarPunto( new Vector2( tiempo, 1 + Random.Range( 0, 3 ) ) );
         if( Comunicacion.NuevosDatos == false ){
             return;
         }
