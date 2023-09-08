@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO.Ports;
 
+
 public class CamaraCansat : MonoBehaviour{
 
     public  Image     imagen;
@@ -27,9 +28,14 @@ public class CamaraCansat : MonoBehaviour{
     }
 
     private bool LoadImageToUI(){
-        byte[] imageData = System.IO.File.ReadAllBytes( "Assets/Imagenes/imagen_serial.jpg" );
-        receivedImageTexture = new Texture2D( 320, 240 );
-        receivedImageTexture.LoadRawTextureData( imageData );
+        var bitmap = System.Drawing.Bitmap.FromFile("Assets/Imagenes/imagen_serial.jpg");
+        bitmap.Save("Assets/Imagenes/imagen_serial.png", System.Drawing.Imaging.ImageFormat.Png);
+        bitmap.Dispose();
+        byte[] imageData = System.IO.File.ReadAllBytes("Assets/Imagenes/imagen_serial.png");
+        receivedImageTexture = new Texture2D( 320, 240);
+
+
+        receivedImageTexture.LoadImage( imageData );
         receivedImageTexture.Apply();
         //return receivedImageTexture.LoadImage( imageData );
         return true;
