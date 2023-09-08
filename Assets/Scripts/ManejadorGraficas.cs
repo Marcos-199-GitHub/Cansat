@@ -16,12 +16,12 @@ public class ManejadorGraficas : MonoBehaviour{
 
     private void Update(){
         float tiempo = Time.time * 1f;
-        Grafica1.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
-        Grafica6.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
-        Grafica7.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
-        Grafica8.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
-        Grafica9.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0, 40 ) ) );
-        Grafica10.agregarPunto( new Vector2( tiempo, 1 + Random.Range( 0, 40 ) ) );
+        Grafica1.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0,    40 ) ) );
+        Grafica6.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0,    40 ) ) );
+        Grafica7.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0,    40 ) ) );
+        Grafica8.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 2000, 2500 ) ) );
+        Grafica9.agregarPunto( new Vector2( tiempo,  1 + Random.Range( 0,    40 ) ) );
+        Grafica10.agregarPunto( new Vector2( tiempo, 1 + Random.Range( 0,    40 ) ) );
         if( Comunicacion.NuevosDatos == false ){
             return;
         }

@@ -92,12 +92,12 @@ public class Comunicacion : MonoBehaviour{
             }
         }
         else{
-            byte[] buffer    = new byte[DatosRecibidos.tamañoImagen];
+            byte[] buffer    = new byte[DatosRecibidos.tamañoImagen * 3];
             int    bytesRead = serialPort.Read( buffer, 0, buffer.Length );
             Debug.Log( $"imagen de {DatosRecibidos.tamañoImagen} bytes, {bytesRead}" );
             if( bytesRead > 0 ){
-                File.WriteAllBytes( "Assets/Imagenes/imagen_serial.jpg", buffer.Take( bytesRead ).ToArray() );
-                //File.WriteAllBytes("Assets/Imagenes/imagen_serial.jpg", buffer);
+                File.WriteAllBytes( "Assets/Imagenes/imagen_serial.jpg",  buffer.Take( bytesRead ).ToArray() );
+                File.WriteAllBytes( "Assets/Imagenes/imagen_serial2.jpg", buffer );
             }
 
             Debug.Log( buffer.ToString() );
