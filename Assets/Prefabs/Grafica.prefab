@@ -779,18 +779,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6110c3397ff7fcd418b8b0b8f2f55175, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FondoGrafica: {fileID: 5099465504474898979}
-  ContenedorGrafica: {fileID: 8903459019474025326}
-  ContentView: {fileID: 7823735014422061630}
-  SpriteCriculo: {fileID: 0}
-  TextoX: {fileID: 2811352588743808556}
-  TextoY: {fileID: 166132854376794779}
-  GridX: {fileID: 6440778231728263756}
-  GridY: {fileID: 7204303099564904865}
   ValorMinimoY: 0
   ValorMaximoY: 100
   anchoTemporal: 10
   Intervalos: {x: 5, y: 5}
+  FondoGrafica: {fileID: 5099465504474898979}
+  ContenedorGrafica: {fileID: 8903459019474025326}
+  ContentView: {fileID: 7823735014422061630}
+  SpriteCriculo: {fileID: 0}
+  Titulo: {fileID: 5125820267620368230}
+  EtiquetaX: {fileID: 1787625107915353789}
+  EtiquetaY: {fileID: 6309619140387335573}
+  TextoX: {fileID: 2811352588743808556}
+  TextoY: {fileID: 166132854376794779}
+  GridX: {fileID: 6440778231728263756}
+  GridY: {fileID: 7204303099564904865}
   "tama\xF1oGraficaInicial": {x: 0, y: 0}
 --- !u!1 &3467647978552366377
 GameObject:
@@ -1361,7 +1364,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 20, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: 200, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &785981291451636691
 CanvasRenderer:

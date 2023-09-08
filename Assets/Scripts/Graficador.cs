@@ -8,21 +8,28 @@ using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class Graficador : MonoBehaviour{
+
+    //Modificables por cualquiera
+    public float      ValorMinimoY  = 0;
+    public float      ValorMaximoY  = 100;
+    public float      anchoTemporal = 10f;
+    public Vector2Int Intervalos    = Vector2Int.one * 5;
+
+    //Modificables por el programador
     public RectTransform FondoGrafica;
 
     public RectTransform ContenedorGrafica;
     public RectTransform ContentView;
     public Sprite        SpriteCriculo;
 
+    public TextMeshProUGUI Titulo;
+    public TextMeshProUGUI EtiquetaX;
+    public TextMeshProUGUI EtiquetaY;
+
     public GameObject    TextoX;
     public GameObject    TextoY;
     public RectTransform GridX;
     public RectTransform GridY;
-
-    public float      ValorMinimoY  = 0;
-    public float      ValorMaximoY  = 100;
-    public float      anchoTemporal = 10f;
-    public Vector2Int Intervalos    = Vector2Int.one * 5;
 
     public Vector2 tamañoGraficaInicial;
 
@@ -36,6 +43,19 @@ public class Graficador : MonoBehaviour{
     private List< GameObject > objetos = new List< GameObject >();
 
     private void Start(){
+        generarGrid();
+    }
+
+    public void setTituloYEtiquetas( string title, string labelX, string labelY ){
+        Titulo.text    = title;
+        EtiquetaX.text = labelX;
+        EtiquetaY.text = labelY;
+    }
+
+    public void setYRangeAndXRange( float min, float max, float ancho = 10 ){
+        ValorMinimoY  = min;
+        ValorMaximoY  = max;
+        anchoTemporal = ancho;
         generarGrid();
     }
 
@@ -88,6 +108,10 @@ public class Graficador : MonoBehaviour{
 
         TextoX.SetActive( false );
         TextoY.SetActive( false );
+    }
+
+    public void agregarPunto( float x, float y ){
+        agregarPunto( new Vector2( x, y ) );
     }
 
     public void agregarPunto( Vector2 newPunto ){
