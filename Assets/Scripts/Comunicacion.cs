@@ -13,11 +13,11 @@ public class Comunicacion : MonoBehaviour{
     SerialPort   serialPort;
     public Datos DatosRecibidos = new Datos();
 
-    public static bool  NuevaImagen = false;
-    public static bool  NuevosDatos = false;
-    public static Datos DatosActuales;
-    public static Datos DatosIniciales = null;
-    public string port = "COM6";
+    public static bool   NuevaImagen = false;
+    public static bool   NuevosDatos = false;
+    public static Datos  DatosActuales;
+    public static Datos  DatosIniciales = null;
+    public        string port           = "COM6";
 
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
@@ -92,6 +92,7 @@ public class Comunicacion : MonoBehaviour{
             }
         }
         else{
+            /*
             byte[] buffer    = new byte[DatosRecibidos.tamañoImagen * 3];
             int    bytesRead = serialPort.Read( buffer, 0, buffer.Length );
             Debug.Log( $"imagen de {DatosRecibidos.tamañoImagen} bytes, {bytesRead}" );
@@ -101,6 +102,33 @@ public class Comunicacion : MonoBehaviour{
             }
 
             Debug.Log( buffer.ToString() );
+            */
+
+            try{
+                byte[] imageData = new byte[DatosRecibidos.tamañoImagen];
+                int    x         = 0;
+                int    maxIter   = 1000;
+                int    iter;
+                for( int i = 0; i < DatosRecibidos.tamañoImagen; i++ ){
+                    iter = 0;
+
+                    do{
+                        x = serialPort.ReadByte();
+                        iter++;
+                        if( iter >= maxIter ) Debug.LogError( "Excedido el tiempo de espera para el serial !!" );
+                    } while( x == -1 );
+
+                    imageData[i] = (byte)x;
+                }
+
+                Debug.Log( String.Format( "Buffer de {0} bytes leido", imageData.Length ) );
+                Debug.Log( BitConverter.ToString( imageData ) );
+                File.WriteAllBytes( "Assets/Imagenes/imagen_serial.jpg", imageData );
+            }
+            catch( Exception e ){
+                Debug.LogError( e.Message );
+            }
+
             DatosRecibidos.tamañoImagen = 0;
             NuevaImagen                 = true;
         }
