@@ -9,9 +9,6 @@ public class CamaraCansat : MonoBehaviour{
     public  Image     imagen;
     private Texture2D receivedImageTexture;
 
-    private void Start(){
-    }
-
     private void Update(){
         if( Comunicacion.NuevaImagen == false ){
             return;
@@ -31,7 +28,7 @@ public class CamaraCansat : MonoBehaviour{
 
     private bool LoadImageToUI(){
         byte[] imageData = System.IO.File.ReadAllBytes( "Assets/Imagenes/imagen_serial.jpg" );
-        receivedImageTexture = new Texture2D( 2, 2 );
+        receivedImageTexture = new Texture2D( 320, 240 );
         receivedImageTexture.LoadRawTextureData( imageData );
         receivedImageTexture.Apply();
         //return receivedImageTexture.LoadImage( imageData );
