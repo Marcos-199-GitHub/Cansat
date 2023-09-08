@@ -13,7 +13,7 @@ public class Comunicacion : MonoBehaviour{
     SerialPort   serialPort;
     public Datos DatosRecibidos = new Datos();
 
-    public static bool   NuevaImagen = false;
+    public static bool   NuevaImagen = true;
     public static bool   NuevosDatos = false;
     public static Datos  DatosActuales;
     public static Datos  DatosIniciales = null;
@@ -124,13 +124,12 @@ public class Comunicacion : MonoBehaviour{
                 Debug.Log( String.Format( "Buffer de {0} bytes leido", imageData.Length ) );
                 Debug.Log( BitConverter.ToString( imageData ) );
                 File.WriteAllBytes( "Assets/Imagenes/imagen_serial.jpg", imageData );
+                DatosRecibidos.tamañoImagen = 0;
+                NuevaImagen                 = true;
             }
             catch( Exception e ){
                 Debug.LogError( e.Message );
             }
-
-            DatosRecibidos.tamañoImagen = 0;
-            NuevaImagen                 = true;
         }
 
         DatosActuales = DatosRecibidos;
