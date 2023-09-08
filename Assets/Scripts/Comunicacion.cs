@@ -17,10 +17,11 @@ public class Comunicacion : MonoBehaviour{
     public static bool  NuevosDatos = false;
     public static Datos DatosActuales;
     public static Datos DatosIniciales = null;
+    public string port = "COM6";
 
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
-        serialPort             = new SerialPort( "COM6", 9600 );
+        serialPort             = new SerialPort( port, 9600 );
         serialPort.ReadTimeout = 5000;
         try{
             Debug.Log( "Tratando de abrir puerto serial" );
