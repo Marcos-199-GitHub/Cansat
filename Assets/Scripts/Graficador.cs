@@ -200,15 +200,22 @@ public class Graficador : MonoBehaviour{
     }
 
     public GameObject crearLinea( Vector2 inicio, Vector2 final ){
-        Vector2    delta = final - inicio;
+        Vector2 delta = final - inicio;
+        if( delta == Vector2.zero ){
+            delta = Vector2.down * 0.001f;
+        }
+
         GameObject linea = new GameObject( "linea", typeof(Image) );
         linea.transform.SetParent( ContenedorGrafica, false );
         RectTransform rectTransform = linea.GetComponent< RectTransform >();
         rectTransform.anchoredPosition = ( inicio + final ) / 2;
         rectTransform.sizeDelta        = new Vector2( delta.magnitude, 2.5f );
-        rectTransform.rotation         = Quaternion.Euler( 0, 0, Mathf.Atan( delta.y / delta.x ) * Mathf.Rad2Deg );
-        rectTransform.anchorMax        = Vector2.zero;
-        rectTransform.anchorMin        = Vector2.zero;
+        rectTransform.rotation =
+            delta.x != 0 ? Quaternion.Euler( 0, 0, Mathf.Atan( delta.y / delta.x ) * Mathf.Rad2Deg ) :
+                Quaternion.Euler( 0,            0, 90 );
+
+        rectTransform.anchorMax = Vector2.zero;
+        rectTransform.anchorMin = Vector2.zero;
         return linea;
     }
 }

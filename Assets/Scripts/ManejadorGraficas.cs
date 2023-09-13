@@ -32,6 +32,8 @@ public class ManejadorGraficas : MonoBehaviour{
         g) Vibración.
 
      */
+    private int i = 0;
+
     private void Start(){
         Grafica0.setTituloYEtiquetas( "Random", "Tiempo [s]", "Algo" );
         Grafica1.setTituloYEtiquetas( "Temperatura interna en el tiempo", "Tiempo [s]", "Temperatura [°C]" );
@@ -66,25 +68,30 @@ public class ManejadorGraficas : MonoBehaviour{
 
         Grafica5.setYRangeAndXRange( 0, 100 );
         Grafica6.setYRangeAndXRange( 0, 100 );
-        
+
         Grafica7.setYRangeAndXRange( 2000, 2500 );
         Grafica8.setYRangeAndXRange( 2000, 2500 );
-        
+
         Grafica9.setYRangeAndXRange( -100, 100 );
         Grafica10.setYRangeAndXRange( -100, 100 );
-        
+
         Grafica11.setYRangeAndXRange( 0, 100 );
         Grafica12.setYRangeAndXRange( 0, 100 );
-        
+
         Grafica13.setYRangeAndXRange( 0, 100 );
         Grafica14.setYRangeAndXRange( 0, 100 );
-        
+
         Grafica15.setYRangeAndXRange( 0, 100 );
         Grafica16.setYRangeAndXRange( 0, 100 );
     }
 
     private void Update(){
-        Grafica0.agregarPunto( Time.time, UnityEngine.Random.Range( 0, 100 ) );
+        if( i >= 3 ){
+            Grafica0.agregarPunto( Time.time, UnityEngine.Random.Range( 0, 100 ) );
+            i = 0;
+        }
+
+        i++;
         if( Comunicacion.NuevosDatos == false ){
             return;
         }
@@ -110,5 +117,8 @@ public class ManejadorGraficas : MonoBehaviour{
         Grafica16.agregarPunto( altura, Comunicacion.DatosActuales.vibracion );
 
         Comunicacion.NuevosDatos = false;
+    }
+
+    private void guardarGraficas(){
     }
 }

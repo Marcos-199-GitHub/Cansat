@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Palmmedia.ReportGenerator.Core.Common;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -18,6 +19,7 @@ public class Comunicacion : MonoBehaviour{
     public static Datos  DatosActuales;
     public static Datos  DatosIniciales = null;
     public        string port           = "COM6";
+    private       Thread myThread;
 
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
@@ -27,6 +29,9 @@ public class Comunicacion : MonoBehaviour{
             Debug.Log( "Tratando de abrir puerto serial" );
             serialPort.Open();
             Debug.Log( "Listo" );
+            // Iniciar el hilo
+            myThread = new Thread( Updates );
+            myThread.Start();
         }
         catch( Exception e ){
             Debug.Log( e );
@@ -34,11 +39,15 @@ public class Comunicacion : MonoBehaviour{
     }
 
     private void OnDisable(){
+        if( myThread != null && myThread.IsAlive ){
+            myThread.Abort();
+        }
+
         serialPort.Close();
     }
 
     // Lee los datos seriales y realiza acciones en Unity
-    private void Update(){
+    private void Updates(){
         if( !serialPort.IsOpen ){
             return;
         }
