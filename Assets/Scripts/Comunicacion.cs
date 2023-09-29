@@ -1,14 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading;
-using Palmmedia.ReportGenerator.Core.Common;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Comunicacion : MonoBehaviour{
     SerialPort   serialPort;
@@ -25,17 +19,6 @@ public class Comunicacion : MonoBehaviour{
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
         serialPort             = new SerialPort( port, 9600 );
         serialPort.ReadTimeout = 5000;
-        try{
-            Debug.Log( "Tratando de abrir puerto serial" );
-            serialPort.Open();
-            Debug.Log( "Listo" );
-            // Iniciar el hilo
-            myThread = new Thread( Updates );
-            myThread.Start();
-        }
-        catch( Exception e ){
-            Debug.Log( e );
-        }
     }
 
     private void OnDisable(){
@@ -46,18 +29,52 @@ public class Comunicacion : MonoBehaviour{
         serialPort.Close();
     }
 
-    // Lee los datos seriales y realiza acciones en Unity
-    private void Updates(){
-        if( !serialPort.IsOpen ){
+    private void Update(){
+        if( serialPort.IsOpen ){
             return;
         }
 
+        try{
+            Debug.Log( "Tratando de abrir puerto serial" );
+            serialPort.Open();
+            Debug.Log( "Listo" );
+            // Iniciar el hilo
+            myThread = new Thread( hiloLectura );
+            myThread.Start();
+        }
+        catch( Exception e ){
+            Debug.Log( e );
+        }
+    }
+
+    private void hiloLectura(){
+        while( true ){
+            if( serialPort.IsOpen == false ){
+                return;
+            }
+
+            Refresh();
+        }
+    }
+
+    // Lee los datos seriales y realiza acciones en Unity
+    private void Refresh(){
         if( DatosRecibidos.tamañoImagen == 0 ){
             string serialData = serialPort.ReadTo( "\n" );
+            if( serialData.Length == 0 ){
+                Debug.LogError( "No hay datos" );
+                return;
+            }
+
             // Procesa los datos recibidos (puedes realizar análisis y acciones aquí)
             Debug.Log( "Datos seriales recibidos: " + serialData );
             //Si el mensaje son los datos
             string[] data = serialData.Substring( 1, serialData.Length - 2 ).Replace( " ", "" ).Split( ',' );
+            if( data.Length < 25 ){
+                Debug.LogError( "Datos incompletos" );
+                return;
+            }
+
             DatosRecibidos = new Datos();
             float.TryParse( data[0], out DatosRecibidos.temperaturaSht );
             float.TryParse( data[1], out DatosRecibidos.temperaturaMpu );
