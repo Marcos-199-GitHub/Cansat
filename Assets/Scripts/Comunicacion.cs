@@ -53,7 +53,13 @@ public class Comunicacion : MonoBehaviour{
                 return;
             }
 
-            Refresh();
+            try{
+                Refresh();
+            }
+            catch( Exception e ){
+                Debug.Log( e );
+                serialPort.Close();
+            }
         }
     }
 
@@ -62,7 +68,7 @@ public class Comunicacion : MonoBehaviour{
         if( DatosRecibidos.tamañoImagen == 0 ){
             string serialData = serialPort.ReadTo( "\n" );
             if( serialData.Length == 0 ){
-                Debug.LogError( "No hay datos" );
+                Debug.Log( "No hay datos" );
                 return;
             }
 
@@ -71,7 +77,7 @@ public class Comunicacion : MonoBehaviour{
             //Si el mensaje son los datos
             string[] data = serialData.Substring( 1, serialData.Length - 2 ).Replace( " ", "" ).Split( ',' );
             if( data.Length < 25 ){
-                Debug.LogError( "Datos incompletos" );
+                Debug.Log( "Datos incompletos" );
                 return;
             }
 
@@ -154,7 +160,7 @@ public class Comunicacion : MonoBehaviour{
                 NuevaImagen                 = true;
             }
             catch( Exception e ){
-                Debug.LogError( e.Message );
+                Debug.Log( e.Message );
             }
         }
 
