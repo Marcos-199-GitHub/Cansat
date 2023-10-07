@@ -43,8 +43,8 @@ GPS NEO6MV2: o
 Altura: 0-1000m
 Posicion latitud y longitud en grados: 0-180°
 Velocidad en x, y, z: -100 a 100m/s
-Numero de satelites: 0-10
-Calidad de la señal: 0-10
+Numero de satelites: 0-100
+Calidad de la señal: 0-4
 
 Sensor de vibracion: o
 Vibracion: 0-100Db  
@@ -53,4 +53,4 @@ Sensor de bateria: o
 Porcentaje de bateria: 0-100%
 
 Señal de radio: o
-Intensidad de la señal: 0-100%
+Intensidad de la señal: 0-4

@@ -6,35 +6,17 @@ using System.IO.Ports;
 
 public class CamaraCansat : MonoBehaviour{
 
-    public bool por_serial; //?
-
-    public string filePath = "Assets/Imagenes/imagen_serial.bin"; // Ruta relativa al archivo binario
-    public Image  imagen;
-
-    private SerialPort serialPort;
-    private Texture2D  receivedImageTexture;
-
-    private void Start(){
-        if( !por_serial ){
-            return;
-        }
-
-        serialPort = new SerialPort( "COM3", 9600 );
-        serialPort.Open();
-    }
-
-    private void OnDestroy(){
-        if( !por_serial ){
-            return;
-        }
-
-        if( serialPort != null && serialPort.IsOpen ){
-            serialPort.Close();
-        }
-    }
+    public  Image     imagen;
+    private Texture2D receivedImageTexture;
 
     private void Update(){
-        if( por_serial ? !RecieveImageToUI() : !LoadImageToUI() ){
+        if( Comunicacion.NuevaImagen == false ){
+            return;
+        }
+
+        Comunicacion.NuevaImagen = false;
+        if( !LoadImageToUI() ){
+            Debug.Log( "no pude" );
             return;
         }
 
@@ -45,21 +27,14 @@ public class CamaraCansat : MonoBehaviour{
         imagen.sprite = sprite;
     }
 
-    private bool RecieveImageToUI(){
-        if( serialPort.IsOpen && serialPort.BytesToRead > 0 ){
-            byte[] imageData = new byte[640 * 480 * 3]; //ancho y alto de imagen
-            serialPort.Read( imageData, 0, imageData.Length );
-            receivedImageTexture.LoadRawTextureData( imageData );
-            receivedImageTexture.Apply();
-            return true;
-        }
-
-        return false;
-    }
-
     private bool LoadImageToUI(){
-        byte[] imageData = System.IO.File.ReadAllBytes( "Assets/Imagenes/imagen_serial.bin" );
-        receivedImageTexture = new Texture2D( 2, 2 );
+        System.Drawing.Image bitmap = System.Drawing.Bitmap.FromFile( "Assets/Imagenes/imagen_serial.jpg" );
+        bitmap.Save( "Assets/Imagenes/imagen_serial.png", System.Drawing.Imaging.ImageFormat.Png );
+        bitmap.Dispose();
+        byte[] imageData = System.IO.File.ReadAllBytes( "Assets/Imagenes/imagen_serial.png" );
+        receivedImageTexture = new Texture2D( 320, 240 );
+        //receivedImageTexture.LoadImage( imageData );
+        //receivedImageTexture.Apply();
         return receivedImageTexture.LoadImage( imageData );
     }
 }
