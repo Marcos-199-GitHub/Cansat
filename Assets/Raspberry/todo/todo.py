@@ -83,7 +83,7 @@ except:
 #Configuraciones extra
 # change this to match the location's pressure (hPa) at sea level
 try:
-    bmp280.sea_level_pressure = 1013.25
+    bmp280.sea_level_pressure = 740.47
 except:
     print("Can't configure BMP")
 try:
@@ -109,6 +109,10 @@ btnB.pull = Pull.UP
 btnC = DigitalInOut(board.D12)
 btnC.direction = Direction.INPUT
 btnC.pull = Pull.UP
+#LED
+eitiLedA = DigitalInOut(board.D17)
+eitiLedA.direction = Direction.OUTPUT
+eitiLedA.value = True
 # Radio
 CS = DigitalInOut(board.CE1)
 RESET = DigitalInOut(board.D25)
@@ -276,7 +280,7 @@ def lcd_update():
 def main():
     global n, total_kb, globalStart, speed, diccionario, start, f, end
     print("Main")
-    f.write(f"{datetime.datetime.fromtimestamp(datetime.datetime.now().timestamp() - 7*3600).strftime('%c')}\n")
+    f.write(f"{datetime.datetime.fromtimestamp(datetime.datetime.now().timestamp() - 0*3600).strftime('%c')}\n")
     f.close()
     f = open("data.log","a")
     extT = 0
@@ -287,14 +291,15 @@ def main():
     altitude = 0
     pressure = 0
     while True:
+        eitiLedA.value = not eitiLedA.value
         n+=1 
         utf = ""
 
         s=time.time()
         try:
              mpu.update()
-             _accel = mpu.accel() 
-             _gyro = mpu.gyro()
+             _accel = mpu.accel
+             _gyro = mpu.gyro
         except:
             print ("Can't update MPU")
         try:
