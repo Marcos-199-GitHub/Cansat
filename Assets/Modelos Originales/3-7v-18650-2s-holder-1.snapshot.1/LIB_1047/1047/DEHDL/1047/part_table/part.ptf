@@ -1,0 +1,11 @@
+FILE_TYPE = MULTI_PHYS_TABLE;
+
+PART '1047'
+CLASS = DISCRETE
+{========================================================================================}
+:"MANUFACTURER_NAME", "MANUFACTURER_PART_NUMBER"= "PART_NUMBER", "JEDEC_TYPE", "PACK_TYPE", "MOUSER_PART_NUMBER", "MOUSER_PRICE/STOCK", "DESCRIPTION", "DATASHEET", "HEIGHT";
+{========================================================================================}
+ "Keystone Electronics", "1047" (!) = "", "1047", "Other", "534-1047", "https://www.mouser.co.uk/ProductDetail/Keystone-Electronics/1047?qs=up89fPMRNqBQruBm7zqCRQ%3D%3D", "KEYSTONE - 1047 - BATTERY HOLDER, 18650 LI-ION, 2CELL, PCB", "https://www.keyelco.com/product.cfm/product_id/14061", "14.85 mm"
+END_PART
+
+END.

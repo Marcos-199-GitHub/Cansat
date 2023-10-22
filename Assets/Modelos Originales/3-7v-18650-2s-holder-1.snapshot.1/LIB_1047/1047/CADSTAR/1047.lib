@@ -1,0 +1,16 @@
+.1047 :1 ;KEYSTONE - 1047 - BATTERY HOLDER, 18650 LI-ION, 2CELL, PCB
+"1047"
+*STM U
+*NGS
+*PLB 1="1" 2="2" 3="3" 4="4" 5="5"
+*MXP 5
+*DFN 1047
+~!Mouser Part Number (534-1047)
+~!Link Mouser Price/Stock (https://www.mouser.co.uk/ProductDetail/Keystone-Electronics/1047?qs=up89fPMRNqBQruBm7zqCRQ%3D%3D)
+~!Manufacturer_Name (Keystone Electronics)
+~!Manufacturer_Part_Number (1047)
+~!Link Datasheet (https://www.keyelco.com/product.cfm/product_id/14061)
+~!Height (14.85mm)
+~!3D_Model (1047)
+"1047"
+1.1!U 2.1!U 3.1!U 4.1!U 5.1!U 

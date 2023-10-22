@@ -1,0 +1,144 @@
+;Proteus Design Interchange Format
+(PDIF
+ (vendor "SamacSys Limited")
+ (version 1 0)
+ (library
+  (part "1047"
+   (description "KEYSTONE - 1047 - BATTERY HOLDER, 18650 LI-ION, 2CELL, PCB")
+   (family "ANA")
+   (package "1047")
+   (attribute "Datasheet Link" "https://www.keyelco.com/product.cfm/product_id/14061")
+   (attribute "Geometry.Height" "14.85mm")
+   (attribute "Mouser Part Number" "534-1047")
+   (attribute "Mouser Price/Stock" "https://www.mouser.co.uk/ProductDetail/Keystone-Electronics/1047?qs=up89fPMRNqBQruBm7zqCRQ%3D%3D")
+   (attribute "Manufacturer_Name" "Keystone Electronics")
+   (attribute "Manufacturer_Part_Number" "1047")
+   (gate
+    (symbol "1047")
+    (pin "1" 1 PS)
+    (pin "2" 2 PS)
+    (pin "3" 3 PS)
+    (pin "4" 4 PS)
+    (pin "5" 5 PS)
+   )
+  )
+  (symbol "1047"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 200 100) (pt 600 100) (pt 600 -300) (pt 200 -300) (pt 200 100) (closed))
+   )
+   (terminal
+    (body (symbol "PIN") (pt 0 0) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -100) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 0 -200) (rot 0) (mir 0) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 800 0) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+   (terminal
+    (body (symbol "PIN") (pt 800 -100) (rot 0) (mir X) (visible true))
+    (name (pt 230 0) (rot 0) (just MIDDLE LEFT) (visible true))
+    (number (pt 140 20) (rot 0) (just BOTTOM RIGHT) (visible true)))
+  )
+  (symbol "PIN"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 200 0))))
+  (symbol "PINSHORT"
+   (units THOU)
+   (origin (pt 0 0))
+   (graphic
+    (stroke 10)
+    (path (pt 0 0) (pt 100 0))))
+  (package "1047"
+   (units MM)
+   (layer TASM
+    (graphic
+     (stroke 0.2)
+     (path
+      (closed true)
+      (pt -38.505 19.9)
+      (pt 38.505 19.9)
+      (pt 38.505 -19.9)
+      (pt -38.505 -19.9)
+      (pt -38.505 19.9))))
+   (layer OCCA
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed true)
+      (pt -39.505 21.087)
+      (pt 39.505 21.087)
+      (pt 39.505 -21.087)
+      (pt -39.505 -21.087)
+      (pt -39.505 21.087))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt 25 19.9)
+      (pt -38.505 19.9)
+      (pt -38.505 -19.9)
+      (pt -30 -19.9))))
+   (layer TSLK
+    (graphic
+     (stroke 0.1)
+     (path
+      (closed false)
+      (pt 30 19.9)
+      (pt 38.505 19.9)
+      (pt 38.505 -19.9)
+      (pt -25 -19.9))))
+   (leg 1 (pt -27.600 0.000) (padstack 0))
+   (leg 2 (pt 27.600 0.000) (padstack 0))
+   (leg 3 (pt -27.600 -17.500) (padstack 3))
+   (leg 4 (pt 27.600 17.500) (padstack 4))
+   (leg 5 (pt 35.820 -17.500) (padstack 5))
+   (padstack 0
+    (hole 3.18)
+    (plated true)
+    (pad (layer TCOP) (round 4.770))
+    (pad (layer INNER) (round 4.770))
+    (pad (layer BCOP) (round 4.770))
+   )
+   (padstack 3
+    (hole 3.45)
+    (plated true)
+    (pad (layer TCOP) (round 5.175))
+    (pad (layer INNER) (round 5.175))
+    (pad (layer BCOP) (round 5.175))
+   )
+   (padstack 4
+    (hole 3.45)
+    (plated true)
+    (pad (layer TCOP) (round 5.175))
+    (pad (layer INNER) (round 5.175))
+    (pad (layer BCOP) (round 5.175))
+   )
+   (padstack 5
+    (hole 2.38)
+    (plated true)
+    (pad (layer TCOP) (round 3.570))
+    (pad (layer INNER) (round 3.570))
+    (pad (layer BCOP) (round 3.570))
+   )
+   (model "1047.stp"
+    (euler 0 0 0)
+    (offset 0 0 0.3199999928474426)
+   )
+  )
+ )
+)

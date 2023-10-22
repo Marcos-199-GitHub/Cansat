@@ -1,0 +1,4 @@
+(sym_lib_table
+  (version 7)
+  (lib (name "Adafruit BMP280 STEMMA QT-eagle-import")(type "KiCad")(uri "D:/CanSat/Cansat/Assets/PCBS/Kicad/BMP280/Adafruit BMP280 STEMMA QT-eagle-import.kicad_sym")(options "")(descr ""))
+)
