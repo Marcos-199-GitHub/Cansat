@@ -13,11 +13,16 @@ public class Comunicacion : MonoBehaviour{
     public static Datos  DatosActuales;
     public static Datos  DatosIniciales = null;
     public        string port           = "COM6";
+    public        int    baudrate       = 9600;
     private       Thread myThread;
 
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
-        serialPort             = new SerialPort( port, 9600 );
+        updatePort( port, baudrate );
+    }
+
+    private void updatePort( string portn, int baudraten ){
+        serialPort             = new SerialPort( portn, baudraten );
         serialPort.ReadTimeout = 5000;
     }
 

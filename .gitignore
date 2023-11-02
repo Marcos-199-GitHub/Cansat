@@ -101,3 +101,13 @@ Assets/Modelos Originales/STEP/Piso 2.x_t.meta
 Assets/Modelos Originales/STEP/Piso 2.step.meta
 Assets/Modelos Originales/STEP/Piso 1.step.meta
 Assets/Modelos Originales/STEP/console.log.meta
+Assets/PCBS/*.meta
+Assets/PCBS/*/*.meta
+Assets/PCBS/*/*/*.meta
+Assets/PCBS/*/*/*/*.meta
+Assets/PCBS/*/*/*/*/*.meta
+Assets/Raspberry/*.meta
+Assets/Raspberry/*/*.meta
+Assets/Raspberry/*/*/*.meta
+Assets/Raspberry/*/*/*/*.meta
+Assets/Raspberry/*/*/*/*/*.meta
