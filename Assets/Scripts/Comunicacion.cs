@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Threading;
@@ -15,6 +16,8 @@ public class Comunicacion : MonoBehaviour{
     public        string port           = "COM6";
     public        int    baudrate       = 9600;
     private       Thread myThread;
+
+    public List< Datos > DatosGuardados = new List< Datos >();
 
     private void Start(){
         //serialPort = new SerialPort( PlayerPrefs.GetString(ComSelector.key), 9600 );
@@ -68,6 +71,43 @@ public class Comunicacion : MonoBehaviour{
         }
     }
 
+    public void saveData(){
+        string path = "Assets/Logs/log_" + DateTime.Now.ToString( "yyyy-MM-dd_HH-mm-ss" ) + ".txt";
+        Debug.Log( "Guardando datos en " + path );
+        using( StreamWriter sw = File.CreateText( path ) ){
+            foreach( Datos d in DatosGuardados ){
+                sw.WriteLine(
+                    $"{d.temperaturaSht},"      +
+                    $"{d.temperaturaMpu},"      +
+                    $"{d.timestamp},"           +
+                    $"{d.altura},"              +
+                    $"{d.presion},"             +
+                    $"{d.humedad},"             +
+                    $"{d.Aceleracion.x},"       +
+                    $"{d.Aceleracion.y},"       +
+                    $"{d.Aceleracion.z},"       +
+                    $"{d.Gyro.x},"              +
+                    $"{d.Gyro.y},"              +
+                    $"{d.Gyro.z},"              +
+                    $"{d.Magnet.x},"            +
+                    $"{d.Magnet.y},"            +
+                    $"{d.Magnet.z},"            +
+                    $"{d.direccionBrujula},"    +
+                    $"{d.yaw},"                 +
+                    $"{d.pitch},"               +
+                    $"{d.roll},"                +
+                    $"{d.deltaFiltro},"         +
+                    $"{d.latitud},"             +
+                    $"{d.longitud},"            +
+                    $"{d.velocidadHorizontal}," +
+                    $"{d.dilucionGps},"         +
+                    $"{d.tamañoImagen}"         +
+                    $"{d.bateria}"
+                );
+            }
+        }
+    }
+
     // Lee los datos seriales y realiza acciones en Unity
     private void Refresh(){
         if( DatosRecibidos.tamañoImagen == 0 ){
@@ -91,6 +131,7 @@ public class Comunicacion : MonoBehaviour{
             float.TryParse( data[1], out DatosRecibidos.temperaturaMpu );
 
             float.TryParse( data[2], out DatosRecibidos.timestamp );
+
             float.TryParse( data[3], out DatosRecibidos.altura );
             float.TryParse( data[4], out DatosRecibidos.presion );
             float.TryParse( data[5], out DatosRecibidos.humedad );
@@ -123,10 +164,14 @@ public class Comunicacion : MonoBehaviour{
             float.TryParse( data[23], out DatosRecibidos.dilucionGps );
 
             int.TryParse( data[24], out DatosRecibidos.tamañoImagen );
+
+            int.TryParse( data[25], out DatosRecibidos.bateria );
             NuevosDatos = true;
             if( DatosIniciales == null ){
                 DatosIniciales = DatosRecibidos;
             }
+
+            DatosGuardados.Add( DatosRecibidos );
         }
         else{
             /*
@@ -203,6 +248,8 @@ public class Datos{
 
     public int tamañoImagen = 0;
 
+    public int bateria = 0;
+
     //Aqui acaba
     public float vibracion = 0;
 
@@ -212,6 +259,5 @@ public class Datos{
     public int numeroSatelites = 0;
     public int calidadSeñal    = 0;
     public int señalRadio      = 0;
-    public int bateria         = 0;
 
 }

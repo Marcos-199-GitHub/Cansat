@@ -2,25 +2,37 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ManejadorGraficas : MonoBehaviour{
     public Graficador Grafica0;
-    public Graficador Grafica1;
-    public Graficador Grafica2;
-    public Graficador Grafica3;
-    public Graficador Grafica4;
-    public Graficador Grafica5;
-    public Graficador Grafica6;
-    public Graficador Grafica7;
+
+    public Graficador GraficaTempEnT;
+    public Graficador GraficaTempEnA;
+
+    public Graficador GraficaTempinEnT;
+    public Graficador GraficaTempinEnA;
+
+    public Graficador GraficaHumEnT;
+    public Graficador GraficaHumEnA;
+
+    public Graficador GraficaAEnT;
     public Graficador Grafica8;
-    public Graficador Grafica9;
-    public Graficador Grafica10;
-    public Graficador Grafica11;
-    public Graficador Grafica12;
-    public Graficador Grafica13;
-    public Graficador Grafica14;
-    public Graficador Grafica15;
-    public Graficador Grafica16;
+
+    public Graficador GraficaLonEnT;
+    public Graficador GraficaLonEnA;
+
+    public Graficador GraficaLatEnT;
+    public Graficador GraficaLatEnA;
+
+    public Graficador GraficaBatEnT;
+    public Graficador GraficaBatEnA;
+
+    public Graficador GraficaAccEnT;
+    public Graficador GraficaAccEnA;
+
+    public Graficador GraficaVibEnT;
+    public Graficador GraficaVibEnA;
 
     /*
         a) Temperatura interna y externa del CANSAT.
@@ -36,53 +48,63 @@ public class ManejadorGraficas : MonoBehaviour{
 
     private void Start(){
         Grafica0.setTituloYEtiquetas( "Random", "Tiempo [s]", "Algo" );
-        Grafica1.setTituloYEtiquetas( "Temperatura interna en el tiempo", "Tiempo [s]", "Temperatura [°C]" );
-        Grafica2.setTituloYEtiquetas( "Temperatura interna en la altura", "Altura [m]", "Temperatura [°C]" );
-        Grafica3.setTituloYEtiquetas( "Temperatura externa en el tiempo", "Tiempo [s]", "Temperatura [°C]" );
-        Grafica4.setTituloYEtiquetas( "Temperatura externa en la altura", "Altura [m]", "Temperatura [°C]" );
+        GraficaTempEnT.setTituloYEtiquetas( "Temperatura interna en el tiempo", "Tiempo [s]", "Temperatura [°C]" );
+        GraficaTempEnA.setTituloYEtiquetas( "Temperatura interna en la altura", "Altura [m]", "Temperatura [°C]" );
 
-        Grafica5.setTituloYEtiquetas( "Humedad relativa en el tiempo", "Tiempo [s]", "Humedad relativa [%]" );
-        Grafica6.setTituloYEtiquetas( "Humedad relativa en la altura", "Altura [m]", "Humedad relativa [%]" );
+        GraficaTempinEnT.setTituloYEtiquetas( "Temperatura externa en el tiempo", "Tiempo [s]", "Temperatura [°C]" );
+        GraficaTempinEnA.setTituloYEtiquetas( "Temperatura externa en la altura", "Altura [m]", "Temperatura [°C]" );
 
-        Grafica7.setTituloYEtiquetas( "Altitud en el tiempo", "Tiempo [s]", "Altitud [m]" );
-        Grafica8.setTituloYEtiquetas( "Altitud en la altura", "Altura [m]", "Altitud [m]" );
+        GraficaHumEnT.setTituloYEtiquetas( "Humedad relativa en el tiempo", "Tiempo [s]", "Humedad relativa [%]" );
+        GraficaHumEnA.setTituloYEtiquetas( "Humedad relativa en la altura", "Altura [m]", "Humedad relativa [%]" );
 
-        Grafica9.setTituloYEtiquetas( "Longitud en el tiempo", "Tiempo [s]", "Longitud [°]" );
-        Grafica10.setTituloYEtiquetas( "Longitud en la altura", "Altura [m]", "Longitud [°]" );
+        GraficaAEnT.setTituloYEtiquetas( "Altitud en el tiempo", "Tiempo [s]", "Altitud [m]" );
+        //Grafica8.setTituloYEtiquetas( "Altitud en la altura", "Altura [m]", "Altitud [m]" );
 
-        Grafica11.setTituloYEtiquetas( "Nivel de batería en el tiempo", "Tiempo [s]", "Nivel de batería [%]" );
-        Grafica12.setTituloYEtiquetas( "Nivel de batería en la altura", "Altura [m]", "Nivel de batería [%]" );
+        GraficaLonEnT.setTituloYEtiquetas( "Longitud en el tiempo", "Tiempo [s]", "Longitud [°]" );
+        GraficaLonEnA.setTituloYEtiquetas( "Longitud en la altura", "Altura [m]", "Longitud [°]" );
 
-        Grafica13.setTituloYEtiquetas( "Aceleración en el tiempo", "Tiempo [s]", "Aceleración [m/s²]" );
-        Grafica14.setTituloYEtiquetas( "Aceleración en la altura", "Altura [m]", "Aceleración [m/s²]" );
+        GraficaLatEnT.setTituloYEtiquetas( "Latitud en el tiempo", "Tiempo [s]", "Latitud [°]" );
+        GraficaLatEnA.setTituloYEtiquetas( "Latitud en la altura", "Altura [m]", "Latitud [°]" );
 
-        Grafica15.setTituloYEtiquetas( "Vibración en el tiempo", "Tiempo [s]", "Vibración [m/s²]" );
-        Grafica16.setTituloYEtiquetas( "Vibración en la altura", "Altura [m]", "Vibración [m/s²]" );
+        GraficaBatEnT.setTituloYEtiquetas( "Nivel de batería en el tiempo", "Tiempo [s]", "Nivel de batería [%]" );
+        GraficaBatEnA.setTituloYEtiquetas( "Nivel de batería en la altura", "Altura [m]", "Nivel de batería [%]" );
+
+        GraficaAccEnT.setTituloYEtiquetas( "Aceleración en el tiempo", "Tiempo [s]", "Aceleración [m/s²]" );
+        GraficaAccEnA.setTituloYEtiquetas( "Aceleración en la altura", "Altura [m]", "Aceleración [m/s²]" );
+
+        GraficaVibEnT.setTituloYEtiquetas( "Vibración en el tiempo", "Tiempo [s]", "Vibración [m/s²]" );
+        GraficaVibEnA.setTituloYEtiquetas( "Vibración en la altura", "Altura [m]", "Vibración [m/s²]" );
 
         Grafica0.setYRangeAndXRange( 0, 100 );
 
-        Grafica1.setYRangeAndXRange( -20, 100 );
-        Grafica2.setYRangeAndXRange( -20, 100 );
-        Grafica3.setYRangeAndXRange( -20, 100 );
-        Grafica4.setYRangeAndXRange( -20, 100 );
+        GraficaTempEnT.setYRangeAndXRange( -20, 100 );
+        GraficaTempEnA.setYRangeAndXRange( -20, 100 );
 
-        Grafica5.setYRangeAndXRange( 0, 100 );
-        Grafica6.setYRangeAndXRange( 0, 100 );
+        GraficaTempinEnT.setYRangeAndXRange( -20, 100 );
+        GraficaTempinEnA.setYRangeAndXRange( -20, 100 );
 
-        Grafica7.setYRangeAndXRange( 2000, 2500 );
-        Grafica8.setYRangeAndXRange( 2000, 2500 );
+        GraficaHumEnT.setYRangeAndXRange( 0, 100 );
+        GraficaHumEnA.setYRangeAndXRange( 0, 100 );
 
-        Grafica9.setYRangeAndXRange( -100, 100 );
-        Grafica10.setYRangeAndXRange( -100, 100 );
+        GraficaAEnT.setYRangeAndXRange( 2000, 2500 );
+        //Grafica8.setYRangeAndXRange( 2000, 2500 );
 
-        Grafica11.setYRangeAndXRange( 0, 100 );
-        Grafica12.setYRangeAndXRange( 0, 100 );
+        GraficaLonEnT.setYRangeAndXRange( -100, 100 );
+        GraficaLonEnA.setYRangeAndXRange( -100, 100 );
 
-        Grafica13.setYRangeAndXRange( 0, 100 );
-        Grafica14.setYRangeAndXRange( 0, 100 );
+        GraficaLatEnT.setYRangeAndXRange( -100, 100 );
+        GraficaLatEnA.setYRangeAndXRange( -100, 100 );
 
-        Grafica15.setYRangeAndXRange( 0, 100 );
-        Grafica16.setYRangeAndXRange( 0, 100 );
+        GraficaBatEnT.setYRangeAndXRange( 0, 100 );
+        GraficaBatEnA.setYRangeAndXRange( 0, 100 );
+
+        GraficaAccEnT.setYRangeAndXRange( 0, 100 );
+        GraficaAccEnA.setYRangeAndXRange( 0, 100 );
+
+        GraficaVibEnT.setYRangeAndXRange( 0, 100 );
+        GraficaVibEnA.setYRangeAndXRange( 0, 100 );
+
+        Grafica8.gameObject.SetActive( false );
     }
 
     private void Update(){
@@ -99,22 +121,32 @@ public class ManejadorGraficas : MonoBehaviour{
         float timestamp = Comunicacion.DatosActuales.timestamp - Comunicacion.DatosIniciales.timestamp;
         float altura    = Comunicacion.DatosActuales.altura    - Comunicacion.DatosIniciales.altura;
 
-        Grafica1.agregarPunto( timestamp, Comunicacion.DatosActuales.temperaturaMpu );
-        Grafica2.agregarPunto( altura, Comunicacion.DatosActuales.temperaturaMpu );
-        Grafica3.agregarPunto( timestamp, Comunicacion.DatosActuales.temperaturaSht );
-        Grafica4.agregarPunto( altura, Comunicacion.DatosActuales.temperaturaSht );
-        Grafica5.agregarPunto( timestamp, Comunicacion.DatosActuales.humedad );
-        Grafica6.agregarPunto( altura, Comunicacion.DatosActuales.humedad );
-        Grafica7.agregarPunto( timestamp, Comunicacion.DatosActuales.altura );
-        Grafica8.agregarPunto( altura, Comunicacion.DatosActuales.altura );
-        Grafica9.agregarPunto( timestamp, Comunicacion.DatosActuales.longitud );
-        Grafica10.agregarPunto( altura, Comunicacion.DatosActuales.longitud );
-        Grafica11.agregarPunto( timestamp, Comunicacion.DatosActuales.bateria );
-        Grafica12.agregarPunto( altura, Comunicacion.DatosActuales.bateria );
-        Grafica13.agregarPunto( timestamp, Comunicacion.DatosActuales.Aceleracion.magnitude );
-        Grafica14.agregarPunto( altura, Comunicacion.DatosActuales.Aceleracion.magnitude );
-        Grafica15.agregarPunto( timestamp, Comunicacion.DatosActuales.vibracion );
-        Grafica16.agregarPunto( altura, Comunicacion.DatosActuales.vibracion );
+        GraficaTempEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.temperaturaMpu );
+        GraficaTempEnA.agregarPunto( altura, Comunicacion.DatosActuales.temperaturaMpu );
+
+        GraficaTempinEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.temperaturaSht );
+        GraficaTempinEnA.agregarPunto( altura, Comunicacion.DatosActuales.temperaturaSht );
+
+        GraficaHumEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.humedad );
+        GraficaHumEnA.agregarPunto( altura, Comunicacion.DatosActuales.humedad );
+
+        GraficaAEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.altura );
+        //Grafica8.agregarPunto( altura, Comunicacion.DatosActuales.altura );
+
+        GraficaLonEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.longitud );
+        GraficaLonEnA.agregarPunto( altura, Comunicacion.DatosActuales.longitud );
+
+        GraficaLatEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.latitud );
+        GraficaLatEnA.agregarPunto( altura, Comunicacion.DatosActuales.latitud );
+
+        GraficaBatEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.bateria );
+        GraficaBatEnA.agregarPunto( altura, Comunicacion.DatosActuales.bateria );
+
+        GraficaAccEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.Aceleracion.magnitude );
+        GraficaAccEnA.agregarPunto( altura, Comunicacion.DatosActuales.Aceleracion.magnitude );
+
+        GraficaVibEnT.agregarPunto( timestamp, Comunicacion.DatosActuales.vibracion );
+        GraficaVibEnA.agregarPunto( altura, Comunicacion.DatosActuales.vibracion );
 
         Comunicacion.NuevosDatos = false;
     }
