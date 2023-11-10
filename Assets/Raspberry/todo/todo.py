@@ -32,7 +32,7 @@ sys.path.append('../../Graficas Python/Calibracion de los IMU')
 import fusion
 #Colores en terminal
 from colorama import Fore, Back, Style
-
+from hilos import *
 
 DELAY = 0.00
 SHT30_ADDRESS = 0x44
@@ -231,37 +231,6 @@ n=0
 total_kb=0
 globalStart = time.time()
 speed = 0
-#Diccionario de datos
-diccionario = {
-    #"T1":"0", # temp bmp °C
-    "T2":"0", # temp sht °C
-    "T3":"0", # temp mpu °C
-    "P":"0", # Press hPa
-    "A":"0", # Altitud m
-    "T":"0", # Tiempo (en segundos con respecto al EPOCH) s
-    "H":"0", # Humedad relativa %
-    "Ax":"0", #AccelX m/s2
-    "Ay":"0", #AccelY m/s2
-    "Az":"0", #AccelZ m/s2
-    "Wx":"0", #GyroX °/s
-    "Wy":"0", #GyroY °/s
-    "Wz":"0", #GyroZ °/s
-    "Mx":"0", #MagnetX uT
-    "My":"0", #MagnetY uT
-    "Mz":"0", #MagnetZ uT
-    "He":"0", #Magnet Heading °
-    "Y":"0", #Yaw
-    "P":"0", #Pitch 
-    "R":"0", #Roll
-    "Dt":"0", #Delta T del filtro
-    "Lt":"0", #Latitud
-    "Lg":"0", #Longitud
-    "Di":"NW", #Indica la direccion para la latitud y longitud respectivamente (No es necesario si se utilizan signos)
-    "Km":"0", #Velocidad respecto al suelo
-    "DP":"0", #Dilucion de precision del GPS
-    "Im":"0", #Si el proximo mensaje va a ser una imagen, su valor es el tamaño en bytes, si no, es 0
-
-    }
 
 
 def lcd_update():
@@ -364,7 +333,7 @@ def main():
         diccionario["He"] = f"{magnet[3]:.3f}"
 
         diccionario["Y"] = f"{yaw:.2f}"
-        diccionario["P"] = f"{pitch:.2f}"
+        diccionario["Pi"] = f"{pitch:.2f}"
         diccionario["R"] = f"{roll:.2f}"
 
         diccionario["Dt"] = f"{(1000*(delta)):.1f}"
@@ -398,7 +367,7 @@ def main():
             ut+= f"{float(diccionario['Ax'])},{float(diccionario['Ay'])},{float(diccionario['Az'])},"
             ut+= f"{float(diccionario['Wx'])},{float(diccionario['Wy'])},{float(diccionario['Wz'])},"
             ut+= f"{float(diccionario['Mx'])},{float(diccionario['My'])},{float(diccionario['Mz'])},"
-            ut+= f"{float(diccionario['He'])},{float(diccionario['Y'])},{float(diccionario['P'])},"
+            ut+= f"{float(diccionario['He'])},{float(diccionario['Y'])},{float(diccionario['Pi'])},"
             ut+= f"{float(diccionario['R'])},{float(diccionario['Dt'])},{float(diccionario['Lt'])},"
             ut+= f"{float(diccionario['Lg'])},{float(diccionario['Km'])},{float(diccionario['DP'])},"
             ut+= f"{int(diccionario['Im'])}"
