@@ -1,4 +1,4 @@
-from threading import Thread
+from threading import Thread, Lock
 
 diccionario = {
     #"T1":"0", # temp bmp °C
@@ -33,19 +33,19 @@ sensoresTerminados = False #cuando termine de leer
 fotoTomada = False #cuando termine de tomar la foto
 enviarFoto = False #cuando lo siguiente que debe enviar es una foto
 
-def leerSensores():
+def leerSensores(milook):
     while True:
         pass
 
-def tomarFoto():
+def tomarFoto(milook):
     while True:
         pass
 
-def guardarSensores():
+def guardarSensores(milook):
     while True:
         pass
 
-def enviarDatos():
+def enviarDatos(milook):
     while True:
         if enviarFoto:
             enviarFoto = False
@@ -65,12 +65,12 @@ def enviarDatos():
             pass
 
 
-
 def iniciarHilos():
-    Thread(target=leerSensores).start()
-    Thread(target=tomarFoto).start()
-    Thread(target=guardarSensores).start()
-    Thread(target=enviarDatos).start()
+    look = Lock
+    Thread(target=leerSensores, args=look).start()
+    Thread(target=tomarFoto, args=look).start()
+    Thread(target=guardarSensores, args=look).start()
+    Thread(target=enviarDatos, args=look).start()
 
 
 if __name__ == '__main__':
