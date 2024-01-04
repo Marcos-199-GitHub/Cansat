@@ -5,7 +5,7 @@ from io import BytesIO
 import cv2
 import time 
 
-datos = serial.Serial('COM8', 9600)  
+datos = serial.Serial('COM8', 38400)  
 datos.readline()
 isImg = False
 imgLen = 0
