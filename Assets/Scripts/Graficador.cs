@@ -145,9 +145,9 @@ public class Graficador : MonoBehaviour{
             texto.GetComponent< RectTransform >().anchoredPosition = new Vector2(
                 ultimaPosicionDeGridX, texto.GetComponent< RectTransform >().anchoredPosition.y
             );
-
+            //TODO: el -14 no deberia de existir idealmente
             texto.GetComponent< TextMeshProUGUI >().text =
-                Math.Round( anchoTemporal * ( cantidadGridX++ - 1 ) / Intervalos.x, 2 ).ToString();
+                Math.Round( anchoTemporal * ( cantidadGridX++ - 1 ) / Intervalos.x - 12, 2 ).ToString();
 
             if( contador++ > 10 ){
                 break;

@@ -35,7 +35,7 @@ public class Altimetro : MonoBehaviour{
         GraficaAltura.setTituloYEtiquetas("Altura BMP180", "Tiempo [s]", "Altura [m]");
         GraficaVelocidad.setTituloYEtiquetas("Velocidad BMP180", "Tiempo [s]", "Velocidad [m/s]");
 
-        GraficaTemperatura.setYRangeAndXRange(0, 30);
+        GraficaTemperatura.setYRangeAndXRange(0, 40);
         GraficaPresion.setYRangeAndXRange(0, 1200);
         GraficaAltura.setYRangeAndXRange(2000, 3000);
         GraficaVelocidad.setYRangeAndXRange(-10, 10);
@@ -70,22 +70,22 @@ public class Altimetro : MonoBehaviour{
             }
 
             DatosRecibidos = new DatosAltimetro();
+            DatosRecibidos.tiempo = Time.time - t0;
             float.TryParse(data[0], out DatosRecibidos.temperatura);
             float.TryParse(data[1], out DatosRecibidos.presion);
             float.TryParse(data[2], out DatosRecibidos.altura);
             float.TryParse(data[3], out DatosRecibidos.velocidad);
             DatosGuardados.Add(DatosRecibidos);
-            
-            float time = Time.time - t0;
+
             TextTemperatura.text = DatosRecibidos.temperatura + " °C";
             TextPresion.text = DatosRecibidos.presion + " hPa";
             TextAltura.text = DatosRecibidos.altura + " m";
             TextVelocidad.text = DatosRecibidos.velocidad + " m/s";
 
-            GraficaTemperatura.agregarPunto(time, DatosRecibidos.temperatura);
-            GraficaPresion.agregarPunto(time, DatosRecibidos.presion);
-            GraficaAltura.agregarPunto(time, DatosRecibidos.altura);
-            GraficaVelocidad.agregarPunto(time, DatosRecibidos.velocidad);
+            GraficaTemperatura.agregarPunto(DatosRecibidos.tiempo, DatosRecibidos.temperatura);
+            GraficaPresion.agregarPunto(DatosRecibidos.tiempo, DatosRecibidos.presion);
+            GraficaAltura.agregarPunto(DatosRecibidos.tiempo, DatosRecibidos.altura);
+            GraficaVelocidad.agregarPunto(DatosRecibidos.tiempo, DatosRecibidos.velocidad);
 
             return;
         }
@@ -94,6 +94,7 @@ public class Altimetro : MonoBehaviour{
             Debug.Log("Tratando de abrir puerto serial");
             serialPort.Open();
             Debug.Log("Listo");
+            t0 = Time.time;
         }
         catch (Exception e){
             Debug.Log(e);
@@ -105,7 +106,7 @@ public class Altimetro : MonoBehaviour{
         Debug.Log("Guardando datos en " + path);
         using (StreamWriter sw = File.CreateText(path)){
             foreach (DatosAltimetro d in DatosGuardados){
-                sw.WriteLine(d.temperatura + "," + d.presion + "," + d.altura + "," + d.velocidad);
+                sw.WriteLine(d.tiempo + "," + d.temperatura + "," + d.presion + "," + d.altura + "," + d.velocidad);
             }
         }
     }
@@ -113,6 +114,7 @@ public class Altimetro : MonoBehaviour{
 
 [Serializable]
 public class DatosAltimetro{
+    public float tiempo;
     public float temperatura;
     public float presion;
     public float altura;
