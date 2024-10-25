@@ -35,10 +35,10 @@ public class Altimetro : MonoBehaviour{
         GraficaAltura.setTituloYEtiquetas("Altura BMP180", "Tiempo [s]", "Altura [m]");
         GraficaVelocidad.setTituloYEtiquetas("Velocidad BMP180", "Tiempo [s]", "Velocidad [m/s]");
 
-        GraficaTemperatura.setYRangeAndXRange(0, 40);
-        GraficaPresion.setYRangeAndXRange(0, 1200);
-        GraficaAltura.setYRangeAndXRange(2000, 3000);
-        GraficaVelocidad.setYRangeAndXRange(-10, 10);
+        GraficaTemperatura.setYRangeAndXRange(10, 40);
+        GraficaPresion.setYRangeAndXRange(500, 1200);
+        GraficaAltura.setYRangeAndXRange(2400, 2700);
+        GraficaVelocidad.setYRangeAndXRange(-11, 11);
 
         t0 = Time.time;
     }

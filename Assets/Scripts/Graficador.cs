@@ -193,7 +193,7 @@ public class Graficador : MonoBehaviour{
 
         RectTransform rectTransform = circulo.GetComponent< RectTransform >();
         rectTransform.anchoredPosition = position;
-        rectTransform.sizeDelta        = new Vector2( 10, 10 );
+        rectTransform.sizeDelta        = new Vector2( 5, 5 );
         rectTransform.anchorMax        = Vector2.zero;
         rectTransform.anchorMin        = Vector2.zero;
         return circulo;
